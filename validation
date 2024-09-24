@@ -1,0 +1,140 @@
+import React from "react";
+import * as Yup from "yup";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
+
+const Addressform = () => {
+  const validationSchema = Yup.object().shape({
+    address: Yup.array().of(
+      Yup.object().shape({
+        title: Yup.string()
+          .min(2, "Title Is to Short")
+          .max(50, "Title Is To Big")
+          .required("Title Is required"),
+
+        street: Yup.string()
+          .min(2, "Street is too short")
+          .max(20, "Street Is Too Big")
+          .required("Street Is required"),
+
+        city: Yup.string()
+          .min(2, "Too small for city")
+          .max(20, "Too Big for city"),
+
+        country: Yup.string()
+          .min(2, "Not a valid country")
+          .max(15, "Name is too big for country")
+          .required("Country Name Is required"),
+
+        pincode: Yup.string()
+          .required("Pincode is required")
+          .matches(/^\d{6}$/, "Must We 6 digits"),
+      })
+    ),
+  });
+
+  const initialValues = {
+    address: [
+      {
+        title: "",
+        street: "",
+        city: "",
+        country: "",
+        pincode: "",
+      },
+    ],
+  };
+  const handleSubmit = (values) => {
+    console.log(values);
+  };
+  return (
+    <div>
+      <h3>Address Form</h3>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, setFieldValue }) => (
+          <Form>
+            <div>
+              {values.address.map((_, index) => (
+                <div key={index}>
+                  <Field name={`address.${index}.title`} placeholder="Title" />
+                  <ErrorMessage
+                    name={`address.${index}.title`}
+                    component="div"
+                  />
+
+                  <Field
+                    name={`address.${index}.street`}
+                    placeholder="Street"
+                  />
+                  <ErrorMessage
+                    name={`address.${index}.street`}
+                    component="div"
+                  />
+
+                  <Field name={`address.${index}.city`} placeholder="City" />
+                  <ErrorMessage
+                    name={`address.${index}.city`}
+                    component="div"
+                  />
+
+                  <Field
+                    name={`address.${index}.country`}
+                    placeholder="Country"
+                  />
+                  <ErrorMessage
+                    name={`address.${index}.country`}
+                    component="div"
+                  />
+
+                  <Field
+                    name={`address.${index}.pincode`}
+                    placeholder="Pincode"
+                    type="string"
+                  />
+                  <ErrorMessage
+                    name={`address.${index}.pincode`}
+                    component="div"
+                  />
+
+                  {values.address.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const removeAddress = [...values.address];
+                        removeAddress.splice(index, 1);
+                        setFieldValue("address", removeAddress);
+                      }}
+                    >
+                      Remove Address
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {values.address.length>1 &&(
+                <button type="button"
+                onClick={()=>{
+                    const addAddress={
+                        title: "",
+                        street: "",
+                        city: "",
+                        country: "",
+                        pincode: "",
+                      };
+                    setFieldValue=[...values.address, addAddress];
+                }}>Add Address</button>
+            )}
+            
+            <button type="submit">Submit</button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default Addressform;
