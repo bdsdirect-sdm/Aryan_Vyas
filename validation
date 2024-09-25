@@ -1,6 +1,6 @@
-import React from "react";
+";
 import * as Yup from "yup";
-import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 
 const Addressform = () => {
   const validationSchema = Yup.object().shape({
@@ -125,9 +125,9 @@ const Addressform = () => {
                         country: "",
                         pincode: "",
                       };
-                    setFieldValue=[...values.address, addAddress];
+                    setFieldValue("address", [...values.address, addAddress]);
                 }}>Add Address</button>
-            )}
+              )}
             
             <button type="submit">Submit</button>
           </Form>
