@@ -48,5 +48,3 @@ Submit Button
 
 create frontend using vite+react and typescript
 create backend using nodejs,express,sequelized mysql typescript 
-
-give me a proffessional like code
