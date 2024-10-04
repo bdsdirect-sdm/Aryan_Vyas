@@ -2,9 +2,7 @@ use typescript in both frontend and backend
 
 create backend using nodejs,expressjs,mysql sequelize databse my passwordis-Password123#@! and database name is-Project2
 
-and for frontend use reactjs,formik and yup from creating form and validations 
-
-use bycrypt for password hashing and also creates token using jwt
+and for frontend use reactjs,formik and yup from creating form and validations react+vite
 
 store photo and appoinment pdf using multer in localhost
 
