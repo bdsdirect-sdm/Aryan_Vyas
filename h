@@ -3,9 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 
 
 const useFetchProducts = () => {
-return useQuery("products",async()=>{
+return useQuery({queryKey:["products"],queryFn:async()=>{
     const response=await axios.get("https://dummyjson.com/products");
-    return response.data.products
+    return response.data.products;
+}
 })
 };
 
