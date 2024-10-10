@@ -1,44 +1,54 @@
-use typescript in both frontend and backend
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getUsers } from '../services/userServices';
+import {useQuery} from "react-query"
+import "./ViewUser.css";
 
-create backend using nodejs,expressjs,mysql sequelize databse my passwordis-Password123#@! and database name is-Project2
+const ViewUser = () => {
+  const [users, setUsers] = useState([]);
 
-and for frontend use reactjs,formik and yup from creating form and validations react+vite
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response: any = await getUsers();
+      setUsers(response);
+    };
 
-store photo and appoinment pdf using multer in localhost
+    fetchUsers();
+  }, []);
 
-only display appoinment pdf link in view user screen 
+  return (
+    <div className="container">
+      <h1 className='userheading'>Users List</h1>
+      {users.map((user: any) => (
+        <div key={user.id} className="user-card">
+          <img src={`http://localhost:4004/images/${user.profilePhoto}`} alt="Profile" />
+          <div className="user-info">
+            <h3>Name: {user.firstName} {user.lastName}</h3>
+            <h3>Email: {user.email}</h3>
+            <h3>Company Address: {user.Address.companyAddress}</h3>
+            <h3>Company City: {user.Address.companyCity}</h3>
+            <h3>Company State: {user.Address.companyState}</h3>
+            <h3>Company Zip: {user.Address.companyZip}</h3>
+            <h3>Home Address: {user.Address.homeAddress}</h3>
+            <h3>Home City: {user.Address.homeCity}</h3>
+            <h3>Home State: {user.Address.homeState}</h3>
+            <h3>Home Zip: {user.Address.homeZip}</h3>
+            <div className="button-group"> 
+              <button 
+                className="view-button" 
+                onClick={() => window.open(`http://localhost:4004/images/${user.appointmentLetter}`, "_blank")}
+              >
+                View Appointment Letter
+              </button>
+              <Link to={`/edit-user/${user.id}`}>
+                <button className="edit-button">Edit</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-use associations because we have to store data in different tables as i mentions
-
-Following are the modules:
-1. Add User Screen
-2. View User Screen
-3. Edit User Screen
-Description
-Default page will add a user, Use backend server(apis) and database to store the data. After
-submitting, redirect the user to the view user page with the option of edit details.
-Add / Edit a user Form:
-​
-- First Name
-- Last Name
-- Email
-- Profile photo (PNG, JPG, JPEG)
-- Company Address
-- Company city
-- Company State
-- Company zip (6 digits)
-- Home Address
-- Home City
-- Home State
-- Home Zip (6 digits)
-- Appointment Letter (PDF)
-- Submit Button, Cancel Button
-View user details:
-Display all the details with a user profile photo. 
-Note:
-1. The user personal details should be in the user table and Address
-details should be in the Address table.
-2. All the fields are mandatory, implement the client and server side both
-the validations.
-
-give me a full proffessional like code with proper structure
+export default ViewUser;
