@@ -1,0 +1,79 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import io from 'socket.io-client'
+import { useEffect, useState } from 'react'
+
+const socket = io('http://localhost:3001')
+
+function App() {
+  const [message, setMessage] = useState('')
+  const [recivedMessage, setRecivedMessage] = useState('')
+  const [room, setRoom] = useState('');
+
+
+  const joinRoom = () => {
+    if (room !== '') { socket.emit("join_room", room) }
+  };
+
+
+  const sendMessage = () => {
+    socket.emit("send_message", { message, room });
+  };
+
+  useEffect(() => {
+    socket.on('reciver_message', (data) => {
+      setRecivedMessage(data.message);
+    })
+  })
+
+  return (
+  
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          <div className="card">
+            <div className="card-header text-center">
+              <h2>Chat Room</h2>
+            </div>    
+            <div className="card-body">
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Room"
+                  onChange={(event) => setRoom(event.target.value)}
+                />
+              </div>
+              <div className="mb-3 text-center">
+                <button className="btn btn-primary" onClick={joinRoom}>
+                  Join Room
+                </button>
+                <p>Joined Room: {room}</p>
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Message"
+                  onChange={(event) => setMessage(event.target.value)}
+                />
+              </div>
+              <div className="mb-3 text-center">
+                <button className="btn btn-success" onClick={sendMessage}>
+                  Send Message
+                </button>
+              </div>
+              <h3>Message:</h3>
+              <div className="alert alert-secondary" role="alert">
+                {recivedMessage}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+export default App
