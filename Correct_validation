@@ -1,88 +1,118 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { getUsers } from '../services/userServices';
-import './ViewUser.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import io from 'socket.io-client'
+import { useEffect, useState } from 'react'
 
-const useFetchUsers = (page: number, limit: number) => {
-  return useQuery({
-    queryKey: ['users', page, limit],
-    queryFn: async () => {
-      const response: any = await getUsers(page,limit);
-      const posts=await response.json();
-      return posts;
-    },
-    placeholderData: keepPreviousData,
-  });
-};
+const socket = io('http://localhost:3001')
 
-const ViewUser = () => {
-  const [page, setPage] = useState(1);
-  const limit = 5;
+function App() {
+  const [message, setMessage] = useState('')
+  const [recivedMessage, setRecivedMessage] = useState<string[]>([]);
+  const [room, setRoom] = useState('');
 
-  const { data, isLoading, isError } = useFetchUsers(page, limit);
+  const joinRoom = () => {
+    if (room !== '') { socket.emit("join_room", room) }
+  };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
-  if (isError) {
-    return <div>Error fetching users</div>;
-  }
+  const sendMessage = () => {
+    socket.emit("send_message", { message, room });
+  };
 
-  const { users, total } = data;
+
+  useEffect(() => {
+    socket.on('reciver_message', (data) => {
+      setRecivedMessage(prevMessages => [...prevMessages, data.message]);
+    });
+  }, []);
 
   return (
-    <div className="container">
-      <h1 className="userheading">Users List</h1>
-      {users.map((user: any) => (
-        <div key={user.id} className="user-card">
-          <img src={`http://localhost:4004/images/${user.profilePhoto}`} alt="Profile" />
-          <div className="user-info">
-            <h3>Name: {user.firstName} {user.lastName}</h3>
-            <h3>Email: {user.email}</h3>
-            <h3>Company Address: {user.Address.companyAddress}</h3>
-            <h3>Company City: {user.Address.companyCity}</h3>
-            <h3>Company State: {user.Address.companyState}</h3>
-            <h3>Company Zip: {user.Address.companyZip}</h3>
-            <h3>Home Address: {user.Address.homeAddress}</h3>
-            <h3>Home City: {user.Address.homeCity}</h3>
-            <h3>Home State: {user.Address.homeState}</h3>
-            <h3>Home Zip: {user.Address.homeZip}</h3>
-            <div className="button-group">
-              <button 
-                className="view-button" 
-                onClick={() => window.open(`http://localhost:4004/images/${user.appointmentLetter}`, "_blank")}
-              >
-                View Appointment Letter
-              </button>
-              <Link to={`/edit-user/${user.id}`}>
-                <button className="edit-button">Edit</button>
-              </Link>
+
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          <div className="card">
+            <div className="card-header text-center">
+              <h2>Chat Room</h2>
+            </div>
+            <div className="card-body">
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Room"
+                  onChange={(event) => setRoom(event.target.value)}
+                />
+              </div>
+              <div className="mb-3 text-center">
+                <button className="btn btn-primary" onClick={joinRoom}>
+                  Join Room
+                </button>
+                <p>Joined Room: {room}</p>
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Message"
+                  onChange={(event) => setMessage(event.target.value)}
+                />
+              </div>
+              <div className="mb-3 text-center">
+                <button className="btn btn-success" onClick={sendMessage}>
+                  Send Message
+                </button>
+              </div>
+              <h3>Message:</h3>
+              <div className="alert alert-secondary" role="alert">
+                {recivedMessage.map((msg, index) => (
+                  <span key={index}>
+                    {msg}
+                    <br />
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      ))}
-
-      <div className="pagination">
-        <button 
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))} 
-          disabled={page === 1}
-          className="pagination-button"
-        >
-          Previous
-        </button>
-        <span>Page {page}</span>
-        <button 
-          onClick={() => setPage((prev) => (prev * limit < total ? prev + 1 : prev))} 
-          disabled={page * limit >= total}
-          className="pagination-button"
-        >
-          Next
-        </button>
       </div>
     </div>
   );
-};
+}
 
-export default ViewUser;
+
+export default App
+
+
+
+import express from 'express';
+const app = express();
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
+app.use(cors());
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+});
+
+io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    socket.on("join_room", (data) => { socket.join(data); });
+
+    socket.on("send_message", (data) => {
+       
+        socket.to(data.room).emit("reciver_message", data);
+    });
+
+});
+
+server.listen(3001, () => {
+    return console.log(`Server is listening on port 3001`);
+});
+
