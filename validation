@@ -1,140 +1,77 @@
-";
-import * as Yup from "yup";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+    import React, { useEffect, useState } from 'react';
+    import { io } from 'socket.io-client';
+    import './ChatRoom.css';
+    import { useNavigate } from 'react-router-dom';
 
-const Addressform = () => {
-  const validationSchema = Yup.object().shape({
-    address: Yup.array().of(
-      Yup.object().shape({
-        title: Yup.string()
-          .min(2, "Title Is to Short")
-          .max(50, "Title Is To Big")
-          .required("Title Is required"),
+    const socket = io('http://localhost:4001');
 
-        street: Yup.string()
-          .min(2, "Street is too short")
-          .max(20, "Street Is Too Big")
-          .required("Street Is required"),
+    interface Message {
+        id: number;
+        roomId: number;
+        senderId: number;
+        content: string;
+    }
 
-        city: Yup.string()
-          .min(2, "Too small for city")
-          .max(20, "Too Big for city"),
+    const ChatRoom: React.FC<{ userType: '1' | '2'; userId: number }> = ({ userType, userId }) => {
+        const navigate = useNavigate();
+        const [messages, setMessages] = useState<Message[]>([]);
+        const [content, setContent] = useState('');
+        const [currentRoomId, setCurrentRoomId] = useState<number | null>(null);
+        const agencyId = userType === '1' ? 1 : null;
+        const jobSeekerId = userType === '2' ? 1 : null;
 
-        country: Yup.string()
-          .min(2, "Not a valid country")
-          .max(15, "Name is too big for country")
-          .required("Country Name Is required"),
+        useEffect(() => {
+            socket.on('newMessage', (message: Message) => {
+                setMessages(prevMessages => [...prevMessages, message]);
+            });
 
-        pincode: Yup.string()
-          .required("Pincode is required")
-          .matches(/^\d{6}$/, "Must We 6 digits"),
-      })
-    ),
-  });
+            socket.on('chatRoomCreated', (chatRoom: { id: number }) => {
+                setCurrentRoomId(chatRoom.id);
+                socket.emit('joinRoom', chatRoom.id);
+            });
 
-  const initialValues = {
-    address: [
-      {
-        title: "",
-        street: "",
-        city: "",
-        country: "",
-        pincode: "",
-      },
-    ],
-  };
-  const handleSubmit = (values) => {
-    console.log(values);
-  };
-  return (
-    <div>
-      <h3>Address Form</h3>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ values, setFieldValue }) => (
-          <Form>
-            <div>
-              {values.address.map((_, index) => (
-                <div key={index}>
-                  <Field name={`address.${index}.title`} placeholder="Title" />
-                  <ErrorMessage
-                    name={`address.${index}.title`}
-                    component="div"
-                  />
+            return () => {
+                socket.off('newMessage');
+                socket.off('chatRoomCreated');
+            };
+        }, []);
 
-                  <Field
-                    name={`address.${index}.street`}
-                    placeholder="Street"
-                  />
-                  <ErrorMessage
-                    name={`address.${index}.street`}
-                    component="div"
-                  />
+        const createChatRoom = () => {
+            const roomData = userType === '1'
+                ? { jobSeekerId: userId, agencyId }
+                : { agencyId: userId, jobSeekerId };
+            socket.emit('createChatRoom', roomData);
+        };
 
-                  <Field name={`address.${index}.city`} placeholder="City" />
-                  <ErrorMessage
-                    name={`address.${index}.city`}
-                    component="div"
-                  />
+        const sendMessage = () => {
+            if (content.trim() && currentRoomId) {
+                socket.emit('sendMessage', { roomId: currentRoomId, senderId: userId, content });
+                setContent('');
+            }
+        };
 
-                  <Field
-                    name={`address.${index}.country`}
-                    placeholder="Country"
-                  />
-                  <ErrorMessage
-                    name={`address.${index}.country`}
-                    component="div"
-                  />
-
-                  <Field
-                    name={`address.${index}.pincode`}
-                    placeholder="Pincode"
-                    type="string"
-                  />
-                  <ErrorMessage
-                    name={`address.${index}.pincode`}
-                    component="div"
-                  />
-
-                  {values.address.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const removeAddress = [...values.address];
-                        removeAddress.splice(index, 1);
-                        setFieldValue("address", removeAddress);
-                      }}
-                    >
-                      Remove Address
-                    </button>
-                  )}
+        return (
+                <div className="chat-room">
+                    <h1>{userType === '1' ? 'Job Seeker' : 'Agency'} Chat Room</h1>
+                    <button onClick={createChatRoom}>Create Chat Room</button>
+                    <div className="message-container">
+                        {messages.map((message) => (
+                            <div className="message" key={message.id}>
+                                <strong>User {message.senderId}:</strong> {message.content}
+                            </div>
+                        ))}
+                    </div>
+                    <input
+                        type="text"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        placeholder="Type your message..."
+                    />
+                    <button onClick={sendMessage}>Send</button>
+                    <button onClick={() => navigate("/dashboard")}>Go To Dashboard</button>
+                    <button onClick={() => navigate("/login")} className='login'>Logout</button>
                 </div>
-              ))}
-            </div>
-            
-            {values.address.length>1 &&(
-                <button type="button"
-                onClick={()=>{
-                    const addAddress={
-                        title: "",
-                        street: "",
-                        city: "",
-                        country: "",
-                        pincode: "",
-                      };
-                    setFieldValue("address", [...values.address, addAddress]);
-                }}>Add Address</button>
-              )}
-            
-            <button type="submit">Submit</button>
-          </Form>
-        )}
-      </Formik>
-    </div>
-  );
-};
+            );
+    };
 
-export default Addressform;
+    export default ChatRoom;
