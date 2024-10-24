@@ -1,0 +1,148 @@
+import React, { useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import {
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Box,
+  Stack,
+  
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Notification from "./Notification";
+
+
+
+
+
+const Chat: React.FC = () => {
+  const { id } = useParams();  
+  // Existing useEffect...
+  
+  
+  // Initialize socket connection
+  
+  const socket = useRef<Socket | null>(null);
+  // socket.current = io('http://localhost:9000');
+  
+  // Use useRef to hold the socket instance
+  
+  // Define state types
+  const [message, setMessage] = useState<string>("");
+  const [room, setRoom] = useState<string>("");
+  const [socketID, setSocketID] = useState<string>("");
+  const [messages, setMessages] = useState<string[]>([]);
+  const [roomName, setRoomName] = useState<string>("");
+  const [history, setHistory] = useState<any>([]);
+  const [notification, setNotification] = useState<{ open: boolean; message: string }>({ open: false, message: "" });  
+  const senderId = localStorage.getItem("userId");
+  const receiverId = id;
+
+  // Fetch messages when the component mounts or when id changes
+  useEffect(() => {
+    socket.current = io("http://localhost:9000");
+
+    socket.current.on("connect", () => {
+      // console.log(socket.current?.id);
+      setSocketID(socket.current?.id || "");
+      // console.log("connected", socket.current?.id);
+    });
+
+    socket.current.emit("join-room", senderId, receiverId);
+
+    socket.current.emit("get-histories", { senderId, receiverId });
+
+    socket.current.on("histories", (data) => {
+      // console.log("........................",data)
+      setHistory(data.chatRoom);
+    });
+    // console.log(senderId , receiverId);
+
+    socket.current.on("receive-message", (data: string) => {
+      // console.log("receive-message", data);
+      setMessages((messages) => [...messages, data]);
+
+
+      if(!receiverId){
+        console.log("receiverId",receiverId)  
+        // setNotification({ open: false, message: `New message: '' }` });
+      }
+
+
+      setNotification({ open: true, message: `New message: ${data}` });
+    });
+
+    // Cleanup on disconnection
+    return () => {
+      socket.current?.disconnect();
+    };
+  }, [id , messages]); // Re-run effect when id changes
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
+  };
+
+  // Handle message send
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    socket.current?.emit("send-message", { message, senderId, receiverId });
+   
+    setMessage("");
+  };
+  return (
+<Container maxWidth="sm" sx={{ backgroundColor: "#f9f9f9", borderRadius: "8px", padding: "20px", boxShadow: "0px 0px 10px rgba(0,0,0,0.1)" }}>
+<Notification 
+        message={notification.message} 
+        open={notification.open} 
+        onClose={handleCloseNotification} 
+      />
+      <Typography variant="h6" sx={{ color: "#333", marginBottom: "20px" }}>
+        Socket ID: {socketID || "Connecting..."}
+      </Typography>
+
+      <Stack spacing={2} sx={{ maxHeight: "400px", overflowY: "auto", marginBottom: "20px" }}>
+        {history.map((msg: any, i: any) => (
+          
+          <Box key={i} sx={{
+            alignSelf: msg.senderId === id ? 'flex-end' : 'flex-start',
+            backgroundColor: msg.senderId === id ? "#d1e7dd" : "#ffffff",
+            padding: "10px",
+            borderRadius: "10px",
+            maxWidth: "70%",
+            wordWrap: "break-word",
+            display: 'flex',
+            justifyContent: msg.senderId === id ? 'flex-end' : 'flex-start',
+          }}>
+            <Typography variant="body1" sx={{ color: "#333" }}>
+              {msg.content} <em>{new Date(msg.createdAt).toLocaleTimeString()}</em>
+
+            </Typography>
+          </Box>
+          
+        ))}
+      </Stack>
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center' }}>
+        <TextField
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          label="Type a message"
+          variant="outlined"
+          fullWidth
+          sx={{ marginRight: '10px' }}
+        />
+        <Button type="submit" variant="contained" color="primary" sx={{
+          "&:hover": {
+            backgroundColor: "#0056b3",
+          },
+        }}>
+          Send
+        </Button>
+      </form>
+    </Container>
+  );
+};
+
+export default Chat;
