@@ -1,0 +1,19 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.not-found h1 {
+    font-size: 3rem;
+    color: #dc3545; /* Bootstrap danger color */
+}
+
+.not-found p {
+    font-size: 1.2rem;
+    color: #6c757d; /* Bootstrap muted color */
+}

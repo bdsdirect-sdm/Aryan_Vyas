@@ -1,0 +1,35 @@
+.edit-product-form {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .edit-product-form input,
+  .edit-product-form select,
+  .edit-product-form button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .edit-product-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .edit-product-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .edit-product-form div {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
