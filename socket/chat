@@ -1,140 +1,216 @@
-export const getDoctorList = async (req: any, res: Response) => {
+export const updateprofile = async (req: any, res: any) => {
     try {
         const { uuid } = req.user;
+        const { firstname, lastname, phone, email } = req.body;
 
-        console.log("User UUID:", req.user);
-
-        const user = await User.findOne({ where: { uuid: uuid }, include: Address });
-
-        if (user) {
-            const referCount = await Patient.count({ where: { referedto: uuid } });
-
-            const referCompleted = await Patient.count({ where: { referedto: uuid, referalstatus: 1 } });
-
-            const docCount = await User.count({
-                where: {
-                    is_verified: 1,
-                    doctype: [1, 2],
-                }
-            });
-
-            const doctorList = await User.findAll({
-                where: {
-                    doctype: [1, 2],
-                    is_verified: 1,
-                },
-                include: Address,
-            });
-
-
-            res.status(200).json({
-                user,
-                message: "User Found",
-                docCount,
-                referCount,
-                referCompleted,
-                doctorList,
-            });
-        } else {
-            res.status(404).json({ message: "User Not Found" });
+        const user = await User.findOne({ where: { uuid: uuid } });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-    } catch (err) {
-        console.error("Error fetching doctor list:", err);
-        res.status(500).json({ message: `Error: ${err}` });
+
+        user.firstname = firstname || user.firstname;
+        user.lastname = lastname || user.lastname;
+        user.phone = phone || user.phone;
+        user.email = email || user.email;
+
+        await user.save();
+
+        return res.status(200).json({ message: "Profile updated successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error updating profile" });
     }
 };
-
-
-////////////////////////////////////////////////////////////////////////////////////
-
-import { useQuery } from '@tanstack/react-query';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+//////////////////////
+router.post('/update-profile', userAuthMiddleware, updateprofile);
+///////
+VITE_UPDATE_PROFILE = update-profile
+/////////////////////////////////
+    UPDATE_USER: import.meta.env.VITE_UPDATE_PROFILE
+//////////////////////
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import './DoctorList.css'; // Add custom styles for spacing
+import { Modal } from 'react-bootstrap';
+import api from '../api/axiosInstance'; // Import your axios instance
+import './Profile.css'; // Assuming you have some basic styles
 
-const DoctorList: React.FC = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+// Helper function to fetch user data
+const getUser = async (token: string) => {
+  try {
+    const response = await api.get('/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err: any) {
+    toast.error("Failed to fetch user data");
+    throw new Error(err?.message || "User data fetch failed");
+  }
+};
 
+// Helper function to update user data
+const updateUser = async (token: string, updatedUser: { firstname: string, lastname: string, phone: string, email: string }) => {
+  try {
+    const response = await api.post('/update-profile', updatedUser, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err: any) {
+    toast.error("Failed to update user data");
+    throw new Error(err?.message || "User update failed");
+  }
+};
+
+const Profile: React.FC = () => {
+  const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+  const [user, setUser] = useState<any>(null); // Initial user data state
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  // Fetch user data on component mount
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
+    if (token) {
+      getUser(token)
+        .then((data) => {
+          setUser(data.user);
+          setFirstname(data.user.firstname);
+          setLastname(data.user.lastname);
+          setPhone(data.user.phone);
+          setEmail(data.user.email);
+        })
+        .catch((err) => {
+          console.error("Error fetching user data:", err);
+        });
     }
-  }, [navigate]);
+  }, [token]);
 
-  // Fetch doctor list
-  const fetchDoctor = async () => {
-    try {
-      const response = await api.get(`${Local.GET_DOCTOR_LIST}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (err) {
-      toast.error(`Error fetching doctor data: ${err}`);
+  // Save updated user data
+  const handleSaveChanges = () => {
+    if (firstname && lastname && phone && email) {
+      const updatedUser = { firstname, lastname, phone, email };
+      updateUser(token!, updatedUser)
+        .then((response) => {
+          toast.success("Profile updated successfully");
+          setIsEditing(false);
+          // Update the user state with the new data
+          setUser((prevUser: any) => ({
+            ...prevUser,
+            firstname: updatedUser.firstname,
+            lastname: updatedUser.lastname,
+            phone: updatedUser.phone,
+            email: updatedUser.email,
+          }));
+        })
+        .catch((err) => {
+          toast.error(`Error updating profile: ${err.message}`);
+        });
+    } else {
+      toast.error("Please fill all fields");
     }
   };
 
-  // Use React Query to fetch the doctor data
-  const { data: doctors, error, isLoading, isError } = useQuery({
-    queryKey: ['doctor'],
-    queryFn: fetchDoctor,
-  });
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-text">Loading...</div>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+  if (!user) {
+    return <div>Loading...</div>;
   }
-
-  // Error state
-  if (isError) {
-    return (
-      <div className="error-container">
-        <div className="text-danger">Error: {error.message}</div>
-      </div>
-    );
-  }
-
-  console.log('Doctor List------------>', doctors);
 
   return (
-    <div className="doctor-list-container">
-      <h2 className="doctor-list-title">Doctor List</h2>
-      <div className="table-container">
-        <table className="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            {doctors?.doctorList?.map((doctor: any, index: number) => (
-              <tr key={doctor.id}>
-                <td className="fw-bold">{index + 1}</td>
-                <td>{doctor.firstname}</td>
-                <td>{doctor.lastname}</td>
-                <td>{doctor.email}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="profile-container">
+      <h2>Profile</h2>
+
+      <div className="profile-header">
+        <img
+          src={user.profileImage || 'https://via.placeholder.com/150'}
+          alt="Profile"
+          className="profile-image"
+        />
+        <div>
+          <h3>{user.firstname} {user.lastname}</h3>
+          <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+        </div>
       </div>
+
+      <div className="profile-info">
+        <div>
+          <strong>Name:</strong>
+          {isEditing ? (
+            <div>
+              <input
+                type="text"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                placeholder="First Name"
+              />
+              <input
+                type="text"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+                placeholder="Last Name"
+              />
+            </div>
+          ) : (
+            `${user.firstname} ${user.lastname}`
+          )}
+        </div>
+
+        <div>
+          <strong>Phone:</strong>
+          {isEditing ? (
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Phone Number"
+            />
+          ) : (
+            user.phone
+          )}
+        </div>
+
+        <div>
+          <strong>Email:</strong>
+          {isEditing ? (
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
+          ) : (
+            user.email
+          )}
+        </div>
+      </div>
+
+      {isEditing && (
+        <div>
+          <button onClick={handleSaveChanges}>Save Changes</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        </div>
+      )}
+
+      <button onClick={handleOpenModal}>Add Address</button>
+
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Address</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* You can add your AddAddress component here */}
+          <p>Add your address here...</p>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
 
-export default DoctorList;
+export default Profile;
