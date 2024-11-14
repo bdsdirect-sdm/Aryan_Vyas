@@ -1,208 +1,127 @@
-export const changePassword = async (req: any, res: any) => {
-    try {
-        const { uuid } = req.user;
-        const { currentPassword, newPassword } = req.body;
-
-    
-        const user = await User.findOne({ where: { uuid } });
-
-        if (!user) {
-            return res.status(404).json({ "message": "User not found" });
-        }
-
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
-
-        if (!isMatch) {
-            return res.status(403).json({ "message": "Current password is incorrect" });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        user.password = hashedPassword;
-        await user.save();
-        return res.status(200).json({ "message": "Password updated successfully" });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ "message": "Error updating password" });
-    }
-};
-///////////////////////////
-router.post("/change-password", userAuthMiddleware, changePassword);
-///////////////////////
-VITE_CHANGE_PASSWORD = change-password
-/////////////////////
-VITE_CHANGE_PASSWORD: any;
-////////
-VITE_CHANGE_PASSWORD: import.meta.env.VITE_CHANGE_PASSWORD,
-//////////////////
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
+import api from '../api/axiosInstance';  // Assuming this is your Axios instance
 import { toast } from 'react-toastify';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import './UpdatePassword.css'; // Optional: Add custom CSS for styling
+import './Staff.css';  // Add custom styles if needed
 
-const UpdatePassword: React.FC = () => {
+const Staff: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-const handleCancel=()=>{
-  navigate('/dashboard')
-}
-  // Local state for old and new passwords
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // State variables for form fields
+  const [staffName, setStaffName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
+  const [gender, setGender] = useState('Male');
+  const [loading, setLoading] = useState(false);  // Loading state for the button
 
-    if (newPassword !== confirmPassword) {
-      toast.error("New passwords don't match");
+  // Function to handle adding staff
+  const handleAddStaff = async (e: React.FormEvent) => {
+    e.preventDefault();  // Prevent default form submission
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Please log in to add staff.');
+      navigate('/login');
       return;
     }
 
+    const staffData = {
+      staffName,
+      email,
+      contact,
+      gender,
+    };
+
     try {
-      setLoading(true);
+      setLoading(true);  // Show loading indicator
+      const response = await api.post('/add-Staff', staffData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      // Make API call to change password
-      const response = await api.post(
-        `${Local.VITE_CHANGE_PASSWORD}`,
-        { currentPassword: oldPassword, newPassword },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      toast.success('Password changed successfully!');
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      navigate('/profile');
-    } catch (err) {
-      toast.error('Failed to update password. Please try again.');
+      if (response.data.success) {
+        toast.success('Staff added successfully');
+        // Optionally reset the form or navigate to another page after adding staff
+        setStaffName('');
+        setEmail('');
+        setContact('');
+        setGender('Male');
+      } else {
+        toast.error(response.data.message || 'Failed to add staff');
+      }
+    } catch (err: any) {
+      toast.error(`Error: ${err.response?.data?.message || err.message}`);
     } finally {
-      setLoading(false);
+      setLoading(false);  // Hide loading indicator
     }
   };
 
   return (
-    <div className="update-password-container">
-      <h2 className="update-password-title">Change Your Password</h2>
-
-      <form onSubmit={handleSubmit} className="update-password-form">
+    <div className="staff-form-container">
+      <h3>Add Staff</h3>
+      <form onSubmit={handleAddStaff}>
         <div className="form-group">
-          <label htmlFor="old-password">Old Password</label>
+          <label htmlFor="staffName">Staff Name</label>
           <input
-            type="password"
-            id="old-password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            required
+            type="text"
+            id="staffName"
             className="form-control"
-            placeholder="Enter your old password"
+            value={staffName}
+            onChange={(e) => setStaffName(e.target.value)}
+            required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="new-password">New Password</label>
+          <label htmlFor="email">Email</label>
           <input
-            type="password"
-            id="new-password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
+            type="email"
+            id="email"
             className="form-control"
-            placeholder="Enter a new password"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="confirm-password">Confirm New Password</label>
+          <label htmlFor="contact">Contact</label>
           <input
-            type="password"
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+            type="text"
+            id="contact"
             className="form-control"
-            placeholder="Confirm your new password"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            required
           />
         </div>
-    <div className='btn-reset'>
-          <button onClick={handleCancel} className='cancel-btn btn btn-outline-success'>Cancel</button>
-             <button type="submit" className="password-btn btn btn-info " disabled={loading}>
-               Change Password
+
+        <div className="form-group">
+          <label htmlFor="gender">Gender</label>
+          <select
+            id="gender"
+            className="form-control"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            required
+          >
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading} // Disable button during loading
+        >
+          {loading ? 'Adding Staff...' : 'Add Staff'}
         </button>
-        </div>
-   
       </form>
     </div>
   );
 };
 
-export default UpdatePassword;
-//////////////////////////////////
-.update-password-container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .update-password-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .update-password-form .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .update-password-form label {
-    font-weight: bold;
-  }
-  
-  .update-password-form .form-control {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  .update-password-form .form-control:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .btn-reset{
-    display: flex;
-    justify-content: flex-end;
-    gap:2%;
-  }
-  .cancel-btn{
-    border-color:#43D79E;
-    color:#43D79E;
-  }
-  .cancel-btn:hover{
-    background-color:#43D79E;
-    border-color:#43D79E;
-    color:white;
-  }
-  .password-btn{
-    color:white;
-  }
-  .password-btn:hover{
-    color:white;
-    background-color: #35c0e4;
-  }
-
-//////
-{ path: '/update-password', element: <UpdatePassword /> },
+export default Staff;
