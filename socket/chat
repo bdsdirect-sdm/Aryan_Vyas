@@ -35,3 +35,5 @@ router.get('/get-staff', userAuthMiddleware, getStaffList);
 GET_STAFF: string;
 
 /////////////
+VITE_GET_STAFF = get-staff
+///////////////////
