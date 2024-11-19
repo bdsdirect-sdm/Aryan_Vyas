@@ -1,39 +1,21 @@
-export const getStaffList = async (req: any, res: Response):Promise<void> => {
-    try {
-        console.log("testin")
-        const { uuid } = req.user;
-
-        const staffList = await Staff.findAll({
-            where: { userId: uuid },  
-            attributes: ['uuid', 'firstname', 'lastname', 'gender', 'email', 'phoneNumber'],  
-        });
-        console.log("stafff list ---------------->",staffList)
-        if (staffList.length > 0) {
-             res.status(200).json(staffList);
-             return
-        } else {
-             res.status(404).json({ message: 'No staff found for this user.' });
-             return
-        }
-    } catch (err) {
-        console.error(err);
-         res.status(500).json({ message: 'Server error, please try again later.' });
-         return
-    }
-};
-
-///////////////////////////////////////////////////////////////////
-
-router.get('/get-staff', userAuthMiddleware, getStaffList);
-
-///////////////////////////////////////////////////////////
-
- GET_STAFF: import.meta.env.VITE_GET_STAFF,
-
-/////////////////////////////////////////////////////////////////
-
-GET_STAFF: string;
-
-/////////////
-VITE_GET_STAFF = get-staff
-///////////////////
+ <form className="d-flex mb-4 hi" role="search">
+        <input
+          className="form-control me-2 hi2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          />
+        <button className="btn btn-primary btn-search" type="submit">Search</button>
+      </form>
+  .hi{
+    margin-top:15px;
+    border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+  gap: 1rem;
+  margin-bottom: 20px;
+  padding: 10px;
+  }
+  .hi2{
+    width: 100%;
+    max-width: 50%;
+  }
