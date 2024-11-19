@@ -1,0 +1,75 @@
+/* Ensure the content has top margin to avoid overlap with header */
+.doctor-list-container {
+    margin-left: 250px; /* Adjust this depending on the sidebar width */
+    margin-top: 60px;   /* Adjust this depending on header height */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background for content */
+    height: calc(100vh - 60px); /* Ensure content takes full height minus header */
+    overflow-y: auto; /* Make content scrollable if it overflows */
+    margin-top: 0px;
+}
+
+/* Make sure the table fits well inside the content area */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for table */
+}
+
+/* Table header and cells */
+.table th,
+.table td {
+    text-align: center;
+    padding: 12px 20px;
+    background-color: white;
+}
+.tablecolor{
+    background-color: white;
+}
+/* Table header styling */
+.table th {
+    background-color:#ecf1f3;
+    color:#212121;
+    font-weight: bold;
+}
+
+
+.table td {
+    background-color: #ffffff;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f1f1f1; 
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+.spinner-border {
+    margin: 20px auto;
+    display: block;
+}
+
+/* Error message container */
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: red;
+    font-size: 1.2rem;
+}
+.icon{
+    margin-top: 5px;
+display: flex;
+justify-content: space-between;
+}
+.icon-2{
+    background: linear-gradient(to left, #5ae1fd, #5bebb1);
+    border-radius: 4px;
+  padding: 10px;
+}
