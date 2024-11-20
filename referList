@@ -1,0 +1,156 @@
+export const getAppointments = async (req: any, res: Response): Promise<void> => {
+    try {
+        const { uuid: userId } = req.user;
+
+        const appointments = await Appointment.findAll({
+            where: {
+                userId: userId, 
+            },
+            attributes: ['uuid', 'appointmentDate', 'appointmentType'],
+            include: [
+                {
+                    model: Patient,
+                    attributes: ['uuid', 'firstname', 'lastname', 'disease','referalstatus'], 
+                },
+                {
+                    model: User,
+                    attributes: ['uuid', 'firstname', 'lastname', 'email'],
+                },
+            ],
+        });
+
+        if (!appointments || appointments.length === 0) {
+            res.status(404).json({ message: 'No appointments found for this user.' });
+            return;
+        }
+
+        res.status(200).json(appointments);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+};
+
+
+
+Frontend Code
+import { useQuery } from '@tanstack/react-query';
+import { Local } from '../environment/env';
+import api from '../api/axiosInstance';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import './AppoinmentList.css';
+
+const AppointmentsList: React.FC = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await api.get(`${Local.GET_APPOINTMENT}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err: any) {
+      toast.error(`${err.message || 'Error fetching appointments data'}`);
+    }
+  };
+
+  const { data: appointmentsData, error, isLoading, isError } = useQuery({
+    queryKey: ['appointments'],
+    queryFn: fetchAppointments,
+  });
+
+  console.log("apppointmentttttttttt", appointmentsData);
+
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div>Loading...</div>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-danger">
+        Error: {error.message || 'Failed to load appointments data'}
+      </div>
+    );
+  }
+
+  return (
+    <div className="appointments-list-container">
+      <div className="appointments-list-header">
+        <h5 className="appointments-list-title">Appointments List</h5>
+        <div className="add-appointment-button">
+          <button
+            onClick={() => navigate('/add-appointment')}
+            className="add-appointment-btn mb-4"
+            disabled={loading}
+          >
+            {loading ? 'Adding Appointment...' : 'Add Appointment'}
+          </button>
+        </div>
+      </div>
+
+      <form className="d-flex mb-4 search-b" role="search">
+        <input
+          className="form-control input-field"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button className="btn btn-primary btn-search" type="submit">Search</button>
+      </form>
+
+      {/* Appointments List Table */}
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">Patient Name</th>
+            <th scope="col">Doctor Name</th>
+            <th scope="col">Appointment Date</th>
+            <th scope="col">Appointment Type</th>
+            {/* <th scope="col">Action</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {appointmentsData?.map((appointment: any) => (
+            <tr key={appointment.uuid}>
+              <td>{appointment.Patient?.firstname} {appointment.Patient?.lastname}</td>
+              <td>{appointment.User?.firstname} {appointment.User?.lastname}</td>
+              <td>{appointment.appointmentDate}</td>
+              <td>{appointment.appointmentType}</td>
+              {/* <td>
+                <button
+                  className="btn btn-info btn-sm"
+                  onClick={() => navigate(`/appointment/${appointment.uuid}`)}
+                >
+                  View
+                </button>
+              </td> */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default AppointmentsList;
