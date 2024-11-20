@@ -127,7 +127,7 @@ select:focus {
     padding: 12px;
     font-size: 16px;
     width: 100%;
-    background-color: #57cdec;
+    background-color:#35c0e4;
     color: white;
     border: none;
     border-radius: 8px;
@@ -135,11 +135,11 @@ select:focus {
 }
 
 .sign-up-btn1:hover {
-    background-color: #35c0e4;
+    background-color:#2899b6;
 }
 
 .login-link {
-    color: #57cdec;
+    color: #35c0e4;
     font-weight: 600;
     margin-left: 10px;
 }

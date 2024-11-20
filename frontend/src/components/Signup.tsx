@@ -136,7 +136,7 @@ const Signup: React.FC = () => {
                                         <ErrorMessage name="confirmPass" component="div" className="text-danger" />
                                     </div>
 
-                                    <button type="submit" className="btn-login btn-outline-dark sign-up-btn">SignUp</button>
+                                    <button type="submit" className="sign-up-btn1 btn-outline-dark ">SignUp</button>
                                 </Form>
                                 
                             )}

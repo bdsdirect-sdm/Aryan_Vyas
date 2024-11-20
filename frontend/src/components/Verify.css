@@ -73,23 +73,6 @@ section.sign-up-section {
     color: red;
 }
 
-/* Button Styles */
-.sign-up-btn {
-    margin-top: 40px;
-    padding: 12px;
-    font-size: 16px;
-    width: 100%;
-    background-color: #43d79e;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.sign-up-btn:hover {
-    background-color: #35c0e4;
-}
-
 /* Bottom Section (Link to Login) */
 .bottom-sec {
     margin-top: 20px;
@@ -97,7 +80,7 @@ section.sign-up-section {
 }
 
 .bottom-sec p {
-    color: var(--light-text);
+    color: #35c0e4;
     opacity: 70%;
 }
 
@@ -112,10 +95,13 @@ section.sign-up-section {
   padding: 12px;
   font-size: 16px;
   width: 100%;
-  background-color: #57cdec;
+  background-color: #35c0e4;
   color: white;
   border: none;
   border-radius: 8px;
+}
+.btn-verify:hover{
+    background-color: #2a99b6;
 }
 /* Media Queries for Responsiveness */
 @media screen and (max-width: 1600px) {

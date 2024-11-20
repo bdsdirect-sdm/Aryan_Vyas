@@ -12,6 +12,7 @@
 }
 .my-appointment-heading{
   margin-top: 10px;
+  font-weight: 500  ;
 }
 .view-icon{
   display: flex;

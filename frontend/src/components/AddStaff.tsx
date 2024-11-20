@@ -177,7 +177,7 @@ const AddStaff: React.FC = () => {
         )}
 
         {/* Staff List Table */}
-        <p className="staff-list-header fs-4 fw-bold">Staff List</p>
+        <p className="staff-list-header fw-medium fs-5">Staff List</p>
 
         <form className="d-flex mb-4 hi" role="search">
         <input

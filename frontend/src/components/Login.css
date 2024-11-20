@@ -125,15 +125,17 @@ select#doctorType {
         padding: 12px;
         font-size: 16px;
         width: 100%;
-        background-color: #57cdec;
+        background-color:#35c0e4;
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         }
-
+.btn-login:hover{
+    background-color:#2a99b6;
+}
 .signup-text{
-    color:#57cdec;
+    color:#35c0e4;
 }
 @media screen and (max-width: 1600px) {
     .new-logo-img {

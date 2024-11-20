@@ -93,7 +93,7 @@ const Verify: React.FC = () => {
 
                                 <button
                                     type="submit"
-                                    className="btn-outline-dark btn-verify "
+                                    className="btn-verify btn-outline-dark"
                                 >
                                     Verify OTP
                                 </button>
