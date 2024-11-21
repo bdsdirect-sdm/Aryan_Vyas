@@ -206,19 +206,21 @@ const Profile: React.FC = () => {
               {user.Addresses?.map((add, index) => (
                 <div key={index} className='address-data-img'>
                   {`${add.street}`}<br></br>{`${add.city}`}<br></br> {`${add.state}`}<br></br> {`${add.pincode}`}
-                  <hr className='horizontal-line'></hr>
+                  
+                  {/* <hr className='horizontal-line'></hr> */}
                   {/* <button
                     onClick={() => handleOpenUpdateAddressModal(add)}
                     // src="update.png"
                     // alt="Update Address"
                     className="btn btn-addAddress"
-                  >Update</button>
-                  <button
+                  >Update</button>*/}
+                  {/* <button
                     onClick={() => handleDelete(add.uuid)}
-                    //  src="delete.png"
-                    //   alt="Delete Address"
+                      src="delete.png"
+                       alt="Delete Address"
                     className="btn btn-addAddress"
                   >Delete</button> */}
+                  <div className='line'></div> 
                 </div>
               ))}
             </div>

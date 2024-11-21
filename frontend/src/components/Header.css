@@ -106,8 +106,11 @@
     padding-left:10px;
 }
 hr{
-    color:gray;
-    width: 140%;
+    color: gray;
+  width: 141%;
+  position: relative;
+  left: -12%;
+  float: left;  
 }
 .nav-links {
     display: flex;

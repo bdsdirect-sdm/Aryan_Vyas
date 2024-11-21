@@ -20,7 +20,10 @@
     padding: 20px;
     z-index: 999;
 }
-
+.line{
+    border: 1px solid #4e5154;
+    margin-top: 5px;
+}
 .profile-container {
     margin-left: 220px;
     padding: 20px;
