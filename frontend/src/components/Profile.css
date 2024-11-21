@@ -115,7 +115,19 @@ color:white;
     background-color: #35c0e4;
     border-color: #35c0e4;
 }
+.address-title{
+    color: black;
+    text-transform: capitalize;
+    font-weight: 600;
+    line-height: 25px;
+}
 
+.profile-icon{
+    width: 25px;
+  height: 25px;
+  margin-left: 25px;
+  margin-bottom: 4px;
+}
 .btn-primary:hover {
     background-color: #2a99b6;
     border-color: #2a99b6;

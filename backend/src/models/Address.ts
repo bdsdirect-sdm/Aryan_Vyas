@@ -9,6 +9,7 @@ class Address extends Model{
         throw new Error("Method not implemented.");
     }
     public uuid!: number;
+    public title!: string;
     public street!: string;
     public district!: string;
     public city!: string;
@@ -24,6 +25,9 @@ Address.init({
         defaultValue: UUIDV4,
         primaryKey: true,
         allowNull: false
+    },
+    title:{
+        type: DataTypes.STRING,
     },
     street: {
         type: DataTypes.STRING,

@@ -8,6 +8,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Local } from '../environment/env';
 import AddAddress from './AddAddress';
 import UpdateAddress from './UpdateAddress'; // Import UpdateAddress component
+import { AiOutlineDelete } from "react-icons/ai";
+import { BsPencilSquare } from "react-icons/bs";
 import './Profile.css';
 
 interface Address {
@@ -17,6 +19,7 @@ interface Address {
   state: string;
   pincode: string;
   phone: string;
+  title:string;
 }
 
 interface User {
@@ -204,7 +207,10 @@ const Profile: React.FC = () => {
 
               {/* <p className="fw-bold">Work</p> */}
               {user.Addresses?.map((add, index) => (
-                <div key={index} className='address-data-img'>
+                <div key={index} className='address-data-img'><span className='address-title'>{`${add.title}`} 
+                <BsPencilSquare  onClick={() => handleOpenUpdateAddressModal(add)}
+                   className='profile-icon'/>
+                <AiOutlineDelete  onClick={() => handleDelete(add.uuid)} className='profile-icon' /> <br></br></span>
                   {`${add.street}`}<br></br>{`${add.city}`}<br></br> {`${add.state}`}<br></br> {`${add.pincode}`}
                   
                   {/* <hr className='horizontal-line'></hr> */}

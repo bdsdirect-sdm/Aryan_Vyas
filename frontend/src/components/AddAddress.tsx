@@ -40,6 +40,7 @@ const AddAddress = ({ close } : { close: () => void }) => {
   })
 
   const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
     street: Yup.string().required("Street is required"),
     district: Yup.string().required("District is required"),
     state: Yup.string().required("State is required"),
@@ -55,6 +56,7 @@ const AddAddress = ({ close } : { close: () => void }) => {
   return (
     <Formik
     initialValues={{
+      title:"",
       street: "",
       district: "",
       state: "",
@@ -68,6 +70,12 @@ const AddAddress = ({ close } : { close: () => void }) => {
       {()=>(
         <>
               <Form>
+              <div className="form-group1"> 
+                  <label>Title<span className='star'>*</span></label>
+                  <Field type="title" name="title" className="form-control1"/>
+                  <ErrorMessage name="title" component="div" className="text-danger1"/>
+                </div>
+
                 <div className="form-group1"> 
                   <label>Street<span className='star'>*</span></label>
                   <Field type="text" name="street" className="form-control1"/>

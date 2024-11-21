@@ -224,8 +224,8 @@ export const addAddress = async (req: any, res: Response) => {
         const { uuid } = req.user;
         const user = await User.findOne({ where: { uuid: uuid } });
         if (user) {
-            const { street, district, city, state, pincode, phone } = req.body;
-            const address = await Address.create({ street, district, city, state, pincode, phone, user: uuid });
+            const { street, district, city, state, pincode, phone,title } = req.body;
+            const address = await Address.create({ street, district, city, state, pincode, phone,title, user: uuid });
             if (address) {
                 res.status(200).json({ "message": "Address added Successfully" });
             }
