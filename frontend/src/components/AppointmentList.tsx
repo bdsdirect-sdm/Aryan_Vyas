@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axiosInstance';
-import './AppointmentList.css';
 import { Local } from '../environment/env';
+import api from '../api/axiosInstance';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import './AppointmentList.css';
 
 const AppointmentsList: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-const handleAppointment=()=>{
-    navigate('/add-appointment')
-}
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -20,22 +21,23 @@ const handleAppointment=()=>{
 
   const fetchAppointments = async () => {
     try {
-        const response = await api.get(`${Local.GET_APPOINTMENT_LIST}`, {
+      const response = await api.get(`${Local.GET_APPOINTMENT_LIST}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("appointment name",response.data)
-      return response.data.appointmentList;
+      return response.data;
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Error fetching appointments');
-      return [];
+      toast.error(`${err.message || 'Error fetching appointments data'}`);
     }
   };
-  const { data: appointments, isLoading, isError, error } = useQuery({
+
+  const { data: appointmentsData, error, isLoading, isError } = useQuery({
     queryKey: ['appointments'],
     queryFn: fetchAppointments,
   });
+
+  console.log("apppointmentttttttttt", appointmentsData);
 
   if (isLoading) {
     return (
@@ -50,20 +52,26 @@ const handleAppointment=()=>{
 
   if (isError) {
     return (
-      <div className="error-container">
-        <div>Error: {error?.message || 'Error loading appointments'}</div>
+      <div className="text-danger">
+        Error: {error.message || 'Failed to load appointments data'}
       </div>
     );
   }
 
   return (
     <div className="appointments-list-container">
-        <div className='heading-appointment'>
-      <p className='my-appointment-heading'>My Appointments</p>
-    <button className='appointment-btn' onClick={handleAppointment}>+Add Appointment</button>
-
+      <div className="appointments-list-header">
+        <h5 className="appointments-list-title">Appointments List</h5>
+        <div className="add-appointment-button">
+          <button
+            onClick={() => navigate('/add-appointment')}
+            className="appointment-btn"
+            disabled={loading}
+          >
+            {loading ? 'Adding Appointment...' : 'Add Appointment'}
+          </button>
         </div>
-        
+      </div>
 
       <form className="d-flex mb-4 hi" role="search">
         <input
@@ -74,50 +82,38 @@ const handleAppointment=()=>{
           />
         <button className="btn btn-primary btn-search" type="submit">Search</button>
       </form>
-          
 
-      {appointments?.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Patient Name</th>
-              <th>Appointment Type</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
+
+      {/* Appointments List Table */}
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">Patient Name</th>
+            <th scope="col">Doctor Name</th>
+            <th scope="col">Appointment Date</th>
+            <th scope="col">Appointment Type</th>
+            {/* <th scope="col">Action</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {appointmentsData?.map((appointment: any) => (
+            <tr key={appointment.uuid}>
+              <td>{appointment.Patient?.firstname} {appointment.Patient?.lastname}</td>
+              <td>{appointment.User?.firstname} {appointment.User?.lastname}</td>
+              <td>{appointment.date}</td>
+              <td>{appointment.type}</td>
+              {/* <td>
+                <button
+                  className="btn btn-info btn-sm"
+                  onClick={() => navigate(`/appointment/${appointment.uuid}`)}
+                >
+                  View
+                </button>
+              </td> */}
             </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appointment: any) => (
-              <tr key={appointment.appointmentId}>
-                <td>{appointment.patientName}</td>
-        
-                
-                <td>{appointment.type}</td>
-                <td>{new Date(appointment.date).toLocaleDateString()}</td>
-                <td>{'Pending'}</td>
-                <td>
-              <div className='view-icon'>
-
-              <img
-              src="view.png"
-              alt="Update Address"
-              className="googleIcon-3"
-            />
-            <img
-              src="delete.png"
-              alt="Delete Address"
-              className="googleIcon-3"
-            />
-              </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div>No Appointments Available.</div>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

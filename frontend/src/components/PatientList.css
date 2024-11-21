@@ -1,6 +1,6 @@
 /* Ensure the content has top margin to avoid overlap with header */
 .patient-list-container {
-    margin-left:250px;
+    margin-left:220px;
     margin-top: 0px;
     padding: 20px;
     background-color: #f8f9fa;

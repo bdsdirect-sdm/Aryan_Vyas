@@ -110,7 +110,7 @@ const AddStaff: React.FC = () => {
             <div className="modal-content">
               <h3>Add Staff</h3>
               <form className="add-staff-form" onSubmit={handleAddStaff}>
-                <div className="form-group">
+                <div className="form-group1">
                   <label htmlFor="staffName">Staff Name<span className='star'>*</span></label>
                   <input
                     type="text"
@@ -122,7 +122,7 @@ const AddStaff: React.FC = () => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group1">
                   <label htmlFor="email">Email<span className='star'>*</span></label>
                   <input
                     type="email"
@@ -134,7 +134,7 @@ const AddStaff: React.FC = () => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group1">
                   <label htmlFor="phone">Phone Number<span className='star'>*</span></label>
                   <input
                     type="text"
@@ -146,7 +146,7 @@ const AddStaff: React.FC = () => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group1">
                   <label htmlFor="gender">Gender<span className='star'>*</span></label>
                   <select
                     id="gender"

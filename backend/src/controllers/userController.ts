@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt';
 import Staff from "../models/Staff";
 import Appointments from "../models/Appointments";
 import { any } from "joi";
+import Appointment from "../models/Appointments";
 
 const Security_Key: any = Local.SECRET_KEY;
 
@@ -523,63 +524,36 @@ export const addAppointment = async (req: any, res: any) => {
   };
 
   
-  export const getAppointmentList = async (req: any, res: any) => {
-      try {
-          const { uuid } = req.user;
-  
-        
-          const appointments = await Appointments.findAll({
-              where: {
-                  [Op.or]: [{ userId: uuid }] 
-              },
-              include: [
-                  {
-                      model: Patient, 
-                      include: [
-                          {
-                              model: User, 
-                              attributes: ['firstname', 'lastname'],
-                          }
-                      ]
-                  },
-                  {
-                      model: User,
-                      attributes: ['firstname', 'lastname'],
-                  }
-              ],
-              order: [['date', 'ASC']], 
-          });
-  
-      
-          if (!appointments || appointments.length === 0) {
-              return res.status(404).json({ message: "No appointments found." });
-          }
-  
-    
-          const appointmentList = appointments.map(Appointment => {
-              const patient = Appointment.patient; 
-              const doctor = Appointment.user;    
-  
-            
-              const patientName = patient?.user ? `${patient.user.firstname} ${patient.user.lastname}` : 'N/A';
-              const doctorName = doctor ? `${doctor.firstname} ${doctor.lastname}` : 'N/A';
-  
-              return {
-                  appointmentId: Appointment.uuid,
-                  patientName,  
-                  doctorName, 
-                  date: Appointment.date,
-                  type: Appointment.type,
-              };
-          });
+  export const getAppointmentList = async (req: any, res: Response): Promise<void> => {
+    try {
+        const { uuid: userId } = req.user;
 
-          return res.status(200).json({
-              message: "Appointment list fetched successfully.",
-              appointmentList
-          });
-      } catch (err) {
-          console.error("Error fetching appointments:", err);
-          return res.status(500).json({ message: `Error fetching appointments: ${err}` });
-      }
-  };
-  
+        const appointments = await Appointment.findAll({
+            where: {
+                userId: userId, 
+            },
+            attributes: ['uuid', 'date', 'type'],
+            include: [
+                {
+                    model: Patient,
+                    attributes: ['uuid', 'firstname', 'lastname', 'disease','referalstatus'], 
+                },
+                {
+                    model: User,
+                    attributes: ['uuid', 'firstname', 'lastname', 'email'],
+                },
+            ],
+        });
+
+        if (!appointments || appointments.length === 0) {
+            res.status(404).json({ message: 'No appointments found for this user.' });
+            return;
+        }
+
+        res.status(200).json(appointments);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+};

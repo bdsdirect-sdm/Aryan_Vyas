@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect } from 'react';
@@ -205,7 +206,8 @@ const Profile: React.FC = () => {
               {user.Addresses?.map((add, index) => (
                 <div key={index} className='address-data-img'>
                   {`${add.street}`}<br></br>{`${add.city}`}<br></br> {`${add.state}`}<br></br> {`${add.pincode}`}
-                  <button
+                  <hr className='horizontal-line'></hr>
+                  {/* <button
                     onClick={() => handleOpenUpdateAddressModal(add)}
                     // src="update.png"
                     // alt="Update Address"
@@ -216,7 +218,7 @@ const Profile: React.FC = () => {
                     //  src="delete.png"
                     //   alt="Delete Address"
                     className="btn btn-addAddress"
-                  >Delete</button>
+                  >Delete</button> */}
                 </div>
               ))}
             </div>

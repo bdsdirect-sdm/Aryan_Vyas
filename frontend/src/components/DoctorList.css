@@ -1,6 +1,6 @@
 /* Ensure the content has top margin to avoid overlap with header */
 .doctor-list-container {
-    margin-left: 250px; /* Adjust this depending on the sidebar width */
+    margin-left: 220px; /* Adjust this depending on the sidebar width */
     margin-top: 60px;   /* Adjust this depending on header height */
     padding: 20px;
     background-color: #f8f9fa; /* Light background for content */

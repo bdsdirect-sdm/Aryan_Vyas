@@ -61,7 +61,7 @@ const UpdatePassword: React.FC = () => {
         <h3 className="update-password-title">Change Password</h3>
 
         <form onSubmit={handleSubmit} className="update-password-form">
-          <div className="form-group1">
+          <div className="form-group3">
             <label htmlFor="old-password">Old Password<span className='star'>*</span></label>
             <input
               type="password"
@@ -74,7 +74,7 @@ const UpdatePassword: React.FC = () => {
             />
           </div>
 
-          <div className="form-group1">
+          <div className="form-group3">
             <label htmlFor="new-password">New Password<span className='star'>*</span></label>
             <input
               type="password"
@@ -87,7 +87,7 @@ const UpdatePassword: React.FC = () => {
             />
           </div>
 
-          <div className="form-group1">
+          <div className="form-group3">
             <label htmlFor="confirm-password">Confirm New Password<span className='star'>*</span></label>
             <input
               type="password"

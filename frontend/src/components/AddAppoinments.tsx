@@ -133,12 +133,12 @@ const AddAppointment: React.FC = () => {
 >
   {({ values }) => (
     <Form>
-      <div className="form-group">
-        <div className='fieldflex'>
+      <div className="form-group1">
+        <div className='fieldflex1'>
         <div className="form-field">
-          <label htmlFor="patientId">Patient:</label>
-          <Field as="select" name="patientId" className="form-select">
-            <option value="" disabled>Patient</option>
+          <label htmlFor="patientId">Patient Name<span className='star'>*</span></label>
+          <Field as="select" name="patientId" className="form-select1">
+            <option value="" disabled>Select</option>
             {patientList.patientList?.length > 0 ? (
               patientList.patientList.map((patient: any) => (
                 <option key={patient.uuid} value={patient.uuid}>
@@ -151,10 +151,14 @@ const AddAppointment: React.FC = () => {
           </Field>
           <ErrorMessage name="patientId" component="div" className="text-danger" />
         </div>
-
+  <div className="form-field">
+          <label htmlFor="date">Appointment Date<span className='star'>*</span></label>
+          <Field type="date" name="date" className="form-select1" />
+          <ErrorMessage name="date" component="div" className="text-danger" />
+        </div>
         <div className="form-field">
-          <label htmlFor="type">Type:</label>
-          <Field as="select" name="type" className="form-select">
+          <label htmlFor="type">Type<span className='star'>*</span></label>
+          <Field as="select" name="type" className="form-select1">
             <option value="" disabled>Select</option>
             {['Surgery', 'Consultation'].map((type) => (
               <option key={type} value={type}>{type}</option>
@@ -162,18 +166,14 @@ const AddAppointment: React.FC = () => {
           </Field>
           <ErrorMessage name="type" component="div" className="text-danger" />
         </div>
-
-        <div className="form-field">
-          <label htmlFor="date">Date:</label>
-          <Field type="date" name="date" className="form-control" />
-          <ErrorMessage name="date" component="div" className="text-danger" />
+      
         </div>
-        </div>
+      </div>
       <div className="btn-subcancel">
         <button type="button" onClick={cancleAddAppointment} className="btn btn-cancel1">Cancel</button>
         <button type="submit" className="appointment-btn">Add Appointment</button>
       </div>
-      </div>
+
     </Form>
   )}
 </Formik>

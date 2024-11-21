@@ -7,6 +7,7 @@
     background-color: #f8f9fa;
     padding: 20px;
     z-index: 1000;
+    margin-left:-27px;
 }
 
 .header {
@@ -21,7 +22,7 @@
 }
 
 .profile-container {
-    margin-left: 250px;
+    margin-left: 220px;
     padding: 20px;
     background-color: #f1f1f1;
     border-radius: 8px;
@@ -71,10 +72,15 @@
     margin-top: 20px;
 }
 .address-data-img{
-    display: flex;
+    /* display: flex; */
     justify-content: space-evenly;
     align-items: center;
-    gap:33.33%;
+    /* gap:33.33%; */
+}
+.horizontal-line{
+    width:100%;
+    color: #737a7d;
+  font-weight: 600;
 }
 .profile-title {
     font-size: 28px;

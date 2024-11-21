@@ -1,12 +1,12 @@
 .appointments-list-container {
-  margin-left:250px;
+  margin-left:220px;
   margin-top: 0px;
   padding: 20px;
   background-color: #f8f9fa;
   height: calc(100vh - 60px);
   overflow-y: auto;
 }
-.heading-appointment{
+.appointments-list-header{
   display: flex;
   justify-content: space-between;
 }

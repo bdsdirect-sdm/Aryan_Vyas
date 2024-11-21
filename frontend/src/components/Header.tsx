@@ -1,7 +1,16 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { PiHouseLight } from "react-icons/pi";
+import { MdOutlinePersonalInjury } from "react-icons/md";
+import { SlCalender } from "react-icons/sl";
+import { GrGroup } from "react-icons/gr";
+import { MdOutlineMarkChatRead } from "react-icons/md";
+import { TfiPrinter } from "react-icons/tfi";
 // import logo from '../Assets/title_logo.webp';
 import './Header.css';
+
+
+
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +19,7 @@ const Header: React.FC = () => {
   const lastname = localStorage.getItem('lastname')
 
 
-  console.log(firstname,"dkfjsdklfjsdklfj")
+  console.log(firstname, "dkfjsdklfjsdklfj")
 
   const doctype: any = localStorage.getItem('doctype');
 
@@ -21,15 +30,15 @@ const Header: React.FC = () => {
 
   return (
     <>
-      
+
       <header className="header-container">
-        
+
         <div className="header-left">
-          
-         
+
+
           {/* <img src='logo1.png' alt="loginbg" /> */}
-           
-          </div>
+
+        </div>
 
 
         <div className="header-right">
@@ -37,8 +46,8 @@ const Header: React.FC = () => {
             {token ? (
               <div className="dropdown">
                 <h6 className="dropdown-toggle" aria-expanded="false">
-                Hi, {firstname} {lastname}
-                 <br className='welcome'></br>Welcome back
+                  Hi, {firstname} {lastname}
+                  <br className='welcome'></br>Welcome back
                 </h6>
                 <ul className="dropdown-menu">
                   <li>
@@ -84,70 +93,67 @@ const Header: React.FC = () => {
       {token && (
         <div className="sidebar bg-white">
           <div className="sidebar-logo">
-             <div onClick={handleLogoClick} className="logo">
-             <img src="logo1.png" alt="EyeRefer" className="logo1-img" />
-             <span className='logo-text'>EYE REFER</span>
-          <hr />  
-          </div>
+            <div onClick={handleLogoClick} className="logo">
+              <img src="logo1.png" alt="EyeRefer" className="logo1-img" />
+              <span className='logo-text'>EYE REFER</span>
+              <hr />
+            </div>
           </div>
 
           <nav className="nav-links ">
-            <div className='google-icon'>
-            <img src="house.png" alt="EyeRefer" className='googleIcon-2'/>
-            <Link to="/dashboard" className="nav-link active">
-              Dashboard
-            </Link>
+
+            <div className='nav-link'>
+
+              <PiHouseLight className='house' />
+
+              <Link to="/dashboard" className="nav-link">
+                Dashboard
+              </Link>
             </div>
-             <div className='google-icon'>
-            <img src="patient.png" alt="EyeRefer" className='googleIcon-2'/>
-            <Link to="/patient" className="nav-link">
-              Patient
-            </Link>
+            <div className='nav-link'>
+              <MdOutlinePersonalInjury className='house' />
+
+              <Link to="/patient" className="nav-link">
+                Patient
+              </Link>
             </div>
-           
-      
-            
+
+
+
             {doctype === '1' && (
-              <div className='google-icon'>
-            <img src="refer.png" alt="EyeRefer" className='googleIcon-2'/>
-              <Link to="/appointmentList" className="nav-link">
-                Appointments
-              </Link>
+              <div className='nav-link'>
+                <SlCalender className='house' />
+                <Link to="/appointmentList" className="nav-link">
+                  Appointments
+                </Link>
               </div>
             )}
-           
 
-              {doctype === '2' && (
-                 <div className='google-icon'>
-            <img src="appointment.png" alt="EyeRefer" className='googleIcon-2'/>
-              <Link to="/add-patient" className="nav-link">
-                Referral Patient
-              </Link>
+
+            {doctype === '2' && (
+              <div className='nav-link'>
+          <TfiPrinter className='house' />
+                <Link to="/add-patient" className="nav-link">
+                  Referral Patient
+                </Link>
               </div>
             )}
-            
 
-            <div className='google-icon'>
-            <img src="doctor.png" alt="EyeRefer" className='googleIcon-2'/>
-            <Link to="/doctor" className="nav-link">
-              Doctors
-            </Link>
+
+            <div className='nav-link'>
+              <MdOutlineMarkChatRead className='house' />
+              <Link to="/chat" className="nav-link">
+                Chat
+              </Link>
             </div>
 
-            <div className='google-icon'>
-            <img src="chat.png" alt="EyeRefer" className='googleIcon-2'/>
-            <Link to="/chat" className="nav-link">
-              Chat
-            </Link>
+            <div className='nav-link'>
+              <GrGroup className='house' />
+              <Link to="/add-staff" className="nav-link">
+                Staff
+              </Link>
             </div>
 
-            <div className='google-icon'>
-            <img src="staff.png" alt="EyeRefer" className='googleIcon-2'/>
-            <Link to="/add-staff" className="nav-link">
-              Staff
-            </Link>
-            </div>
-          
           </nav>
         </div>
       )}
