@@ -544,7 +544,7 @@ export const addAppointment = async (req: any, res: any) => {
                 },
             ],
         });
-
+console.log("apponmtsbdhgfye",appointments)
         if (!appointments || appointments.length === 0) {
             res.status(404).json({ message: 'No appointments found for this user.' });
             return;
