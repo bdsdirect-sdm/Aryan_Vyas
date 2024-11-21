@@ -71,44 +71,43 @@ const AddAddress = ({ close } : { close: () => void }) => {
                 <div className="form-group1"> 
                   <label>Street<span className='star'>*</span></label>
                   <Field type="text" name="street" className="form-control1"/>
-                  <ErrorMessage name="street" component="div" className="text-danger"/>
+                  <ErrorMessage name="street" component="div" className="text-danger1"/>
                 </div>
-                <br />
+            
 
                 <div className="form-group1">
                   <label>District<span className='star'>*</span></label>
                   <Field type="text" name="district" className="form-control1"/>
-                  <ErrorMessage name="district" component="div" className="text-danger"/>
+                  <ErrorMessage name="district" component="div" className="text-danger1"/>
                 </div>
-                <br />
+             
                 
                 <div className="form-group1">
                   <label>State<span className='star'>*</span></label>
                   <Field type="text" name="state" className="form-control1"/>
-                  <ErrorMessage name="state" component="div" className="text-danger"/>
+                  <ErrorMessage name="state" component="div" className="text-danger1"/>
                 </div>
-                <br />
-                
+                           
                 <div className="form-group1">
                   <label>City<span className='star'>*</span></label>
                   <Field type="text" name="city" className="form-control1"/>
-                  <ErrorMessage name="city" component="div" className="text-danger"/>
+                  <ErrorMessage name="city" component="div" className="text-danger1"/>
                 </div>
-                <br />
+             
                 
                 <div className="form-group1">
                   <label>Phone<span className='star'>*</span></label>
                   <Field type="text" name="phone" maxLength={10} className="form-control1"/>
-                  <ErrorMessage name="phone" component="div" className="text-danger"/>
+                  <ErrorMessage name="phone" component="div" className="text-danger1"/>
                 </div>
-                <br />
+           
                 
                 <div className="form-group1">
                   <label>Pincode<span className='star'>*</span></label>
                   <Field type="text" name="pincode" maxLength={6} className="form-control1" />
-                  <ErrorMessage name="pincode" component="div" className="text-danger"/>
+                  <ErrorMessage name="pincode" component="div" className="text-danger1"/>
                 </div>
-                <br />
+                
                 <button type="submit" className='btn btn-outline-dark'>Submit</button>
               </Form>
         </>

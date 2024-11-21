@@ -92,7 +92,7 @@
 }
 .gender-center{
     position:relative;
-    left:-40%;
+    left:-38.5%;
 }
 .email-center{
     position:relative;
@@ -107,7 +107,10 @@ background-color:#2a99b6;
 border-color: #2a99b6;
 color:white;
 }
-
+.text-danger1{
+    color:red;
+    margin-top:-20px;
+}
 .btn-primary {
     background-color: #35c0e4;
     border-color: #35c0e4;

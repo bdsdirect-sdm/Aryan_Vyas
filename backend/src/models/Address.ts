@@ -58,7 +58,7 @@ Address.init({
     modelName:'Address'
 })
 
-User.hasMany(Address, {foreignKey: "user", onDelete: 'CASCADE', onUpdate: 'CASCADE'});
-Address.belongsTo(User, {foreignKey: "user", onDelete: 'CASCADE', onUpdate: 'CASCADE'});
+User.hasMany(Address, {foreignKey: "user"});
+Address.belongsTo(User, {foreignKey: "user"});
 
 export default Address;
