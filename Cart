@@ -1,0 +1,47 @@
+import { Model, DataTypes } from 'sequelize';
+import sequelize from '../config/database';
+import Retailer from './Retailer'; 
+import Product from './Product'; 
+class Cart extends Model {
+  public id!: number;
+  public productId!: number; 
+  public userId!: number; 
+  public quantity!: number;
+}
+
+Cart.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  productId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Product,
+      key: 'id'
+    }
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1 
+  },
+}, {
+  sequelize,
+  modelName: 'Cart',
+  tableName: 'carts', 
+  timestamps: true,
+  paranoid: true 
+});
+
+// Associations
+Cart.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+Cart.belongsTo(Retailer, { foreignKey: 'userId', as: 'retailer' });
+
+export default Cart;
