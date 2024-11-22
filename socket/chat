@@ -1,3 +1,37 @@
-CAPT CHA (Completely Automated Public Turing test to tell Computers and Humans Apart) challenges users to solve puzzles or tasks.
-Bots often struggle to solve these challenges, effectively filtering out malicious automated activity.
-CAPT CHA protects sensitive data and resources from automated attacks, such as brute-force password guessing.
+Create a Static JSON at Frontend to display Products
+
+technology used react+vite typescript formik with yup validation,react router dom for navigation use routes to show pages,
+the data must we stord in local storage of the item and not delete on refresh use usecontext for dynamic updation on refresh beacuse on refersh data can we deleted from local storage so use this to avoid this 
+and also create eamil function in frontend so that the email should go to the buyer smtp 
+
+Cart and Checkout
+List Products
+List products from the static JSON, along with pagination.
+
+Select Items to Add to the Cart
+Users can browse the product catalog and select items they wish to purchase. A button will be available on each product page to add the item to the cart.
+
+Add Multiple Items to the Cart
+Users can add multiple items from different categories or the same category to their cart. Each selected item will appear as a separate entry in the cart.
+
+Modify the Quantity of Items in the Cart
+Users can adjust the quantity of each item in their cart before proceeding to checkout. This will dynamically update the total cost.
+Credit Card Checkout
+
+At the checkout stage, users will be required to provide their credit card details, including card number, expiry date, and CVV, to complete the payment process securely.
+and his email
+
+Success Email Notification
+After successfully placing an order, the system will send a confirmation email to the user, containing details of the purchased items, the total amount, and the estimated delivery date.
+sender email is vyasaryan786@gmail.com and pass is 
+
+JSON Data
+Name
+Image
+Price
+Category
+Stock/Quantity Available
+Tags, labels
+Rating
+Seller
+Description
