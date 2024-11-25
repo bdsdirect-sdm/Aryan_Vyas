@@ -127,7 +127,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
 
-      <h5 className="dashboard-title">Dashboard</h5>
+      <h6 className="dashboard-title" style={{fontSize:16}}>Dashboard</h6>
     
       <div className="metrics-cards">
         <div className="card" onClick={() => navigate('/patient')}>
@@ -167,8 +167,8 @@ const Dashboard: React.FC = () => {
       <div className='refer d-flex'>
         {user.doctype === 2 ? (
           <>
-            <h2 className="refer-title">Refer a Patient</h2>
-            <button className="appointment-btn" onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+            <h6 className="refer-title">Refer a Patient</h6>
+            <button className="appointment-btn"  style={{ marginTop: -10}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
           </>
         ) : (
           <>
