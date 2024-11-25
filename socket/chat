@@ -1,37 +1,127 @@
-Create a Static JSON at Frontend to display Products
+import { useQuery } from '@tanstack/react-query';
+import { Local } from '../environment/env';
+import api from '../api/axiosInstance';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import './PatientList.css';
 
-technology used react+vite typescript formik with yup validation,react router dom for navigation use routes to show pages,
-the data must we stord in local storage of the item and not delete on refresh use usecontext for dynamic updation on refresh beacuse on refersh data can we deleted from local storage so use this to avoid this 
-and also create eamil function in frontend so that the email should go to the buyer smtp 
+const PatientList: React.FC = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredPatients, setFilteredPatients] = useState<any[]>([]);
 
-Cart and Checkout
-List Products
-List products from the static JSON, along with pagination.
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
 
-Select Items to Add to the Cart
-Users can browse the product catalog and select items they wish to purchase. A button will be available on each product page to add the item to the cart.
+  const fetchPatient = async () => {
+    try {
+      const response = await api.get(`${Local.GET_PATIENT_LIST}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      toast.error(`${err}`);
+    }
+  };
 
-Add Multiple Items to the Cart
-Users can add multiple items from different categories or the same category to their cart. Each selected item will appear as a separate entry in the cart.
+  const { data: Patients, error, isLoading, isError } = useQuery({
+    queryKey: ['patient'],
+    queryFn: fetchPatient,
+  });
 
-Modify the Quantity of Items in the Cart
-Users can adjust the quantity of each item in their cart before proceeding to checkout. This will dynamically update the total cost.
-Credit Card Checkout
+  // Filter patients based on search query
+  const handleSearch = () => {
+    if (Patients?.patientList) {
+      setFilteredPatients(
+        Patients.patientList.filter((patient: any) =>
+          `${patient.firstname} ${patient.lastname}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  };
 
-At the checkout stage, users will be required to provide their credit card details, including card number, expiry date, and CVV, to complete the payment process securely.
-and his email
+  useEffect(() => {
+    if (Patients?.patientList && searchQuery === '') {
+      setFilteredPatients(Patients.patientList); // Reset to original list if search query is cleared
+    }
+  }, [searchQuery, Patients]);
 
-Success Email Notification
-After successfully placing an order, the system will send a confirmation email to the user, containing details of the purchased items, the total amount, and the estimated delivery date.
-sender email is vyasaryan786@gmail.com and pass is srshixgdtbttkbza
+  if (isLoading) {
+    return (
+      <>
+        <div>Loading...</div>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </>
+    );
+  }
 
-JSON Data
-Name
-Image
-Price
-Category
-Stock/Quantity Available
-Tags, labels
-Rating
-Seller
-Description
+  if (isError) {
+    return (
+      <>
+        <div className="text-danger">Error: {error.message}</div>
+      </>
+    );
+  }
+
+  console.log('Patient-List------------>', Patients);
+
+  return (
+    <div className="patient-list-container">
+      <p className="heading-patient">Referred Patients</p>
+
+      {/* Search Input and Button */}
+      <div className="search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button className="search-button" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            {/* <th scope="col">#</th> */}
+            <th scope="col">Patient Name</th>
+            <th scope="col">Disease</th>
+            <th scope="col">Refer by</th>
+            <th scope="col">Refer to</th>
+            <th scope="col">Refer back</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredPatients.map((patient: any, index: number) => (
+            <tr key={index}>
+              {/* <td className="fw-bold">{index + 1}</td> */}
+              <td>{patient.firstname} {patient.lastname}</td>
+              <td>{patient.disease}</td>
+              <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
+              <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
+              <td>{patient.referback ? 'Yes' : 'No'}</td>
+              <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default PatientList;
