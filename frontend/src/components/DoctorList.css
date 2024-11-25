@@ -1,24 +1,29 @@
-/* Ensure the content has top margin to avoid overlap with header */
 .doctor-list-container {
-    margin-left: 220px; /* Adjust this depending on the sidebar width */
-    margin-top: 60px;   /* Adjust this depending on header height */
+    margin-left: 220px;
+    margin-top: 60px;
     padding: 20px;
-    background-color: #f8f9fa; /* Light background for content */
-    height: calc(100vh - 60px); /* Ensure content takes full height minus header */
-    overflow-y: auto; /* Make content scrollable if it overflows */
+    background-color: #ecf1f3;
+    height: calc(100vh - 60px);
+    overflow-y: auto; 
     margin-top: 0px;
 }
 
-/* Make sure the table fits well inside the content area */
 .table {
     width: 100%;
     margin-top: 20px;
     background-color: #fff;
     border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for table */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Table header and cells */
+.table-striped > tbody > tr:nth-of-type(2n+1) > * {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type:white;
+  }
+.table-heading{
+    font-size: 13px;
+}
+
 .table th,
 .table td {
     text-align: center;
@@ -28,7 +33,7 @@
 .tablecolor{
     background-color: white;
 }
-/* Table header styling */
+
 .table th {
     background-color:#ecf1f3;
     color:#212121;
@@ -54,7 +59,6 @@
     display: block;
 }
 
-/* Error message container */
 .error-container {
     display: flex;
     justify-content: center;

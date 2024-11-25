@@ -16,7 +16,12 @@ const AddStaff: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [staffList, setStaffList] = useState<any[]>([]);
+  const [filteredStaff, setFilteredStaff] = useState<any[]>([]); // For filtered staff
   const [fetching, setFetching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const staffPerPage = 5; // Number of staff to display per page
 
   // Fetch staff list on component mount
   useEffect(() => {
@@ -38,6 +43,7 @@ const AddStaff: React.FC = () => {
 
         if (response.status === 200) {
           setStaffList(response.data);
+          setFilteredStaff(response.data); // Initialize filtered staff with all staff
         } else {
           toast.error('Failed to fetch staff list.');
         }
@@ -99,9 +105,33 @@ const AddStaff: React.FC = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // Search functionality
+  const handleSearch = () => {
+    if (searchQuery) {
+      setFilteredStaff(
+        staffList.filter((staff: any) =>
+          `${staff.staffName}`.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredStaff(staffList); // Reset if search query is empty
+    }
+  };
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredStaff.length / staffPerPage);
+  const indexOfLastStaff = currentPage * staffPerPage;
+  const indexOfFirstStaff = indexOfLastStaff - staffPerPage;
+  const currentStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <>
       <div className="add-staff-container">
+        <h5 className="referral-title">Staff List</h5>
         <button className="btn-add-staff" onClick={openModal}>+ Add Staff</button>
 
         {/* Modal for adding new staff */}
@@ -162,45 +192,43 @@ const AddStaff: React.FC = () => {
                 </div>
 
                 <div className="add-staff-div">
-                <button className="btn btn-cancel1" onClick={closeModal}>Cancel</button>
+                  <button className="btn btn-cancel1" onClick={closeModal}>Cancel</button>
                   <button
                     type="submit"
                     className="btn btn-primary"
                     disabled={loading}
                   >
                     {loading ? 'Adding Staff...' : 'Add Staff'}
-                  </button>   
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         )}
 
-        {/* Staff List Table */}
-        <p className="staff-list-header fw-medium fs-5">Staff List</p>
-
-        <form className="d-flex mb-4 hi" role="search">
-        <input
-          className="form-control me-2 hi2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
+        {/* Search Input */}
+        <form className="d-flex mb-4 hii1" role="search" onSubmit={(e) => e.preventDefault()}>
+          <input
+            className="form-control me-2 hi2"
+            type="search"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search"
           />
-        <button className="btn btn-primary btn-search" type="submit">Search</button>
-      </form>
+          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>Search</button>
+        </form>
 
-
-
+        {/* Staff List Table */}
         {fetching ? (
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-        ) : staffList.length > 0 ? (
+        ) : currentStaff.length > 0 ? (
           <div className="staff-list-container">
             <table className="table">
               <thead>
                 <tr>
-                  {/* <th scope="col">#</th> */}
                   <th scope="col">Staff Name</th>
                   <th scope="col">Email</th>
                   <th scope="col">Phone</th>
@@ -208,9 +236,8 @@ const AddStaff: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {staffList.map((staff: any, index: number) => (
+                {currentStaff.map((staff: any, index: number) => (
                   <tr key={staff.id}>
-                    {/* <td className="fw-bold">{index + 1}</td> */}
                     <td>{staff.staffName}</td>
                     <td>{staff.email}</td>
                     <td>{staff.phone}</td>
@@ -223,6 +250,48 @@ const AddStaff: React.FC = () => {
         ) : (
           <p>No staff found.</p>
         )}
+
+        {/* Pagination Controls */}
+        <div className="pagination-controls d-flex justify-content-end mt-4 pagination-color">
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <a
+                  className="page-link"
+                  href="#"
+                  aria-label="Previous"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  // disabled={currentPage === 1}
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {/* Loop to create page numbers */}
+              {[...Array(totalPages)].map((_, index) => (
+                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </a>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <a
+                  className="page-link"
+                  href="#"
+                  aria-label="Next"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  // disabled={currentPage === totalPages}
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </>
   );
@@ -232,3 +301,4 @@ export default AddStaff;
 function fetchStaff() {
   throw new Error('Function not implemented.');
 }
+

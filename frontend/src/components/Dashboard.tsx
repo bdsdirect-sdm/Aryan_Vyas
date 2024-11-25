@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQuery } from '@tanstack/react-query';
+
+
+//import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Dashboard.css';
+import { useQuery } from '@tanstack/react-query';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+
+  const [currentPage, setCurrentPage] = useState(1);  // Track current page
+  const patientsPerPage = 5;  // Number of patients to show per page
 
   useEffect(() => {
     if (!token) {
@@ -97,12 +103,26 @@ const Dashboard: React.FC = () => {
   localStorage.setItem("firstname", user.firstname)
   localStorage.setItem("lastname", user.lastname)
 
-  console.log(user.firstname,"lkdsfjkldfjklsdj")
-
   const totalRefersReceived = patientList?.length || 0;
   const totalRefersCompleted = patientList?.filter((patient: { referalstatus: boolean }) => patient.referalstatus === true).length || 0;
-
   const totalDoctors = doctorList?.length || 0;
+
+  // Pagination Logic
+  const totalPages = Math.ceil(patientList?.length / patientsPerPage);
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = patientList?.slice(indexOfFirstPatient, indexOfLastPatient);
+
+  // Handle Page Change
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Create Page Numbers
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="dashboard-container">
@@ -111,44 +131,58 @@ const Dashboard: React.FC = () => {
     
       <div className="metrics-cards">
         <div className="card" onClick={() => navigate('/patient')}>
-          <div className="card-body">Total Refers
+          <div className='card-heading'>Referrals Received</div>
+          <div className="card-body2">
             <div className='icon d-flex'>
-            <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
-            <div className="card-text">{totalRefersReceived}</div>
-          </div>
+              <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
+              <div className="card-text">{totalRefersReceived}</div>
+            </div>
+            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Nov 25</div>
           </div>
         </div>
 
         <div className="card">
-          <div className="card-body">Total Refers Completed
-          <div className='icon d-flex'>
-          <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
-            <div className="card-text">{totalRefersCompleted}</div>
-          </div>
+          <div className='card-heading'>Total Refers Completed</div>
+          <div className="card-body2">
+            <div className='icon d-flex'>
+              <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
+              <div className="card-text">{totalRefersCompleted}</div>
+            </div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 25</div>
           </div>
         </div>
 
         <div className="card" onClick={() => navigate('/doctor')}>
-          <div className="card-body">Total Doctors OD/MD
-          <div className='icon d-flex'>
-          <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
-            <div className="card-text">{totalDoctors}</div>
-          </div>
+          <div className='card-heading'>Total Doctors OD/MD</div>
+          <div className="card-body2">
+            <div className='icon d-flex'>
+              <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
+              <div className="card-text">{totalDoctors}</div>
+            </div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 25</div>
           </div>
         </div>
       </div>
 
-<div className='refer d-flex'>
-  {user.doctype ===2 ?(<><h2 className="refer-title">Refer a Patient</h2><button className="appointment-btn" onClick={() => navigate("/add-patient")}>+Add Refer</button></>):<><h2 className="refer-title">Add Appointment</h2><button className="appointment-btn" onClick={() => navigate("/add-appointment")}>+Add Appointment</button></>}
-  
-  
-</div>
+      <div className='refer d-flex'>
+        {user.doctype === 2 ? (
+          <>
+            <h2 className="refer-title">Refer a Patient</h2>
+            <button className="appointment-btn" onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+          </>
+        ) : (
+          <>
+            <h2 className="refer-title">Add Appointment</h2>
+            <button className="appointment-btn" onClick={() => navigate("/add-appointment")}>+Add Appointment</button>
+          </>
+        )}
+      </div>
+
       <div className="patient-list-section">
         <div className="patient-table-container">
           <table className="table">
             <thead>
-              <tr >
-                <th scope="col">#</th>
+              <tr>
                 <th scope="col">Patient Name</th>
                 <th scope="col">Disease</th>
                 <th scope="col">Refer by</th>
@@ -158,9 +192,8 @@ const Dashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {patientList?.map((patient: any, index: number) => (
+              {currentPatients?.map((patient: any, index: number) => (
                 <tr key={index}>
-                  <td className="fw-bold">{index + 1}</td>
                   <td>{patient.firstname} {patient.lastname}</td>
                   <td>{patient.disease}</td>
                   <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
@@ -176,6 +209,50 @@ const Dashboard: React.FC = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-end">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+              <a className="page-link" href="#" aria-label="Previous" onClick={(e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                  handlePageChange(currentPage - 1);
+                }
+              }}>
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+
+            {/* Page Numbers */}
+            {pageNumbers.map((number) => (
+              <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+                <a
+                  className="page-link"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(number);
+                  }}
+                >
+                  {number}
+                </a>
+              </li>
+            ))}
+
+            {/* Next Button */}
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+              <a className="page-link" href="#" aria-label="Next" onClick={(e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                  handlePageChange(currentPage + 1);
+                }
+              }}>
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );

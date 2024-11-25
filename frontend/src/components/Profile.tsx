@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect } from 'react';
@@ -19,7 +19,7 @@ interface Address {
   state: string;
   pincode: string;
   phone: string;
-  title:string;
+  title: string;
 }
 
 interface User {
@@ -29,6 +29,7 @@ interface User {
   email: string;
   phone: string;
   doctype: number;
+  gender: string;
   Addresses?: Array<Address>;
 }
 
@@ -184,7 +185,7 @@ const Profile: React.FC = () => {
             <div>
               <span className='infoheading'>Name: </span>{user.firstname} {user.lastname}
             </div>
-            <div className='gender-center'><span className='infoheading'>Gender:</span></div>
+            <div className='gender-center'><span className='infoheading'>Gender:{user.gender}</span></div>
           </div>
 
           <div className='info'>
@@ -207,12 +208,12 @@ const Profile: React.FC = () => {
 
               {/* <p className="fw-bold">Work</p> */}
               {user.Addresses?.map((add, index) => (
-                <div key={index} className='address-data-img'><span className='address-title'>{`${add.title}`} 
-                <BsPencilSquare  onClick={() => handleOpenUpdateAddressModal(add)}
-                   className='profile-icon'/>
-                <AiOutlineDelete  onClick={() => handleDelete(add.uuid)} className='profile-icon' /> <br></br></span>
+                <div key={index} className='address-data-img'><span className='address-title'>{`${add.title}`}
+                  <BsPencilSquare onClick={() => handleOpenUpdateAddressModal(add)}
+                    className='profile-icon' />
+                  <AiOutlineDelete onClick={() => handleDelete(add.uuid)} className='profile-icon' /> <br></br></span>
                   {`${add.street}`}<br></br>{`${add.city}`}<br></br> {`${add.state}`}<br></br> {`${add.pincode}`}
-                  
+
                   {/* <hr className='horizontal-line'></hr> */}
                   {/* <button
                     onClick={() => handleOpenUpdateAddressModal(add)}
@@ -226,7 +227,7 @@ const Profile: React.FC = () => {
                        alt="Delete Address"
                     className="btn btn-addAddress"
                   >Delete</button> */}
-                  <div className='line'></div> 
+                  <div className='line'></div>
                 </div>
               ))}
             </div>
@@ -283,6 +284,22 @@ const Profile: React.FC = () => {
                       onChange={handleInputChange}
                     />
                   </Form.Group>
+
+                  <Form.Group controlId="gender">
+                    <Form.Label>Gender<span className='star'>*</span></Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Male">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </Form.Control>
+                  </Form.Group>
+
                 </Form>
               )}
             </Modal.Body>

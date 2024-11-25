@@ -3,7 +3,7 @@
     padding: 20px;
     border-radius: 8px;
     min-height: 90vh;
-    background-color:#f8f9fa;
+    background-color:#ecf1f3;
     margin-top: 0px;
 }
 
@@ -66,11 +66,17 @@
 .appointment-btn:hover{
     background-color: #2a99b6;
 }
-
+.card-heading{
+    display: flex;
+}
 .spinner-border {
     margin-top: 10px;
 }
-
+.card-body2{
+    flex: 1 1 auto;
+  padding: 4px;
+  color: var(--bs-card-color);
+}
 /* Flexbox for Metrics Cards */
 .metrics-cards {
     display: flex;
@@ -88,9 +94,10 @@
     min-width: 250px; /* Ensures cards don't shrink too much */
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
     padding: 1.25rem;
     text-align: center;
+    border-color: transparent;
 }
 
 /* Card title */

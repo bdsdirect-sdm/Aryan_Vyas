@@ -127,12 +127,17 @@ hr{
     border-radius: 5px;
 }
 
-.nav-link:hover, .nav-link.active {
+/* .nav-link:hover, .nav-link.active {
+    background-color: #f4fffb;
+    color: #43d79e;
+    /* transition: background-color 0.3s ease, color 0.3s ease; */
+/* } */ 
+
+.nav-link:hover {
     background-color: #f4fffb;
     color: #43d79e;
     /* transition: background-color 0.3s ease, color 0.3s ease; */
 }
-
 
 .btn {
     padding: 10px 15px;
@@ -145,7 +150,10 @@ hr{
     background-color: #35c0e4;
     color: white;
 }
-
+/* .header-profile-img{
+    height: 100px;
+    width: 100px;
+} */
 .signup-btn {
     background-color: #28a745;
     color: white;
@@ -167,7 +175,7 @@ hr{
     height:25px;
     width: 25px;
     box-sizing: border-box;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 .nav-link{
     display: flex;

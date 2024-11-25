@@ -2,10 +2,11 @@ import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { PiHouseLight } from "react-icons/pi";
 import { MdOutlinePersonalInjury } from "react-icons/md";
-import { SlCalender } from "react-icons/sl";
 import { GrGroup } from "react-icons/gr";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { TfiPrinter } from "react-icons/tfi";
+import { MdOutlinePersonPin } from "react-icons/md";
+import { BiBookReader } from "react-icons/bi";
 // import logo from '../Assets/title_logo.webp';
 import './Header.css';
 
@@ -46,7 +47,10 @@ const Header: React.FC = () => {
             {token ? (
               <div className="dropdown">
                 <h6 className="dropdown-toggle" aria-expanded="false">
-                  Hi, {firstname} {lastname}
+                 {/* <img src="avatar.avif"
+              alt="Profile photo"
+              className='header-profile-img'></img> */}
+               Hi, {firstname} {lastname}
                   <br className='welcome'></br>Welcome back
                 </h6>
                 <ul className="dropdown-menu">
@@ -110,6 +114,7 @@ const Header: React.FC = () => {
                 Dashboard
               </Link>
             </div>
+
             <div className='nav-link'>
               <MdOutlinePersonalInjury className='house' />
 
@@ -118,13 +123,11 @@ const Header: React.FC = () => {
               </Link>
             </div>
 
-
-
             {doctype === '1' && (
               <div className='nav-link'>
-                <SlCalender className='house' />
-                <Link to="/appointmentList" className="nav-link">
-                  Appointments
+                <BiBookReader className='house'/>
+                <Link to="/appointment-list" className="nav-link">
+                  Appointment
                 </Link>
               </div>
             )}
@@ -138,7 +141,13 @@ const Header: React.FC = () => {
                 </Link>
               </div>
             )}
-
+            
+            <div className='nav-link'>
+            <MdOutlinePersonPin className='house'/>
+            <Link to="/doctor" className="nav-link">
+              Doctors
+            </Link>
+            </div>
 
             <div className='nav-link'>
               <MdOutlineMarkChatRead className='house' />

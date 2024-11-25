@@ -44,7 +44,7 @@ const App: React.FC = () => {
         { path: '/chat', element: <Chat /> },
         { path: '/add-appointment', element: <AddAppointment /> },
         { path: '/update-password', element: <UpdatePassword /> },
-        { path: '/appointmentList', element: <AppointmentList /> },
+        { path: '/appointment-list', element: <AppointmentList /> },
       ]
     }
   ]);

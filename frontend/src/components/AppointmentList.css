@@ -2,7 +2,7 @@
   margin-left:220px;
   margin-top: 0px;
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #ecf1f3;
   height: calc(100vh - 60px);
   overflow-y: auto;
 }
@@ -50,6 +50,7 @@
   
   .table td {
     vertical-align: middle;
+    font-size: 13px;
   }
   
   .btn-outline-primary {

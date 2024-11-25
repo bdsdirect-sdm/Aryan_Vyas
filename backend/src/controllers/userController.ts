@@ -143,59 +143,61 @@ export const getDocList = async (req: any, res: Response) => {
 
 }
 
-export const getPatientList = async (req: any, res: Response) => {
-    try {
-        const { uuid } = req.user;
-        const user = await User.findOne({ where: { uuid: uuid } });
-        if (user) {
-            let patientList: any = await Patient.findAll({ where: { [Op.or]: [{ referedby: uuid }, { referedto: uuid }] } });
-            if (patientList) {
-                
-                const plist: any[] = [];
-
-                
-                for (const patient of patientList) {
+    export const getPatientList = async (req: any, res: Response) => {
+        try {
+            const { uuid } = req.user;
+            const user = await User.findOne({ where: { uuid: uuid } });
+            if (user) {
+                let patientList: any = await Patient.findAll({ where: { [Op.or]: [{ referedby: uuid }, { referedto: uuid }] } });
+                if (patientList) {
                     
-                    const [referedtoUser, referedbyUser, address] = await Promise.all([
-                        User.findOne({ where: { uuid: patient.referedto } }),
-                        User.findOne({ where: { uuid: patient.referedby } }),
-                        Address.findOne({ where: { uuid: patient.address } }),
-                    ]);
+                    const plist: any[] = [];
 
-                    // Prepare the patient data to be added to the response
-                    const newPatientList: any = {
-                        uuid: patient.uuid,
-                        firstname: patient.firstname,
-                        lastname: patient.lastname,
-                        disease: patient.disease,
-                        referalstatus: patient.referalstatus,
-                        referback: patient.referback,
-                        createdAt: patient.createdAt,
-                        updatedAt: patient.updatedAt,
-                        referedto: referedtoUser,
-                        referedby: referedbyUser,
-                        address: address,
-                    };
+                    
+                    for (const patient of patientList) {
+                        
+                        const [referedtoUser, referedbyUser, address] = await Promise.all([
+                            User.findOne({ where: { uuid: patient.referedto } }),
+                            User.findOne({ where: { uuid: patient.referedby } }),
+                            Address.findOne({ where: { uuid: patient.address } }),
+                        ]);
+console.log(patient)
+                        // Prepare the patient data to be added to the response
+                        const newPatientList: any = {
+                            uuid: patient.uuid,
+                            firstname: patient.firstname,
+                            lastname: patient.lastname,
+                            disease: patient.disease,
+                            referalstatus: patient.referalstatus,
+                            referback: patient.referback,
+                            createdAt: patient.createdAt,
+                            updatedAt: patient.updatedAt,
+                            referedto: referedtoUser,
+                            referedby: referedbyUser,
+                            address: address,
+                            dob:patient.dob,
+                            notes:patient.notes,
+                        };
 
-                    plist.push(newPatientList);
+                        plist.push(newPatientList);
+                    }
+
+                    console.log("Data----->", plist);
+                    
+                    res.status(200).json({ "patientList": plist, "message": "Patient List Found" });
                 }
-
-                console.log("Data----->", plist);
-                
-                res.status(200).json({ "patientList": plist, "message": "Patient List Found" });
+                else {
+                    res.status(404).json({ "message": "Patient List Not Found" });
+                }
             }
             else {
-                res.status(404).json({ "message": "Patient List Not Found" });
+                res.status(404).json({ "message": "User Not Found" });
             }
         }
-        else {
-            res.status(404).json({ "message": "User Not Found" });
+        catch (err) {
+            res.status(500).json({ "message": `${err}` });
         }
     }
-    catch (err) {
-        res.status(500).json({ "message": `${err}` });
-    }
-}
 
 export const addPatient = async (req: any, res: Response) => {
     try {
@@ -203,9 +205,9 @@ export const addPatient = async (req: any, res: Response) => {
         const { uuid } = req.user;
         const user = await User.findOne({ where: { uuid: uuid } });
         if (user) {
-            const { firstname, lastname, disease, address, referedto, referback } = req.body;
+            const { firstname, lastname,gender,email,dob,disease, address, referedto, referback,companyName,policyStartingDate,policyExpireDate,notes,phoneNumber,laterality,timing,speciality } = req.body;
 
-            const patient = await Patient.create({ firstname, lastname, disease, address, referedto, referback, referedby: uuid });
+            const patient = await Patient.create({ firstname, lastname,gender,email,dob, disease, address, referedto, referback, companyName,policyStartingDate,policyExpireDate,notes,phoneNumber,laterality,timing,speciality,referedby: uuid });
             if (patient) {
                 res.status(200).json({ "message": "Patient added Successfully" });
             }
@@ -337,7 +339,7 @@ export const getUserProfile = async (req: any, res: Response) => {
 export const updateprofile = async (req: any, res: any) => {
     try {
         const { uuid } = req.user;
-        const { firstname, lastname, phone,email} = req.body;
+        const { firstname, lastname, phone,email,gender} = req.body;
 
         const user = await User.findOne({ where: { uuid: uuid } });
         if (!user) {
@@ -348,6 +350,7 @@ export const updateprofile = async (req: any, res: any) => {
         user.lastname = lastname || user.lastname;
         user.phone = phone || user.phone;
         user.email = email || user.email;
+        user.gender=gender || user.gender;
 
         await user.save();
 

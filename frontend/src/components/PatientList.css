@@ -1,36 +1,39 @@
 /* Ensure the content has top margin to avoid overlap with header */
 .patient-list-container {
-    margin-left:220px;
+    margin-left: 220px;
     margin-top: 0px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #ecf1f3;
     height: calc(100vh - 60px);
     overflow-y: auto;
 }
+
 .patient-list-container .d-flex {
     width: 100%;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
     gap: 1rem;
     margin-bottom: 20px;
-    padding: 10px; 
-  }
-  
-  .patient-list-container .form-control {
-    max-width: 500px;
-  }
-  .btn-search{
-height: 45px;
-margin-top: 8px;
+    padding: 10px;
 }
 
-.search-boarder{
-    border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,.1);
-  gap: 1rem;
-  margin-bottom: 20px;
-  padding: 10px; 
+.patient-list-container .form-control {
+    max-width: 500px;
 }
+
+.btn-search {
+    height: 45px;
+    margin-top: 8px;
+}
+
+.search-border {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    gap: 1rem;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
 /* Make sure the table fits well inside the content area */
 .table {
     width: 100%;
@@ -38,12 +41,15 @@ margin-top: 8px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Enables horizontal scrolling for small screens */
+    table-layout: fixed; /* Ensures equal column width */
 }
 
 .table th,
 .table td {
     text-align: center;
     padding: 12px 20px;
+    word-wrap: break-word; /* Ensures content doesn't overflow */
 }
 
 .table th {
@@ -69,4 +75,39 @@ margin-top: 8px;
 .spinner-border {
     margin: 20px auto;
     display: block;
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    .patient-list-container {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .table {
+        font-size: 12px; /* Reduce font size for smaller screens */
+    }
+
+    /* Hide less important columns for small screens */
+    .table th:nth-child(4), /* Appointment Date */
+    .table th:nth-child(6), /* Refer by */
+    .table th:nth-child(7), /* Refer to */
+    .table th:nth-child(8), /* Refer back */
+    .table td:nth-child(4),
+    .table td:nth-child(6),
+    .table td:nth-child(7),
+    .table td:nth-child(8) {
+        display: none;
+    }
+
+    /* Make the table scrollable horizontally */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .table {
+        font-size: 10px; /* Even smaller font size for very small screens */
+    }
 }
