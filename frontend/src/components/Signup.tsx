@@ -59,7 +59,7 @@ const Signup: React.FC = () => {
 
     return (
         <>
-     
+
             <section className="sign-up-section">
                 <div className="parent-div">
                     {/* Left Side - Background (Optional) */}
@@ -70,7 +70,7 @@ const Signup: React.FC = () => {
                     </div>
 
                     {/* Right Side - Signup Form */}
-                 
+
                     <div className="sign-up-form">
                         <div className="form-heading">
                             <h2>Signup</h2>
@@ -89,19 +89,19 @@ const Signup: React.FC = () => {
                             onSubmit={signupHandler}>
                             {() => (
                                 <Form className="auth-form">
-                                  
-                                    <div className='name'>
-                                    <div className="field-wrap input-fields">
-                                        <label>First Name<span className='star'>*</span></label>
-                                        <Field type="text" name="firstname" className="form-control" placeholder="First name" />
-                                        <ErrorMessage name="firstname" component="div" className="text-danger" />
-                                    </div>
 
-                                    <div className="field-wrap input-fields">
-                                        <label>Last Name<span className='star'>*</span></label>
-                                        <Field type="text" name="lastname" className="form-control" placeholder="Last name" />
-                                        <ErrorMessage name="lastname" component="div" className="text-danger" />
-                                    </div>
+                                    <div className='name'>
+                                        <div className="field-wrap input-fields">
+                                            <label>First Name<span className='star'>*</span></label>
+                                            <Field type="text" name="firstname" className="form-control" placeholder="First name" />
+                                            <ErrorMessage name="firstname" component="div" className="text-danger" />
+                                        </div>
+
+                                        <div className="field-wrap input-fields">
+                                            <label>Last Name<span className='star'>*</span></label>
+                                            <Field type="text" name="lastname" className="form-control" placeholder="Last name" />
+                                            <ErrorMessage name="lastname" component="div" className="text-danger" />
+                                        </div>
                                     </div>
 
                                     <div className="field-wrap input-fields">
@@ -138,7 +138,7 @@ const Signup: React.FC = () => {
 
                                     <button type="submit" className="sign-up-btn1 btn-outline-dark ">SignUp</button>
                                 </Form>
-                                
+
                             )}
                         </Formik>
 
@@ -146,8 +146,8 @@ const Signup: React.FC = () => {
                             <p>Already have an account? <Link to='/Login' className="login-link">Login</Link></p>
                         </div>
                     </div>
-                    </div>
-    
+                </div>
+
             </section>
             <section className='footer'>
                 <div className='footer-content bg-dark'>

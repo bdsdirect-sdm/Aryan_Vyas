@@ -72,7 +72,10 @@ const AddPatient: React.FC = () => {
       .min(new Date(), 'Policy Ending Date must be a future date')
       .typeError('Invalid date format'),
     notes: Yup.string().required("Note Is required"),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    phoneNumber: Yup.string()
+    .transform((value) => (isNaN(value) ? NaN : Number(value)))
+    .required('Phone number is required')
+    .typeError('Phone number must be a valid number'),
     laterality: Yup.string().required('Laterality is required'),
     timing: Yup.string().required('Timing Is required'),
     speciality: Yup.string().required('Speciality Is required'),
@@ -154,7 +157,7 @@ const AddPatient: React.FC = () => {
                     name="phoneNumber"
                     placeholder="Enter your phone number"
                     className="form-control"
-                    min={10}
+                    maxLength={10}
                   />
                   <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
                 </div>
