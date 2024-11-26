@@ -20,6 +20,18 @@ const PatientList: React.FC = () => {
       navigate('/login');
     }
   }, [token, navigate]);
+  const getUser = async () => {
+    try {
+      const response = await api.get(`${Local.GET_USER}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data.user;
+    } catch (err:any) {
+      toast.error("Failed to fetch user data",err);
+    }
+  };
 
   const fetchPatient = async () => {
     try {
@@ -33,7 +45,10 @@ const PatientList: React.FC = () => {
       toast.error(`Error fetching patients: ${err}`);
     }
   };
-
+  const { data: user } = useQuery({
+    queryKey: ['userData', token],
+    queryFn: getUser,
+  });
   const { data: Patients, error, isLoading, isError } = useQuery({
     queryKey: ['patient'],
     queryFn: fetchPatient,
@@ -95,10 +110,27 @@ const PatientList: React.FC = () => {
     );
   }
 console.log("Patient List>>>>>>>>>>>>>",Patients)
+console.log("user>>>>>>>>>..",user)
   return (
   
     <div className="patient-list-container">
+
+
+   {user?.doctype === 2 && (
+                 <div className='refer-btn'style={{ marginTop: 10}}>
       <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
+      <button className="appointment-btn"  style={{ marginTop: -10,marginBottom:20}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+      </div>
+
+            )}
+
+
+
+
+      {/* <div className='refer-btn'style={{ marginTop: 10}}>
+      <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
+      <button className="appointment-btn"  style={{ marginTop: -10,marginBottom:20}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+      </div> */}
 
       {/* Search Input and Button */}
       <div className="search-border d-flex mb-4" role="search">

@@ -73,9 +73,9 @@ const AddPatient: React.FC = () => {
       .typeError('Invalid date format'),
     notes: Yup.string().required("Note Is required"),
     phoneNumber: Yup.string()
-    .transform((value) => (isNaN(value) ? NaN : Number(value)))
-    .required('Phone number is required')
-    .typeError('Phone number must be a valid number'),
+      // .transform((value) => (isNaN(value) ? NaN : Number(value)))
+      .required('Phone number is required'),
+      // .typeError('Phone number must be a valid number'),
     laterality: Yup.string().required('Laterality is required'),
     timing: Yup.string().required('Timing Is required'),
     speciality: Yup.string().required('Speciality Is required'),
@@ -326,12 +326,17 @@ const AddPatient: React.FC = () => {
                 <label className="notes">
                   Notes <span className="star">*</span>
                 </label>
-                <Field as="textarea" name="notes" className="form-control" />
+                <Field
+                  as="textarea"
+                  name="notes"
+                  className="form-control"
+                  style={{ marginLeft: 12, marginRight: 12 }}
+                />
+
                 <ErrorMessage
                   name="notes"
                   component="div"
                   className="text-danger"
-                  style={{ marginLeft: -11}}
                 />
               </div>
 

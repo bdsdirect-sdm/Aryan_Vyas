@@ -4,9 +4,10 @@ import { PiHouseLight } from "react-icons/pi";
 import { MdOutlinePersonalInjury } from "react-icons/md";
 import { GrGroup } from "react-icons/gr";
 import { MdOutlineMarkChatRead } from "react-icons/md";
-import { TfiPrinter } from "react-icons/tfi";
+// import { TfiPrinter } from "react-icons/tfi";
 import { MdOutlinePersonPin } from "react-icons/md";
 import { BiBookReader } from "react-icons/bi";
+import { LuLogOut } from "react-icons/lu";
 // import logo from '../Assets/title_logo.webp';
 import './Header.css';
 
@@ -53,6 +54,9 @@ const Header: React.FC = () => {
                Hi, {firstname} {lastname}
                   <br className='welcome'></br>Welcome back
                 </h6>
+                
+
+
                 <ul className="dropdown-menu">
                   <li>
                     <Link to="/profile" className="dropdown-item">
@@ -72,7 +76,7 @@ const Header: React.FC = () => {
                         navigate('/login');
                       }}
                     >
-                      Logout
+                      Logout <LuLogOut />
                     </button>
                   </li>
                 </ul>
@@ -133,14 +137,14 @@ const Header: React.FC = () => {
             )}
 
 
-            {doctype === '2' && (
+            {/* {doctype === '2' && (
               <div className='nav-link'>
           <TfiPrinter className='house' />
                 <Link to="/add-patient" className="nav-link">
                   Referral Patient
                 </Link>
               </div>
-            )}
+            )} */}
             
             <div className='nav-link'>
             <MdOutlinePersonPin className='house'/>

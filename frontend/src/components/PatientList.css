@@ -70,7 +70,10 @@
     background-color: #e9ecef;
     cursor: pointer;
 }
-
+.refer-btn{
+    display: flex;
+    justify-content: space-between;
+}
 /* Spinner for loading */
 .spinner-border {
     margin: 20px auto;

@@ -80,6 +80,10 @@
     align-items: center;
     /* gap:33.33%; */
 }
+.insurance{
+    color:#35c0e4;
+    
+}
 .horizontal-line{
     width:100%;
     color: #737a7d;
