@@ -125,8 +125,6 @@ console.log("user>>>>>>>>>..",user)
             )}
 
 
-
-
       {/* <div className='refer-btn'style={{ marginTop: 10}}>
       <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
       <button className="appointment-btn"  style={{ marginTop: -10,marginBottom:20}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
@@ -143,7 +141,7 @@ console.log("user>>>>>>>>>..",user)
           aria-label="Search"
         />
         <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-          Search
+        <i className="fa fa-search"  style={{ marginRight: 5 }}></i>Search
         </button>
       </div>
 

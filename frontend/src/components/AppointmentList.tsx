@@ -123,7 +123,7 @@ const AppointmentsList: React.FC = () => {
           aria-label="Search"
         />
         <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-          Search
+        <i className="fa fa-search"  style={{ marginRight: 5 }}></i>  Search
         </button>
       </div>
 

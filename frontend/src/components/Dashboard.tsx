@@ -100,8 +100,8 @@ const Dashboard: React.FC = () => {
   const { patientList } = patientData || {};
   const { doctorList } = doctorData || {};
 
-  localStorage.setItem("firstname", user.firstname)
-  localStorage.setItem("lastname", user.lastname)
+  localStorage.setItem("firstname", user?.firstname)
+  localStorage.setItem("lastname", user?.lastname)
 
   const totalRefersReceived = patientList?.length || 0;
   const totalRefersCompleted = patientList?.filter((patient: { referalstatus: boolean }) => patient.referalstatus === true).length || 0;
@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className='refer d-flex'>
-        {user.doctype === 2 ? (
+        {user?.doctype === 2 ? (
           <>
             <h6 className="refer-title">Refer a Patient</h6>
             <button className="appointment-btn"  style={{ marginTop: -10}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>

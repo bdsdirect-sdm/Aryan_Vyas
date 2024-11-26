@@ -38,8 +38,8 @@ const App: React.FC = () => {
         { path: '/add-staff', element: <AddStaff /> },
         { path: '/add-address', element: <AddAddress close={function (): void {
           throw new Error('Function not implemented.');
-        } } /> },  // No need for `close` here
-        { path: '/update-address', element: <UpdateAddress /> },  // No need for `close` here
+        } } /> },
+        { path: '/update-address', element: <UpdateAddress /> },
         { path: '/profile', element: <Profile /> },
         { path: '/chat', element: <Chat /> },
         { path: '/add-appointment', element: <AddAppointment /> },

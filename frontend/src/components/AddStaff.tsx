@@ -131,9 +131,11 @@ const AddStaff: React.FC = () => {
   return (
     <>
       <div className="add-staff-container">
+        <div className='add-staff'>
         <h5 className="referral-title">Staff List</h5>
-        <button className="btn-add-staff" onClick={openModal}>+ Add Staff</button>
-
+        <button className="appointment-btn"
+        onClick={openModal}>+ Add Staff</button>
+</div>
         {/* Modal for adding new staff */}
         {isModalOpen && (
           <div className="modal-overlay">
@@ -207,7 +209,7 @@ const AddStaff: React.FC = () => {
         )}
 
         {/* Search Input */}
-        <form className="d-flex mb-4 hii1" role="search" onSubmit={(e) => e.preventDefault()}>
+        <form className="d-flex mb-4 hii1" style={{ marginTop:25}}role="search" onSubmit={(e) => e.preventDefault()}>
           <input
             className="form-control me-2 hi2"
             type="search"
@@ -215,8 +217,9 @@ const AddStaff: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             aria-label="Search"
+            
           />
-          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>Search</button>
+          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>   <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search</button>
         </form>
 
         {/* Staff List Table */}

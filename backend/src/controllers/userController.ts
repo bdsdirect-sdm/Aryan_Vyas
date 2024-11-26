@@ -160,8 +160,11 @@ export const getDocList = async (req: any, res: Response) => {
                             User.findOne({ where: { uuid: patient.referedto } }),
                             User.findOne({ where: { uuid: patient.referedby } }),
                             Address.findOne({ where: { uuid: patient.address } }),
+                            // Appointments.findOne({where:{userId:}})
                         ]);
 console.log(patient)
+// const appointmentDate=await Appointments.findOne({where:{patientId:patient.id}})
+// console.log("appointmentdate",appointmentDate)
                         // Prepare the patient data to be added to the response
                         const newPatientList: any = {
                             uuid: patient.uuid,
@@ -177,6 +180,7 @@ console.log(patient)
                             address: address,
                             dob:patient.dob,
                             notes:patient.notes,
+                            // appointmentDate:appointmentDate,
                         };
 
                         plist.push(newPatientList);
