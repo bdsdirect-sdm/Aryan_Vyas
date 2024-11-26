@@ -1,127 +1,216 @@
-import { useQuery } from '@tanstack/react-query';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import './PatientList.css';
-
-const PatientList: React.FC = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredPatients, setFilteredPatients] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token, navigate]);
-
-  const fetchPatient = async () => {
+export const getPatientDetails = async (req: any, res: Response) => {
     try {
-      const response = await api.get(`${Local.GET_PATIENT_LIST}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
+        const patientId = req.params.patientId;
+
+        const patient = await Patient.findOne({
+            where: { uuid: patientId },
+            include: [
+                {
+                    model: User,
+                    as: 'referedtoUser',
+                    attributes: ['firstname', 'lastname'],
+                },
+                {
+                    model: User,
+                    as: 'referedbyUser',
+                    attributes: ['firstname', 'lastname'],
+                },
+                {
+                    model: Address,
+                    attributes: ['street', 'city', 'state', 'pincode'],
+                }
+            ]
+        });
+
+        const appoinment = await Appointment.findOne({where: {patientId}})
+
+        if (patient) {
+            // Construct the response object
+            const patientDetails = {
+                uuid: patient.uuid,
+                firstname: patient.firstname,
+                lastname: patient.lastname,
+                disease: patient.disease,
+                referalstatus: patient.referalstatus,
+                referback: patient.referback,
+                // createdAt: patient.createdAt,
+                // updatedAt: patient.updatedAt,
+                referedto: patient.referedtoUser,
+                referedby: patient.referedbyUser,
+                address: patient.Address,
+                appointment: appoinment
+            };
+
+            res.status(200).json({
+                patientDetails,
+                message: 'Patient Details Found',
+            });
+        } else {
+            res.status(404).json({ message: 'Patient Not Found' });
+        }
     } catch (err) {
-      toast.error(`${err}`);
+        res.status(500).json({ message: `${err}` });
     }
-  };
-
-  const { data: Patients, error, isLoading, isError } = useQuery({
-    queryKey: ['patient'],
-    queryFn: fetchPatient,
-  });
-
-  // Filter patients based on search query
-  const handleSearch = () => {
-    if (Patients?.patientList) {
-      setFilteredPatients(
-        Patients.patientList.filter((patient: any) =>
-          `${patient.firstname} ${patient.lastname}`
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        )
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (Patients?.patientList && searchQuery === '') {
-      setFilteredPatients(Patients.patientList); // Reset to original list if search query is cleared
-    }
-  }, [searchQuery, Patients]);
-
-  if (isLoading) {
-    return (
-      <>
-        <div>Loading...</div>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </>
-    );
-  }
-
-  if (isError) {
-    return (
-      <>
-        <div className="text-danger">Error: {error.message}</div>
-      </>
-    );
-  }
-
-  console.log('Patient-List------------>', Patients);
-
-  return (
-    <div className="patient-list-container">
-      <p className="heading-patient">Referred Patients</p>
-
-      {/* Search Input and Button */}
-      <div className="search-container">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search by name..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button className="search-button" onClick={handleSearch}>
-          Search
-        </button>
-      </div>
-
-      <table className="table">
-        <thead>
-          <tr>
-            {/* <th scope="col">#</th> */}
-            <th scope="col">Patient Name</th>
-            <th scope="col">Disease</th>
-            <th scope="col">Refer by</th>
-            <th scope="col">Refer to</th>
-            <th scope="col">Refer back</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPatients.map((patient: any, index: number) => (
-            <tr key={index}>
-              {/* <td className="fw-bold">{index + 1}</td> */}
-              <td>{patient.firstname} {patient.lastname}</td>
-              <td>{patient.disease}</td>
-              <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
-              <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
-              <td>{patient.referback ? 'Yes' : 'No'}</td>
-              <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
 };
 
-export default PatientList;
+
+router.get('/patient-details/:patientId',userAuthMiddleware, getPatientDetails);
+
+
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import api from '../api/axiosInstance';
+import { Local } from '../environment/env';
+import './PatientDetails.css'
+
+const PatientDetails: React.FC = () => {
+    const { patientId } = useParams<{ patientId: string }>();
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
+
+    const getPatient = async () => {
+        try {
+            const response = await api.get(`${Local.GET_PATIENT_DETAILS}/${patientId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data.patientDetails;
+        } catch (err) {
+            toast.error("Failed to fetch user data");
+            console.log(err)
+        }
+    };
+
+    const { data: patientData, isError, error, isLoading } = useQuery({
+        queryKey: ['patientData?'],
+        queryFn: getPatient
+    });
+
+
+    console.log("patttttttient-------", patientData);
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/login')
+        }
+    }, [token]);
+
+    if (isLoading) {
+        return (
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return <div className="text-danger">Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
+    }
+
+    if (!patientData) {
+        return <div>Patient not found.</div>;
+    }
+
+    return (
+        <div className="patient-details-container">
+            <h5>Patient Details</h5>
+            <div className="patien-details">
+                <form>
+                    <div className="form-group">
+                        <label htmlFor="firstname">First Name</label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            className="form-control"
+                            value={patientData?.firstname}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="lastname">Last Name</label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            className="form-control"
+                            value={patientData?.lastname}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="disease">Disease</label>
+                        <input
+                            type="text"
+                            id="disease"
+                            className="form-control"
+                            value={patientData?.disease}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="referedBy">Referred By</label>
+                        <input
+                            type="text"
+                            id="referedBy"
+                            className="form-control"
+                            value={`${patientData?.referedby?.firstname} ${patientData?.referedby?.lastname}`}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="referedTo">Referred To</label>
+                        <input
+                            type="text"
+                            id="referedTo"
+                            className="form-control"
+                            value={`${patientData?.referedto?.firstname} ${patientData?.referedto?.lastname}`}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="referBack">Refer Back</label>
+                        <input
+                            type="text"
+                            id="referBack"
+                            className="form-control"
+                            value={patientData?.referback ? 'Yes' : 'No'}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="status">Status</label>
+                        <input
+                            type="text"
+                            id="status"
+                            className="form-control"
+                            value={patientData?.referalstatus ? 'Completed' : 'Pending'}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="address">Address</label>
+                        <input
+                            type="text"
+                            id="address"
+                            className="form-control"
+                            value={`${patientData?.address?.street}, ${patientData?.address?.city}, ${patientData?.address?.state}, ${patientData?.address?.pincode}`}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default PatientDetails;
