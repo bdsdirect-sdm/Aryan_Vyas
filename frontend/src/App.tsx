@@ -20,6 +20,7 @@ import UpdateAddress from './components/UpdateAddress';
 import AppointmentList from './components/AppointmentList';
 
 import './App.css';
+import PatientDetails from './components/PatientsDetails';
 
 
 const App: React.FC = () => {
@@ -45,6 +46,7 @@ const App: React.FC = () => {
         { path: '/add-appointment', element: <AddAppointment /> },
         { path: '/update-password', element: <UpdatePassword /> },
         { path: '/appointment-list', element: <AppointmentList /> },
+        {path:'/patients-details/:patientId',element:<PatientDetails/>}
       ]
     }
   ]);

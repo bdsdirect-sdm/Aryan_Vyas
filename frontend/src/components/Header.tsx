@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { PiHouseLight } from "react-icons/pi";
@@ -8,7 +9,7 @@ import { MdOutlineMarkChatRead } from "react-icons/md";
 import { MdOutlinePersonPin } from "react-icons/md";
 import { BiBookReader } from "react-icons/bi";
 import { LuLogOut } from "react-icons/lu";
-// import logo from '../Assets/title_logo.webp';
+import logoImg from '../../public/logo1.png';
 import './Header.css';
 
 
@@ -102,7 +103,7 @@ const Header: React.FC = () => {
         <div className="sidebar bg-white">
           <div className="sidebar-logo">
             <div onClick={handleLogoClick} className="logo">
-              <img src="logo1.png" alt="EyeRefer" className="logo1-img" />
+              <img src={logoImg} alt="EyeRefer" className="logo1-img" />
               <span className='logo-text'>EYE REFER</span>
               <hr />
             </div>

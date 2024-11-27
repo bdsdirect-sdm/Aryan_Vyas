@@ -16,7 +16,8 @@ import {
     getStaffList,
     deleteAddress,
     addAppointment,
-    getAppointmentList
+    getAppointmentList,
+    getPatientDetails,
 
 } from "../controllers/userController";
 import userAuthMiddleware from "../middlewares/userAuth";
@@ -41,5 +42,7 @@ router.post('/add-staff', userAuthMiddleware, addStaff);
 router.get('/get-staff', userAuthMiddleware, getStaffList);
 router.delete('/delete-address',userAuthMiddleware,deleteAddress);
 router.post('/add-appointment',userAuthMiddleware,addAppointment)
-router.get('/appointment-list',userAuthMiddleware,getAppointmentList)
+router.get('/appointment-list',userAuthMiddleware,getAppointmentList);
+router.get('/patients-details/:patientId',userAuthMiddleware, getPatientDetails);
+
 export default router;

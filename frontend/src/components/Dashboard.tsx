@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 
@@ -127,39 +128,39 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
 
-      <h6 className="dashboard-title" style={{fontSize:16}}>Dashboard</h6>
+      <h6 className="dashboard-title fw-bold" style={{fontSize:16,color:"black"}}>Dashboard</h6>
     
       <div className="metrics-cards">
         <div className="card" onClick={() => navigate('/patient')}>
-          <div className='card-heading'>Referrals Received</div>
+          <div className='card-heading'style={{color:"black"}}>Referrals Received</div>
           <div className="card-body2">
             <div className='icon d-flex'>
               <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Nov 26</div>
+            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Nov 27</div>
           </div>
         </div>
 
         <div className="card">
-          <div className='card-heading'>Total Refers Completed</div>
+          <div className='card-heading'style={{color:"black"}}>Total Refers Completed</div>
           <div className="card-body2">
             <div className='icon d-flex'>
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 26</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 27</div>
           </div>
         </div>
 
         <div className="card" onClick={() => navigate('/doctor')}>
-          <div className='card-heading'>Total Doctors OD/MD</div>
+          <div className='card-heading'style={{color:"black"}}>Total Doctors OD/MD</div>
           <div className="card-body2">
             <div className='icon d-flex'>
               <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 26</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 27</div>
           </div>
         </div>
       </div>
@@ -172,8 +173,8 @@ const Dashboard: React.FC = () => {
           </>
         ) : (
           <>
-            <h6 className="refer-title">Add Appointment</h6>
-            <button className="appointment-btn" onClick={() => navigate("/add-appointment")}>+Add Appointment</button>
+            <h6 className="refer-title fw-bold" style={{color:"black"}}>Referrals Placed</h6>
+            <button className="appointment-btn fw-bold"  style={{marginTop:-5}}onClick={() => navigate("/add-appointment")}>+Add Appointment</button>
           </>
         )}
       </div>

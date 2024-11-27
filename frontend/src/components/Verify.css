@@ -56,7 +56,7 @@ section.sign-up-section {
 .input-fields input {
     padding: 12px;
     font-size: 14px;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     border: 1px solid #ccc;
     width: 100%;
     box-sizing: border-box;

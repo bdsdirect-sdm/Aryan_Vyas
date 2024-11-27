@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
@@ -123,7 +124,7 @@ const DoctorList: React.FC = () => {
           <tbody>
             {/* Render filtered doctors */}
             {currentDoctors.length > 0 ? (
-              currentDoctors.map((doctor: any, index: number) => (
+              currentDoctors.map((doctor: any, _index: number) => (
                 <tr key={doctor.id}>
                   <td>{doctor.firstname}</td>
                   <td>{doctor.lastname}</td>

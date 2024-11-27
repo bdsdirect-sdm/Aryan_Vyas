@@ -140,7 +140,7 @@ const AddPatient: React.FC = () => {
               <div className='referral-fields1 row'>
                 <div className="form-group col">
                   <label>Date of Birth<span className='star'>*</span></label>
-                  <Field type="date" name="dob" className="form-control" />
+                  <Field type="date" name="dob" className="form-control" style={{color:"#495057"}}/>
                   <ErrorMessage name="dob" component="div" className="text-danger" />
                 </div>
 
@@ -180,8 +180,8 @@ const AddPatient: React.FC = () => {
 
                 <div className="form-group col">
                   <label>Gender<span className='star'>*</span></label>
-                  <Field as="select" name="gender" className="form-control">
-                    <option value="">Select</option>
+                  <Field as="select" name="gender" className="form-control" v>
+                    <option value="" style={{color:"#495057"}}>Select</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -308,14 +308,14 @@ const AddPatient: React.FC = () => {
 
                 <div className="form-group col">
                   <label>Policy Starting Date<span className='star'>*</span></label>
-                  <Field type="date" name="policyStartingDate" placeholder="Enter Date" className="form-control" />
+                  <Field type="date" name="policyStartingDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
                   <ErrorMessage name="policyStartingDate" component="div" className="text-danger" />
                 </div>
 
                 <div className="form-group col">
                   <label>Policy Expire Date<span className='star'>*</span></label>
                   <Field type="date"
-                    name="policyEndingDate" placeholder="Enter Date" className="form-control" />
+                    name="policyEndingDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
                   <ErrorMessage name="policyEndingDate" component="div" className="text-danger" />
                 </div>
               </div>
@@ -330,7 +330,6 @@ const AddPatient: React.FC = () => {
                   as="textarea"
                   name="notes"
                   className="form-control"
-                  style={{ marginLeft: 12, marginRight: 12 }}
                 />
 
                 <ErrorMessage

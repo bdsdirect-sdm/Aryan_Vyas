@@ -25,6 +25,10 @@ class Patient extends Model {
     public laterality!:string;
     public timing!:string;
     public speciality!:string;
+    Address: any;
+    Appointments: any;
+    referedbyUser: any;
+    referedtoUser: any;
 }
 
 Patient.init({
@@ -104,11 +108,11 @@ Patient.init({
     modelName: 'Patient'
 })
 
-User.hasMany(Patient, { foreignKey: 'referedby', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Patient.belongsTo(User, { foreignKey: 'referedby', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+User.hasMany(Patient, { foreignKey: 'referedby', as:'referedbyUser',onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Patient.belongsTo(User, { foreignKey: 'referedby', as:'referedbyUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-User.hasMany(Patient, { foreignKey: 'referedto', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Patient.belongsTo(User, { foreignKey: 'referedto', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+User.hasMany(Patient, { foreignKey: 'referedto', as:'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Patient.belongsTo(User, { foreignKey: 'referedto', as:'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 Address.hasMany(Patient, { foreignKey: "address", onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Patient.belongsTo(Address, { foreignKey: "address", onDelete: 'CASCADE', onUpdate: 'CASCADE' });

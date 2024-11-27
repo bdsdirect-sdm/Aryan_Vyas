@@ -143,65 +143,73 @@ export const getDocList = async (req: any, res: Response) => {
 
 }
 
-    export const getPatientList = async (req: any, res: Response) => {
-        try {
-            const { uuid } = req.user;
-            const user = await User.findOne({ where: { uuid: uuid } });
-            if (user) {
-                let patientList: any = await Patient.findAll({ where: { [Op.or]: [{ referedby: uuid }, { referedto: uuid }] } });
-                if (patientList) {
-                    
-                    const plist: any[] = [];
-
-                    
-                    for (const patient of patientList) {
-                        
-                        const [referedtoUser, referedbyUser, address] = await Promise.all([
-                            User.findOne({ where: { uuid: patient.referedto } }),
-                            User.findOne({ where: { uuid: patient.referedby } }),
-                            Address.findOne({ where: { uuid: patient.address } }),
-                            // Appointments.findOne({where:{userId:}})
-                        ]);
-console.log(patient)
-// const appointmentDate=await Appointments.findOne({where:{patientId:patient.id}})
-// console.log("appointmentdate",appointmentDate)
-                        // Prepare the patient data to be added to the response
-                        const newPatientList: any = {
-                            uuid: patient.uuid,
-                            firstname: patient.firstname,
-                            lastname: patient.lastname,
-                            disease: patient.disease,
-                            referalstatus: patient.referalstatus,
-                            referback: patient.referback,
-                            createdAt: patient.createdAt,
-                            updatedAt: patient.updatedAt,
-                            referedto: referedtoUser,
-                            referedby: referedbyUser,
-                            address: address,
-                            dob:patient.dob,
-                            notes:patient.notes,
-                            // appointmentDate:appointmentDate,
-                        };
-
-                        plist.push(newPatientList);
+export const getPatientList = async (req: any, res: Response) => {
+    try {
+        const { uuid } = req.user;
+        const user = await User.findOne({ where: { uuid: uuid } });
+        
+        if (user) {
+            // Fetching the patient list with additional Appointments data
+            let patientList: any = await Patient.findAll({
+                where: {
+                    [Op.or]: [{ referedby: uuid }, { referedto: uuid }]
+                },
+                include: [
+                    {
+                        model: Appointments,
+                        attributes: ['date', 'type'] // Include the attributes you need from the Appointments model
                     }
+                ]
+            });
 
-                    console.log("Data----->", plist);
-                    
-                    res.status(200).json({ "patientList": plist, "message": "Patient List Found" });
+            if (patientList) {
+                const plist: any[] = [];
+
+                for (const patient of patientList) {
+                    const [referedtoUser, referedbyUser, address] = await Promise.all([
+                        User.findOne({ where: { uuid: patient.referedto } }),
+                        User.findOne({ where: { uuid: patient.referedby } }),
+                        Address.findOne({ where: { uuid: patient.address } })
+                    ]);
+
+                    // You can get the appointment data directly from the patient object as it's included in the query
+                    const appointmentData = patient.Appointments ? patient.Appointments[0] : null;
+
+                    // Prepare the patient data to be added to the response
+                    const newPatientList: any = {
+                        uuid: patient.uuid,
+                        firstname: patient.firstname,
+                        lastname: patient.lastname,
+                        disease: patient.disease,
+                        referalstatus: patient.referalstatus,
+                        referback: patient.referback,
+                        createdAt: patient.createdAt,
+                        updatedAt: patient.updatedAt,
+                        referedto: referedtoUser,
+                        referedby: referedbyUser,
+                        address: address,
+                        dob: patient.dob,
+                        notes: patient.notes,
+                        appointmentDate: appointmentData ? appointmentData.date : null, // If an appointment exists, include the date
+                        appointmentType: appointmentData ? appointmentData.type : null // Include the type if available
+                    };
+
+                    plist.push(newPatientList);
                 }
-                else {
-                    res.status(404).json({ "message": "Patient List Not Found" });
-                }
+
+                console.log("Data----->", plist);
+
+                res.status(200).json({ "patientList": plist, "message": "Patient List Found" });
+            } else {
+                res.status(404).json({ "message": "Patient List Not Found" });
             }
-            else {
-                res.status(404).json({ "message": "User Not Found" });
-            }
+        } else {
+            res.status(404).json({ "message": "User Not Found" });
         }
-        catch (err) {
-            res.status(500).json({ "message": `${err}` });
-        }
+    } catch (err) {
+        res.status(500).json({ "message": `${err}` });
     }
+};
 
 export const addPatient = async (req: any, res: Response) => {
     try {
@@ -469,10 +477,7 @@ export const getStaffList = async (req: any, res: Response):Promise<void> => {
         if (staffList.length > 0) {
              res.status(200).json(staffList);
              return
-        } else {
-             res.status(404).json({ message: 'No staff found for this user.' });
-             return
-        }
+        } 
     } catch (err) {
         console.error(err);
          res.status(500).json({ message: 'Server error, please try again later.' });
@@ -543,24 +548,98 @@ export const addAppointment = async (req: any, res: any) => {
             include: [
                 {
                     model: Patient,
-                    attributes: ['uuid', 'firstname', 'lastname', 'disease','referalstatus'], 
+                    attributes: ['uuid', 'firstname', 'lastname', 'gender','email','dob','disease','referalstatus','notes','policyStartingDate','policyExpireDate','laterality'], 
                 },
                 {
                     model: User,
                     attributes: ['uuid', 'firstname', 'lastname', 'email'],
                 },
+                {
+                    model:Appointments,
+                    attributes:['date','type'],
+                }
             ],
         });
 console.log("apponmtsbdhgfye",appointments)
-        if (!appointments || appointments.length === 0) {
-            res.status(404).json({ message: 'No appointments found for this user.' });
-            return;
-        }
+        // if (!appointments || appointments.length === 0) {
+        //     res.status(404).json({ message: 'No appointments found for this user.' });
+        //     return;
+        // }
 
         res.status(200).json(appointments);
 
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+};
+
+export const getPatientDetails = async (req: any, res: Response) => {
+    try {
+        const patientId = req.params.patientId;
+
+        const patient = await Patient.findOne({
+            where: { uuid: patientId },
+            include: [
+                {
+                    model: User,
+                    as: 'referedtoUser',
+                    attributes: ['firstname', 'lastname'],
+                },
+                {
+                    model: User,
+                    as: 'referedbyUser',
+                    attributes: ['firstname', 'lastname'],
+                },
+                {
+                    model: Address,
+                    attributes: ['street', 'city', 'state', 'pincode'],
+                },
+                {
+                    model:Appointments,
+                    attributes:['date',"type"],
+                }
+            ]
+        });
+
+        const appoinment = await Appointment.findOne({where: {patientId}})
+
+        if (patient) {
+            // Construct the response object
+            const patientDetails = {
+                uuid: patient.uuid,
+                firstname: patient.firstname,
+                lastname: patient.lastname,
+                gender:patient.gender,
+                email:patient.email,
+                dob:patient.dob,
+                disease: patient.disease,
+                referalstatus: patient.referalstatus,
+                referback: patient.referback,
+                companyName:patient.companyName,
+                policyStartingDate:patient.policyStartingDate,
+                policyExpireDate:patient.policyExpireDate,
+                notes:patient.notes,
+                phoneNumber:patient.phoneNumber,
+                laterality:patient.laterality,
+                timing:patient.timing,
+                speciality:patient.speciality,
+                // createdAt: patient.createdAt,
+                // updatedAt: patient.updatedAt,
+                referedto: patient.referedtoUser,
+                referedby: patient.referedbyUser,
+                address: patient.Address,
+                appointment: appoinment
+            };
+
+            res.status(200).json({
+                patientDetails,
+                message: 'Patient Details Found',
+            });
+        } else {
+            res.status(404).json({ message: 'Patient Not Found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: `${err}` });
     }
 };

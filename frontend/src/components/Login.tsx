@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable @typescript-eslint/no-unused-vars
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -86,6 +87,7 @@ const Login: React.FC = () => {
           >
             {() => (
               <Form className="auth-form">
+                <div className='form-border'>
                 <div className="field-wrap input-fields">
                   <label htmlFor="email">Email<span className='star'>*</span></label>
                   <Field 
@@ -116,13 +118,15 @@ const Login: React.FC = () => {
                 >
                   Login
                 </button>
+                <div className="bottom-sec">
+            <p>Don't have an Account? <span><Link to="/" color='#57cdec'>Sign Up</Link></span></p>
+          </div>
+                </div>
               </Form>
             )}
           </Formik>
 
-          <div className="bottom-sec">
-            <p>Don't have an Account? <span><Link to="/" color='#57cdec'>Sign Up</Link></span></p>
-          </div>
+          
         </div>
       </div>
     </section>

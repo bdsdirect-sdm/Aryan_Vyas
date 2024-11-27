@@ -132,10 +132,10 @@ const AddStaff: React.FC = () => {
     <>
       <div className="add-staff-container">
         <div className='add-staff'>
-        <h5 className="referral-title">Staff List</h5>
-        <button className="appointment-btn"
-        onClick={openModal}>+ Add Staff</button>
-</div>
+          <h5 className="appointments-list-title">Staff List</h5>
+          <button className="btn-add-staff" onClick={openModal}>+ Add Staff</button>
+        </div>
+
         {/* Modal for adding new staff */}
         {isModalOpen && (
           <div className="modal-overlay">
@@ -209,7 +209,7 @@ const AddStaff: React.FC = () => {
         )}
 
         {/* Search Input */}
-        <form className="d-flex mb-4 hii1" style={{ marginTop:25}}role="search" onSubmit={(e) => e.preventDefault()}>
+        <form className="d-flex mb-4 hii1" style={{ marginTop: 25 }} role="search" onSubmit={(e) => e.preventDefault()}>
           <input
             className="form-control me-2 hi2"
             type="search"
@@ -217,9 +217,10 @@ const AddStaff: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             aria-label="Search"
-            
           />
-          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>   <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search</button>
+          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
+            <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search
+          </button>
         </form>
 
         {/* Staff List Table */}
@@ -229,6 +230,7 @@ const AddStaff: React.FC = () => {
           </div>
         ) : currentStaff.length > 0 ? (
           <div className="staff-list-container">
+             <div className="patient-table-container">
             <table className="table">
               <thead>
                 <tr>
@@ -249,6 +251,7 @@ const AddStaff: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         ) : (
           <p>No staff found.</p>
@@ -264,7 +267,6 @@ const AddStaff: React.FC = () => {
                   href="#"
                   aria-label="Previous"
                   onClick={() => handlePageChange(currentPage - 1)}
-                  // disabled={currentPage === 1}
                 >
                   <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -287,7 +289,6 @@ const AddStaff: React.FC = () => {
                   href="#"
                   aria-label="Next"
                   onClick={() => handlePageChange(currentPage + 1)}
-                  // disabled={currentPage === totalPages}
                 >
                   <span aria-hidden="true">&raquo;</span>
                 </a>

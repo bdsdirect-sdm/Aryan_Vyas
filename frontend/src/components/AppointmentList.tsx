@@ -28,18 +28,27 @@ const AppointmentsList: React.FC = () => {
       const response = await api.get(`${Local.GET_APPOINTMENT_LIST}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          
         },
+        
       });
+    
       return response.data;
+      
     } catch (err: any) {
+      
       toast.error(`${err.message || 'Error fetching appointments data'}`);
+      
     }
   };
+
 
   const { data: appointmentsData, error, isLoading, isError } = useQuery({
     queryKey: ['appointments'],
     queryFn: fetchAppointments,
   });
+
+console.log("appointmentlist>....",appointmentsData);
 
   // Filter appointments based on search query
   const handleSearch = () => {
@@ -128,6 +137,7 @@ const AppointmentsList: React.FC = () => {
       </div>
 
       {/* Appointments List Table */}
+      <div className="patient-table-container">
       <table className="table">
         <thead>
           <tr>
@@ -154,6 +164,7 @@ const AppointmentsList: React.FC = () => {
           )}
         </tbody>
       </table>
+      </div>
 
       {/* Pagination Controls */}
       <nav aria-label="Page navigation">

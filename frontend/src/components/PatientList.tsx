@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './PatientList.css';
 import moment from 'moment';
+import { FaRegEye } from "react-icons/fa";
 
 const PatientList: React.FC = () => {
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ const PatientList: React.FC = () => {
     queryKey: ['patient'],
     queryFn: fetchPatient,
   });
+console.log("patients>>>>>>",Patients);
 
   // Filter patients based on search query
   const handleSearch = () => {
@@ -114,125 +117,120 @@ console.log("user>>>>>>>>>..",user)
   return (
   
     <div className="patient-list-container">
-
-
+       {user?.doctype === 1 &&(
+      <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>)}
    {user?.doctype === 2 && (
-                 <div className='refer-btn'style={{ marginTop: 10}}>
-      <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
-      <button className="appointment-btn"  style={{ marginTop: -10,marginBottom:20}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+      <div className='refer-btn-heading' style={{ marginTop: 10 }}>
+         <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
+        <button className="btn-add-staff"  onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
       </div>
+   )}
 
-            )}
-
-
-      {/* <div className='refer-btn'style={{ marginTop: 10}}>
-      <p className="patient-list-title fw-medium fs-5 mb-3">Referred Patients</p>
-      <button className="appointment-btn"  style={{ marginTop: -10,marginBottom:20}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
-      </div> */}
-
-      {/* Search Input and Button */}
-      <div className="search-border d-flex mb-4" role="search">
+    {/* Search Input and Button */}
+    <div className="search-border d-flex mb-4 hii1" style={{marginTop:10}} role="search">
         <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
-          aria-label="Search"
+            className="form-control me-2 hi2"
+            type="search"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+            aria-label="Search"
         />
         <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-        <i className="fa fa-search"  style={{ marginRight: 5 }}></i>Search
+            <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search
         </button>
-      </div>
-
-      {/* Patient Table */}
-      <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-            <th scope="col" className="table-heading" style={{width: 101}}>Patient Name</th>
-              <th scope="col" className="table-heading">DOB</th>
-              <th scope="col" className="table-heading">Consult</th>
-              <th scope="col" className="table-heading" style={{width:132}}>Appointment Date</th>
-              <th scope="col" className="table-heading">Refer By</th>
-              <th scope="col" className="table-heading">Refer To</th>
-              <th scope="col" className="table-heading">Refer Back</th>
-              <th scope="col" className="table-heading">Consult Note</th>
-              <th scope="col" className="table-heading">Status</th>
-              <th scope="col" className="table-heading">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Render paginated patients */}
-            {currentPatients.length > 0 ? (
-              currentPatients.map((patient: any, index: number) => (
-                <tr key={index}>
-                  <td>{patient.firstname} {patient.lastname}</td>
-                  <td>{moment(patient.dob).format('DD-MM-YYYY')}</td>
-                  <td>{patient.disease}</td>
-                  <td></td>
-                  <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
-                  <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
-                  <td>{patient.referback ? 'Yes' : 'No'}</td>
-                  <td>{patient.notes}</td>
-                  <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
-                  <td></td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={10} className="text-center">No patients found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-end">
-        
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" aria-label="Previous" onClick={(e) => {
-              e.preventDefault();
-              if (currentPage > 1) {
-                handlePageChange(currentPage - 1);
-              }
-            }}>
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-
-          {/* Page Number Buttons */}
-          {pageNumbers.map((number) => (
-            <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
-              <a
-                className="page-link"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(number);
-                }}
-              >
-                {number}
-              </a>
-            </li>
-          ))}
-
-          {/* Next Button */}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" aria-label="Next" onClick={(e) => {
-              e.preventDefault();
-              if (currentPage < totalPages) {
-                handlePageChange(currentPage + 1);
-              }
-            }}>
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
     </div>
+
+    {/* Patient Table */}
+    <div className='table-responsive'>
+    <div className="table-container">
+    <table className="table table-striped"> 
+            <thead>
+                <tr>
+                    <th style={{width:121}}>Patient Name</th>
+                    <th>DOB</th>
+                    <th>Consult</th>
+                    <th style={{width:158}}>Appointment Date</th>
+                    <th style={{width:100}}>Refer By</th>
+                    <th style={{width:100}}>Refer To</th>
+                    <th style={{width:100}}>Refer Back</th>
+                    <th  style={{width:117}}>Consult Note</th>
+                    <th >Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {currentPatients.length > 0 ? (
+                    currentPatients.map((patient: any, index: number) => (
+                        <tr key={index}>
+                            <td>{patient.firstname} {patient.lastname}</td>
+                            <td>{moment(patient.dob).format('DD-MM-YYYY')}</td>
+                            <td>{patient.disease}</td>
+                            <td>{patient.appointmentDate}</td>
+                            <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
+                            <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
+                            <td>{patient.referback ? 'Yes' : 'No'}</td>
+                            <td>{patient.notes}</td>
+                            <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
+                            <td><Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link></td>
+                            {/* <td><Link to="/patient">Link</Link></td> */}
+
+
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan={10} className="text-center">No patients found</td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    {/* Pagination */}
+    <nav aria-label="Page navigation example">
+        <ul className="pagination justify-content-end">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <a className="page-link" href="#" aria-label="Previous" onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        handlePageChange(currentPage - 1);
+                    }
+                }}>
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            {pageNumbers.map((number) => (
+                <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+                    <a
+                        className="page-link"
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(number);
+                        }}
+                    >
+                        {number}
+                    </a>
+                </li>
+            ))}
+
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <a className="page-link" href="#" aria-label="Next" onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                        handlePageChange(currentPage + 1);
+                    }
+                }}>
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
   );
 };
 

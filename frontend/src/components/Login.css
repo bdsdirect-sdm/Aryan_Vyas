@@ -58,7 +58,7 @@ form.auth-form {
     background: white;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 35px;
+    padding: 0px;
 }
 
 .input-fields label,

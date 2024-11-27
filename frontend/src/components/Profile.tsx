@@ -11,7 +11,7 @@ import UpdateAddress from './UpdateAddress'; // Import UpdateAddress component
 import { AiOutlineDelete } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
 import './Profile.css';
-import { BiUnderline } from 'react-icons/bi';
+// import { BiUnderline } from 'react-icons/bi';
 
 interface Address {
   uuid: string;
@@ -166,7 +166,7 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <div>
-        <p>Profile</p>
+        <p className='fw-bold' style={{color:"black"}}>Profile</p>
       </div>
       <div className='profile'>
         <div className='profile-photo-heading'>
@@ -194,8 +194,8 @@ const Profile: React.FC = () => {
             <div className='email-center'><span className='infoheading'>Email:</span> {user.email}</div>
           </div>
 
-          <div>
-          <p className='insurance' style={{ marginTop: 20, textDecoration: 'underline' }}>Insurance Details</p>
+          <div className='insurance-top'>
+          <a href="#" className='insurance' style={{ marginTop: 20, textDecoration: 'underline' }}>Insurance Details</a>
 
           </div>
 

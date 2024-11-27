@@ -1,4 +1,3 @@
-/* Ensure the content has top margin to avoid overlap with header */
 .patient-list-container {
     margin-left: 220px;
     margin-top: 0px;
@@ -25,6 +24,11 @@
     height: 45px;
     margin-top: 8px;
 }
+.refer-btn-heading{
+    margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 
 .search-border {
     border-radius: 5px;
@@ -32,85 +36,4 @@
     gap: 1rem;
     margin-bottom: 20px;
     padding: 10px;
-}
-
-/* Make sure the table fits well inside the content area */
-.table {
-    width: 100%;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow-x: auto; /* Enables horizontal scrolling for small screens */
-    table-layout: fixed; /* Ensures equal column width */
-}
-
-.table th,
-.table td {
-    text-align: center;
-    padding: 12px 20px;
-    word-wrap: break-word; /* Ensures content doesn't overflow */
-}
-
-.table th {
-    background-color: #35c0e4;
-    color: white;
-    font-weight: bold;
-}
-
-.table td {
-    background-color: #f9f9f9;
-}
-
-.table tbody tr:nth-child(even) {
-    background-color: #f1f1f1;
-}
-
-.table tbody tr:hover {
-    background-color: #e9ecef;
-    cursor: pointer;
-}
-.refer-btn{
-    display: flex;
-    justify-content: space-between;
-}
-/* Spinner for loading */
-.spinner-border {
-    margin: 20px auto;
-    display: block;
-}
-
-/* Responsive styling for smaller screens */
-@media (max-width: 768px) {
-    .patient-list-container {
-        margin-left: 0;
-        padding: 10px;
-    }
-
-    .table {
-        font-size: 12px; /* Reduce font size for smaller screens */
-    }
-
-    /* Hide less important columns for small screens */
-    .table th:nth-child(4), /* Appointment Date */
-    .table th:nth-child(6), /* Refer by */
-    .table th:nth-child(7), /* Refer to */
-    .table th:nth-child(8), /* Refer back */
-    .table td:nth-child(4),
-    .table td:nth-child(6),
-    .table td:nth-child(7),
-    .table td:nth-child(8) {
-        display: none;
-    }
-
-    /* Make the table scrollable horizontally */
-    .table-wrapper {
-        overflow-x: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .table {
-        font-size: 10px; /* Even smaller font size for very small screens */
-    }
 }

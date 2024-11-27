@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useMutation } from '@tanstack/react-query';
@@ -8,6 +9,7 @@ import { toast } from 'react-toastify';
 import api from '../api/axiosInstance';
 import * as Yup from 'yup';
 import './Signup.css';
+import { height } from '@mui/system';
 
 const Signup: React.FC = () => {
     const navigate = useNavigate();
@@ -70,7 +72,7 @@ const Signup: React.FC = () => {
                     </div>
 
                     {/* Right Side - Signup Form */}
-
+{/* <div className='form-data'> */}
                     <div className="sign-up-form">
                         <div className="form-heading">
                             <h2>Signup</h2>
@@ -89,6 +91,7 @@ const Signup: React.FC = () => {
                             onSubmit={signupHandler}>
                             {() => (
                                 <Form className="auth-form">
+<div className='form-border'>
 
                                     <div className='name'>
                                         <div className="field-wrap input-fields">
@@ -106,8 +109,8 @@ const Signup: React.FC = () => {
 
                                     <div className="field-wrap input-fields">
                                         <label className="doctor-label">Doctor Type<span className='star'>*</span></label>
-                                        <Field as="select" name="doctype" className="form-select p-2" aria-label="Doctor Type">
-                                            <option value="MD" disabled>Select Doctor Type</option>
+                                        <Field as="select" name="doctype" className="form-select p-2" aria-label="Doctor Type" style={{height:46}}>
+                                            <option value="MD" style={{color:"#ccc"}} disabled>Select Doctor Type</option>
                                             <option value="1">MD</option>
                                             <option value="2">OD</option>
                                         </Field>
@@ -137,15 +140,20 @@ const Signup: React.FC = () => {
                                     </div>
 
                                     <button type="submit" className="sign-up-btn1 btn-outline-dark ">SignUp</button>
+
+                                    <div className="bottom-sec">
+                            <p>Already have an account? <Link to='/Login' className="login-link">Login</Link></p>
+                        </div>
+                        </div>
                                 </Form>
 
                             )}
                         </Formik>
 
-                        <div className="bottom-sec">
-                            <p>Already have an account? <Link to='/Login' className="login-link">Login</Link></p>
-                        </div>
+                      
                     </div>
+                            {/* </div> */}
+
                 </div>
 
             </section>

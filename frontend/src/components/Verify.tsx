@@ -79,6 +79,7 @@ const Verify: React.FC = () => {
                     >
                         {() => (
                             <Form className="auth-form">
+                                <div className='form-border'>
                                 <div className="field-wrap input-fields">
                                     <label htmlFor="otp"><span className='star'>*</span>OTP</label>
                                     <Field
@@ -97,13 +98,15 @@ const Verify: React.FC = () => {
                                 >
                                     Verify OTP
                                 </button>
+                                <div className="bottom-sec">
+                        <p>Already verified? <span><Link to="/login">Login</Link></span></p>
+                    </div>
+                                </div>
                             </Form>
                         )}
                     </Formik>
 
-                    <div className="bottom-sec">
-                        <p>Already verified? <span><Link to="/login">Login</Link></span></p>
-                    </div>
+                   
                 </div>
             </div>
         </section>

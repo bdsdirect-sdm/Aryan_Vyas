@@ -41,7 +41,7 @@ User.init({
     },
     gender:{
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull:true,
     },
     doctype:{
         type: DataTypes.INTEGER,

@@ -1,6 +1,6 @@
 .dashboard-container {
     margin-left: 220px;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
     min-height: 90vh;
     background-color:#ecf1f3;
@@ -112,7 +112,7 @@
 .metrics-cards .card-text {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #35c0e4;
+    color: black;
 }
 
 /* Table styling for Patient List */
@@ -170,6 +170,57 @@
 @media (max-width: 576px) {
     .metrics-cards .card {
         flex: 1 1 100%; /* 1 card per row on very small screens */
+    }
+}
+/* Table Styling */
+.patient-table-container th,
+.patient-table-container td {
+    text-align: center;
+}
+
+.patient-table-container th {
+    background-color: #f1f1f1;
+}
+
+.patient-table-container td {
+    padding: 0.8rem;
+}
+
+/* Badge for referal status */
+.patient-table-container .badge {
+    padding: 0.4rem 0.6rem;
+}
+
+.patient-table-container .badge.bg-success {
+    background-color: #28a745;
+}
+
+.patient-table-container .badge.bg-warning {
+    background-color: #ffc107;
+}
+
+/* Responsive Design: Make the table scrollable on smaller screens */
+@media (max-width: 768px) {
+    .patient-table-container {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* For smooth scrolling on mobile devices */
+    }
+    
+    .patient-table-container table {
+        width: 100%; /* Ensure the table takes up full width */
+        min-width: 600px; /* Minimum width to prevent columns from becoming too narrow */
+    }
+
+    .patient-table-container th, .patient-table-container td {
+        white-space: nowrap; /* Prevent text from wrapping */
+        font-size: 0.9rem; /* Adjust font size for readability */
+    }
+}
+
+/* Further adjustment for very small screens (e.g., mobile devices) */
+@media (max-width: 480px) {
+    .patient-table-container table {
+        min-width: 500px; /* Slightly reduced width for very small screens */
     }
 }
 

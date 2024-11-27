@@ -82,7 +82,10 @@
 }
 .insurance{
     color:#35c0e4;
-    
+    margin-top:5px;
+}
+.insurance-top{
+    margin-top: 20px;
 }
 .horizontal-line{
     width:100%;
