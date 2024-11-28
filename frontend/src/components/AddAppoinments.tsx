@@ -75,7 +75,7 @@ const AddAppointment: React.FC = () => {
         },
       });
       toast.success("Appointment added successfully");
-      navigate('/dashboard');
+      navigate('/appointment-list');
     } catch (err: any) {
       toast.error(`${err.response?.data?.message || 'Error occurred'}`);
     }

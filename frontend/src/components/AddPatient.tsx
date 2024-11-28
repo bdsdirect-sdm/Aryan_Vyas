@@ -9,6 +9,7 @@ import api from '../api/axiosInstance';
 import * as Yup from 'yup';
 import { FormControlLabel, Switch } from '@mui/material';
 import "./AddPatient.css";
+import { IoIosArrowBack } from "react-icons/io";
 const AddPatient: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -67,15 +68,15 @@ const AddPatient: React.FC = () => {
     referback: Yup.string().required("Please select an option"),
     companyName: Yup.string().required("Company Name Is Required"),
     policyStartingDate: Yup.date().required("Policy Starting Date Is Required"),
-    policyEndingDate: Yup.date()
+    policyExpireDate: Yup.date()
       .required('Policy Ending Date is required')
       .min(new Date(), 'Policy Ending Date must be a future date')
       .typeError('Invalid date format'),
     notes: Yup.string().required("Note Is required"),
     phoneNumber: Yup.string()
-      // .transform((value) => (isNaN(value) ? NaN : Number(value)))
-      .required('Phone number is required'),
-      // .typeError('Phone number must be a valid number'),
+    .required('Phone Number is required')  // Ensure the field is not empty
+    .matches(/^\d+$/, 'Phone Number must be a numeric value')  // Ensure it contains only numeric digits
+    .length(10, 'Phone Number must be exactly 10 digits long') ,
     laterality: Yup.string().required('Laterality is required'),
     timing: Yup.string().required('Timing Is required'),
     speciality: Yup.string().required('Speciality Is required'),
@@ -106,7 +107,7 @@ const AddPatient: React.FC = () => {
 
   return (
     <div className="add-patient-container">
-      <h5 className="referral-title">Add Referral Patient</h5>
+      <h5 className="referral-title" onClick={() => navigate("/patient")}><IoIosArrowBack />Add Referral Patient</h5>
       <Formik
         initialValues={{
           firstname: '',
@@ -120,7 +121,7 @@ const AddPatient: React.FC = () => {
           referback: '',
           companyName: '',
           policyStartingDate: '',
-          policyEndingDate: '',
+          policyExpireDate: '',
           notes: '',
           phoneNumber: '',
           laterality: '',
@@ -315,8 +316,8 @@ const AddPatient: React.FC = () => {
                 <div className="form-group col">
                   <label>Policy Expire Date<span className='star'>*</span></label>
                   <Field type="date"
-                    name="policyEndingDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
-                  <ErrorMessage name="policyEndingDate" component="div" className="text-danger" />
+                    name="policyExpireDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
+                  <ErrorMessage name="policyExpireDate" component="div" className="text-danger" />
                 </div>
               </div>
 

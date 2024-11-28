@@ -53,7 +53,10 @@ const handleNavigate=()=>{
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     // phone: Yup.string().required('Phone number is required'),
-    pincode: Yup.number().required('Pincode is required'),
+    pincode: Yup.string()
+    .required('Pincode is required')  // Ensure the field is not empty
+    .matches(/^\d+$/, 'Pincode must be a numeric value')  // Ensure it contains only numeric digits
+    .length(6, 'Pincode must be exactly 6 digits long'),
   });
 
   const handleSubmit = (values: Address) => {
@@ -63,35 +66,35 @@ const handleNavigate=()=>{
   return (
     <Formik
       initialValues={{
-        ...address,  // Pre-fill the form with the selected address
+        ...address,
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
       {() => (
         <Form>
-          <div className="form-group">
+          <div className="form-group1">
             <label>Street<span className='star'>*</span></label>
             <Field type="text" name="street" className="form-control" />
             <ErrorMessage name="street" component="div" className="text-danger" />
           </div>
           <br />
 
-          <div className="form-group">
+          <div className="form-group1">
             <label>District<span className='star'>*</span></label>
             <Field type="text" name="district" className="form-control" />
             <ErrorMessage name="district" component="div" className="text-danger" />
           </div>
           <br />
 
-          <div className="form-group">
+          <div className="form-group1">
             <label>State<span className='star'>*</span></label>
             <Field type="text" name="state" className="form-control" />
             <ErrorMessage name="state" component="div" className="text-danger" />
           </div>
           <br />
 
-          <div className="form-group">
+          <div className="form-group1">
             <label>City<span className='star'>*</span></label>
             <Field type="text" name="city" className="form-control" />
             <ErrorMessage name="city" component="div" className="text-danger" />
@@ -105,7 +108,7 @@ const handleNavigate=()=>{
           </div> */}
           <br />
 
-          <div className="form-group">
+          <div className="form-group1">
             <label>Pincode<span className='star'>*</span></label>
             <Field type="text" name="pincode" className="form-control" maxLength={6} />
             <ErrorMessage name="pincode" component="div" className="text-danger" />

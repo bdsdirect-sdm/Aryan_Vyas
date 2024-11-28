@@ -3,9 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './AppointmentList.css';
+import { FaRegEye } from "react-icons/fa";
+import { MdOutlineDateRange } from "react-icons/md";
 
 const AppointmentsList: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +18,9 @@ const AppointmentsList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);  // Track current page
   const appointmentsPerPage = 5;  // Appointments to show per page
   const [loading, setLoading] = useState(false);
-
+const handleEditAppointment=()=>{
+  navigate('/add-appointment')
+}
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -142,9 +146,11 @@ console.log("appointmentlist>....",appointmentsData);
         <thead>
           <tr>
             <th scope="col">Patient Name</th>
+            <th scope="col">Consultation Date</th>
             <th scope="col">Doctor Name</th>
-            <th scope="col">Appointment Date</th>
-            <th scope="col">Appointment Type</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -152,9 +158,11 @@ console.log("appointmentlist>....",appointmentsData);
             currentAppointments.map((appointment: any) => (
               <tr key={appointment.uuid}>
                 <td>{appointment.Patient?.firstname} {appointment.Patient?.lastname}</td>
-                <td>{appointment.User?.firstname} {appointment.User?.lastname}</td>
                 <td>{appointment.date}</td>
+                <td>{appointment.User?.firstname} {appointment.User?.lastname}</td>
                 <td>{appointment.type}</td>
+                <td></td>
+                <td><Link to={`/edit-appointment/${appointment.uuid}`}><FaRegEye /> <span className='edit-appointment' style={{paddingLeft:20}} onClick={handleEditAppointment}><MdOutlineDateRange /></span></Link></td>
               </tr>
             ))
           ) : (

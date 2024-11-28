@@ -11,6 +11,11 @@ import moment from 'moment';
 const PatientDetails: React.FC = () => {
     const { patientId } = useParams<{ patientId: string }>();
     const token = localStorage.getItem('token');
+    const doctorType: string | null = localStorage.getItem("doctype");
+
+    // Parse doctorType as number, default to 0 if not available
+    const doctorTypeNumber = doctorType ? parseInt(doctorType, 10) : 0;
+
     const navigate = useNavigate();
 
     const getPatient = async () => {
@@ -23,7 +28,7 @@ const PatientDetails: React.FC = () => {
             return response.data.patientDetails;
         } catch (err) {
             toast.error("Failed to fetch user data");
-            console.log(err)
+            console.log(err);
         }
     };
 
@@ -32,12 +37,9 @@ const PatientDetails: React.FC = () => {
         queryFn: getPatient
     });
 
-
-    console.log("patttttttient-------", patientData);
-
     useEffect(() => {
         if (!token) {
-            navigate('/login')
+            navigate('/login');
         }
     }, [token]);
 
@@ -60,122 +62,105 @@ const PatientDetails: React.FC = () => {
     return (
         <div className="patient-details-container">
             <div className='details-btn'>
-                <p  className='back fw-bold' onClick={() => navigate("/patient")}><IoIosArrowBack /> Back</p >
+                <p className='back fw-bold' onClick={() => navigate("/patient")}><IoIosArrowBack /> Back</p>
                 <button className="appointment-btn" onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
             </div>
             <div className='patient-info'>
                 <h6 className="fw-bold" style={{ marginTop: '1.5rem', marginBottom: "1.5rem" }}>Basic Information</h6>
                 <div className="patient-details">
                     <form>
-
                         <div className='name-info row'>
                             <div className="form-group2 col" style={{ marginTop: 15 }}>
                                 <label htmlFor="name">First Name: {patientData?.firstname} {patientData?.lastname}</label>
                             </div>
-
-                            <div className="form-group2 col " style={{ marginTop: 15 }}>
-                                <label htmlFor="gender">Gender:{patientData?.gender}</label>
+                            <div className="form-group2 col" style={{ marginTop: 15 }}>
+                                <label htmlFor="gender">Gender: {patientData?.gender}</label>
                             </div>
                             <div className="form-group2 col" style={{ marginTop: 15 }}>
-                                <label htmlFor="date">Date Of Birth:{moment(patientData?.dob).format('DD-MM-YYYY')}</label>
+                                <label htmlFor="date">Date Of Birth: {moment(patientData?.dob).format('DD-MM-YYYY')}</label>
                             </div>
-
-
                             <div className="form-group4 row py-3">
                                 <div className="form-group2 col">
                                     <label htmlFor="phone">Phone: {patientData?.phoneNumber}</label>
                                 </div>
-                                <div className="form-group2 col">
+                                <div className="form-group2 col px-4">
                                     <label htmlFor="email">Email: {patientData?.email}</label>
                                 </div>
-                            </div>
+                                <div className="form-group2 col">
 
+                                </div>
+                            </div>
                         </div>
 
-                        <p  style={{ marginTop: '1.5rem', marginBottom: "1.5rem",fontSize:16, color:"black"}}>Reason of consult</p >
+                        <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Reason of consult</p>
 
                         <div className='name-info row'>
-                            <div className="form-group2 col p-3" >
+                            <div className="form-group2 col p-3">
                                 <label htmlFor="text">Reason: {patientData?.disease}</label>
                             </div>
-
                             <div className="form-group2 col p-3">
                                 <label htmlFor="text">Laterality: {patientData?.laterality}</label>
                             </div>
                             <div className="form-group2 col p-3">
-                                <label htmlFor="text">Timing:{patientData?.timing}</label>
+                                <label htmlFor="text">Timing: {patientData?.timing}</label>
                             </div>
                         </div>
 
-
-                        <p  style={{ marginTop: '1.5rem', marginBottom: "1.5rem" ,fontSize:16, color:"black"}}>Referral OD/MD</p >
+                        <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Referral OD/MD</p>
 
                         <div className='name-info row'>
                             <div className="form-group2 col p-3">
-                                <label htmlFor="name">MD/OD Name: {`${patientData?.referedby?.firstname} ${patientData?.referedby?.lastname}`}</label>
+                                <label htmlFor="name">
+                                    MD/OD Name: {doctorTypeNumber === 1
+                                        ? `${patientData?.referedby?.firstname} ${patientData?.referedby?.lastname}`
+                                        : doctorTypeNumber === 2
+                                            ? `${patientData?.referedto?.firstname} ${patientData?.referedto?.lastname}`
+                                            : 'Not Available'}
+                                </label>
                             </div>
- 
                             <div className="form-group2 col p-3">
                                 <label htmlFor="gender">Location: {patientData?.address?.street}</label>
                             </div>
                             <div className="form-group2 col p-3">
-                                <label htmlFor="date">Speciality:{patientData?.speciality}</label>
+                                <label htmlFor="date">Speciality: {patientData?.speciality}</label>
                             </div>
                         </div>
 
-
-                        <p  style={{ marginTop: '1.5rem', marginBottom: "1.5rem" ,fontSize:16, color:"black"}}>Appointment Details</p >
+                        <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Appointment Details</p>
 
                         <div className='name-info row'>
                             <div className="form-group2 col p-3">
                                 <label htmlFor="name">Appointment Date Time: {patientData?.appointment?.date}</label>
-                                <span className="form-group2 col p-3">
-                                    <label htmlFor="text" style={{ padding: '0px 5%' }}>Type: {patientData?.appointment?.type}</label>
-                                </span  >
                             </div>
+                            <div className="form-group2 col p-3">
+                                <label htmlFor="text">Type: {patientData?.appointment?.type}</label>
+                            </div>
+                            <div className="form-group2 col">
 
-
+</div>
                         </div>
 
-                        <p  style={{ marginTop: '1.5rem', marginBottom: "1.5rem" ,fontSize:16, color:"black"}}>Insurance Details</p >
+                        <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Insurance Details</p>
 
                         <div className='name-info row'>
                             <div className="form-group2 col p-3">
-                                <label htmlFor="name">Company Name : {patientData?.companyName}</label>
+                                <label htmlFor="name">Company Name: {patientData?.companyName}</label>
                             </div>
-
                             <div className="form-group2 col p-3">
                                 <label htmlFor="gender">Policy Start Date: {moment(patientData?.policyStartingDate).format("DD-MM-YYYY")}</label>
                             </div>
-
                             <div className="form-group2 col p-3">
                                 <label htmlFor="gender">Policy End Date: {moment(patientData?.policyExpireDate).format("DD-MM-YYYY")}</label>
                             </div>
                         </div>
 
-
-                        <p  style={{ marginTop: '1.5rem', marginBottom: "1.5rem" ,fontSize:16, color:"black"}}>Notes</p >
+                        <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Notes</p>
 
                         <div className='name-info row'>
                             <div className="form-group2 col p-3">
-                                <label htmlFor="name">Notes : {patientData?.notes}</label>
+                                <label htmlFor="name">Notes: {patientData?.notes}</label>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-                        {/* <div className="form-group2 col">
-                        <label htmlFor="referedBy">MD/OD Name {`${patientData?.referedby?.firstname} ${patientData?.referedby?.lastname}`}</label> 
-                    </div> */}
-
                     </form>
                 </div>
             </div>

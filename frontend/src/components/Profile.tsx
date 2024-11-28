@@ -182,16 +182,30 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="profile-info2">
-          <div className='info'style={{marginBottom:15}}>
-            <div>
+          <div className='info row'style={{marginBottom:15}}>
+            <div className='col'>
               <span className='infoheading' >Name: </span>{user.firstname} {user.lastname}
             </div>
-            <div className='gender-center'><span className='infoheading'>Gender:{user.gender}</span></div>
+
+            <div className='col'>
+              <span className='infoheading'>Gender: {user.gender}</span>
+              </div>
+
+            <div className='col'>
+              {/* <span className='infoheading'>Gender:{user.gender}</span> */}
+              </div>
           </div>
 
-          <div className='info'>
-            <div><span className='infoheading'>Phone:</span> {user.phone}</div>
-            <div className='email-center'><span className='infoheading'>Email:</span> {user.email}</div>
+          <div className='info row'>
+            <div className='col'>
+              <span className='infoheading'>Phone:</span> {user.phone}
+              </div>
+            <div className='col'>
+              <span className='infoheading'>Email:</span> {user.email}
+            </div>
+            <div className='col'>
+              {/* <span className='infoheading'>Email:</span> {user.email} */}
+            </div>
           </div>
 
           <div className='insurance-top'>
@@ -299,7 +313,7 @@ const Profile: React.FC = () => {
                       value={formData.gender}
                       onChange={handleInputChange}
                     >
-                      <option value="Male">Select Gender</option>
+                      <option value="">Select Gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                       <option value="Other">Other</option>

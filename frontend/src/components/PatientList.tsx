@@ -174,8 +174,6 @@ console.log("user>>>>>>>>>..",user)
                             <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
                             <td><Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link></td>
                             {/* <td><Link to="/patient">Link</Link></td> */}
-
-
                         </tr>
                     ))
                 ) : (

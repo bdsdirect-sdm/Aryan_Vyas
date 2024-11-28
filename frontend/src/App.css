@@ -5,17 +5,7 @@
   text-align: center;
 } */
 
-.logo {
-  height: 6em;
-  padding: 0.5em;
-  margin: auto;
-  /* will-change: filter;
-  transition: filter 300ms; */
-  cursor: pointer;
-  /* margin-top: 11.5%; */
-  position: relative;
-  /* top: -15%;  */
-}
+
 
 /* .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);

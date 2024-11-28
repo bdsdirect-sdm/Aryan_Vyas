@@ -70,7 +70,7 @@ export const loginUser = async (req: any, res: Response) => {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
                 if (user.is_verified) {
-                    const token = jwt.sign({ uuid: user.uuid }, Security_Key);
+                    const token = jwt.sign({ uuid: user.uuid }, Security_Key, { expiresIn: '10m' });
                     res.status(200).json({ "token": token, "user": user, "message": "Login Successfull" });
                 }
                 else {
@@ -535,6 +535,7 @@ export const addAppointment = async (req: any, res: any) => {
     }
   };
 
+
   
   export const getAppointmentList = async (req: any, res: Response): Promise<void> => {
     try {
@@ -553,10 +554,6 @@ export const addAppointment = async (req: any, res: any) => {
                 {
                     model: User,
                     attributes: ['uuid', 'firstname', 'lastname', 'email'],
-                },
-                {
-                    model:Appointments,
-                    attributes:['date','type'],
                 }
             ],
         });
@@ -584,12 +581,12 @@ export const getPatientDetails = async (req: any, res: Response) => {
                 {
                     model: User,
                     as: 'referedtoUser',
-                    attributes: ['firstname', 'lastname'],
+                    attributes: ['firstname', 'lastname','doctype'],
                 },
                 {
                     model: User,
                     as: 'referedbyUser',
-                    attributes: ['firstname', 'lastname'],
+                    attributes: ['firstname', 'lastname','doctype'],
                 },
                 {
                     model: Address,

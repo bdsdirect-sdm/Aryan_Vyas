@@ -2,7 +2,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
     background-color: white;
     border-color: transparent;
     position: sticky;
@@ -14,14 +13,14 @@
     display: flex;
     align-items: center;
 }
-
-.logo-img {
-    width: 100%;
-    height: 100%;
-    margin-right: 10px;
-    cursor:pointer;
-    margin-left: 10px;
-}
+.logo-class{
+        height: 6em;
+        padding: 0.5em;
+        margin: auto;
+        cursor: pointer;
+        position: relative;
+        padding:27px;
+      }
 
 .logo-text {
     font-size: 24px;
@@ -92,18 +91,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* box-shadow: 1px 0 1px rgba(0, 0, 0, 0.1); */
 }
 
-.sidebar-logo {
-    display:flex;
-    margin-left: 35px;
-}
-
-.sidebar-logo-img {
-    width: 60px;
-    height: auto;
-}
 .logo-text{
     font-size: 18px;
     font-weight: bold;
@@ -111,7 +100,7 @@
 }
 hr{
     color: gray;
-  width: 141.5%;
+  width: 147%;
   position: relative;
   left: -23%;
   float: left;  
@@ -119,28 +108,20 @@ hr{
 .nav-links {
     display: flex;
     flex-direction: column;
-    /* padding-top: 20px; */
 }
 
 .nav-link {
     text-decoration: none;
     color: #212121;
     padding: 8px 15px;
-    /* margin-bottom: 10px; */
     font-size: 18px;
     border-radius: 5px;
 }
 
-/* .nav-link:hover, .nav-link.active {
-    background-color: #f4fffb;
-    color: #43d79e;
-    /* transition: background-color 0.3s ease, color 0.3s ease; */
-/* } */ 
 
 .nav-link:hover {
     background-color: #f4fffb;
     color: #43d79e;
-    /* transition: background-color 0.3s ease, color 0.3s ease; */
 }
 
 .btn {
@@ -154,10 +135,7 @@ hr{
     background-color: #35c0e4;
     color: white;
 }
-/* .header-profile-img{
-    height: 100px;
-    width: 100px;
-} */
+
 .signup-btn {
     background-color: #28a745;
     color: white;
@@ -179,15 +157,11 @@ hr{
     height: 20px;
     width: 20px;
     box-sizing: border-box;
-    margin-left: 21px;
+    margin-right: 10px;
 }
 .nav-link{
     display: flex;
     align-items: center;
     font-size: 18px;
 }
-/* .google-icon:hover .house{
-color:#43d79e;
-background-color: #f4fffb;
-transition: all 0.3s ease-in-out;
-} */
+

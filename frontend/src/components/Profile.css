@@ -1,12 +1,12 @@
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 96px;
     left: 0;
     width: 250px;
     height: 100vh;
     background-color: #f8f9fa;
     padding: 20px;
-    z-index: 1000;
+    /* z-index: 1000; */
     margin-left:-27px;
 }
 
@@ -59,7 +59,7 @@
     justify-content: space-between;
 }
 .infoheading{
-    font-weight: 450;
+    /* font-weight: 450; */
 }
 .address-heading{
     text-align: end;
@@ -97,14 +97,14 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
-.gender-center{
+/* .gender-center{
     position:relative;
     left:-38.5%;
-}
-.email-center{
+} */
+/* .email-center{
     position:relative;
     left:-21.5%;
-}
+} */
 .btn-addAddress{
     background-color: #35c0e4;
     color:white;

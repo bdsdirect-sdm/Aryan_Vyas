@@ -174,7 +174,7 @@ const AddStaff: React.FC = () => {
                     className="form-control"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    required
+                    required  
                   />
                 </div>
 
