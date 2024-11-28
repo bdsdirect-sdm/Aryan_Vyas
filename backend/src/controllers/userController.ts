@@ -535,6 +535,53 @@ export const addAppointment = async (req: any, res: any) => {
     }
   };
 
+  export const editAppointment = async (req: any, res: any) => {
+    try {
+      const { uuid } = req.user;
+      const { appointmentId, patientId, type, date } = req.body;
+  
+      const user = await User.findOne({ where: { uuid } });
+      if (!user || user.doctype !== 1) {
+        return res.status(403).json({ message: 'Only MD can edit appointments' });
+      }
+  
+      const appointment = await Appointments.findOne({
+        where: { id: appointmentId },
+        attributes: ["uuid"],
+        include: [{
+          model: Patient,
+          attributes: ['firstname', 'lastname'], 
+        }],
+      });
+      console.log("aaaaa",appointment);
+      
+      if (!appointment) {
+        return res.status(404).json({ message: 'Appointment not found' });
+      }
+  
+     
+      if (appointment.userId !== uuid) {
+        return res.status(403).json({ message: 'You are not authorized to edit this appointment' });
+      }
+  
+     
+      const patient = await Patient.findOne({ where: { uuid: patientId } });
+      if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+      }
+      appointment.type = type;
+      appointment.date = date;
+      await appointment.save();
+  
+      res.status(200).json({
+        message: 'Appointment updated successfully',
+        appointment,
+      });
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).json({ message: 'Error while updating appointment', error: err.message });
+    }
+  };
 
   
   export const getAppointmentList = async (req: any, res: Response): Promise<void> => {
@@ -637,6 +684,29 @@ export const getPatientDetails = async (req: any, res: Response) => {
             res.status(404).json({ message: 'Patient Not Found' });
         }
     } catch (err) {
+        res.status(500).json({ message: `${err}` });
+    }
+};
+
+
+
+export const getAppointDetails = async (req: any, res: Response) => {
+    try {
+        const appointmentId = req.params.appointmentId;
+
+        const appoinment = await Appointment.findOne({
+            where: { uuid: appointmentId },
+        });
+
+        // const appoinment = await Appointment.findOne({where: {patientId}})
+       
+
+            res.status(200).json({
+                appoinment,
+                message: 'Patient Details Found',
+            });
+        }
+     catch (err) {
         res.status(500).json({ message: `${err}` });
     }
 };

@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Local } from '../environment/env';
 import { io, Socket } from 'socket.io-client';
 
-const socket: Socket = io(`${Local.BASE_URL}`);
+// const socket: Socket = io(`${Local.BASE_URL}`);
 
 const fetchChatRooms = async (token: string) => {
     const response = await api.get(`${Local.BASE_URL}chat/chatRooms`, {

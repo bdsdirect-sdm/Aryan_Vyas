@@ -29,7 +29,7 @@ const EditAppointment: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-console.log("appoinments>>>>>..............",response);
+console.log("appoinments>>>>>..............",response?.data);
 
             if (response.data && response.data.appointment) {
                 return response.data.appointment;
