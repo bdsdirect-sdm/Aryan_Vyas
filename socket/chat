@@ -1,85 +1,167 @@
-import express from 'express';
-import http from "http";
-import cors from 'cors';
-import { Local } from './environment/env';
-import sequelize from './config/db';
-import User from './models/User';
-import userRouter from './routers/userRouter';
-import {createServer} from 'http';
-import chatRouter from './routers/chatRouter';
-import { Server,Socket } from 'socket.io';
-// import sequelize from 'seq';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { Local } from "../environment/env";
+import api from "../api/axiosInstance";
+import "./UpdateAppointment.css";
+import { IoIosArrowBack } from "react-icons/io";
 
-const app = express();
+const UpdateAppointment: React.FC = () => {
+  const { appointmentId } = useParams<{ appointmentId: string }>();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
-      credentials: true
-    }
+  const [initialValues, setInitialValues] = useState({
+    appointmentDate: "",
+    appointmentType: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [patientName, setPatientName] = useState<{ firstname: string; lastname: string }>({
+    firstname: "",
+    lastname: "",
   });
 
-export const httpServer = createServer(app);
-   
-app.use(cors());
-app.use(express.json());
-app.use("/", userRouter);
-app.use("/chat", chatRouter);
+  const validationSchema = Yup.object({
+    appointmentDate: Yup.date().required("Appointment date is required"),
+    appointmentType: Yup.string()
+      .oneOf(["Consultation", "Surgery"], "Invalid appointment type")
+      .required("Appointment type is required"),
+  });
 
-io.on("connection",(socket:Socket)=>{
-    console.log(`A Doctor connected:${socket.id}`);
-
-    socket.on("join_room", (room: string) => {
-        console.log(`${socket.id} joined room ${room}`);
-        socket.join(room);  
-      });
-
-      socket.on("leave_room", (room: string) => {
-        console.log(`${socket.id} left room ${room}`);
-        socket.leave(room);
-      });
-      socket.on("send_message", async (data) => {
-        const { message, chatRoomId, senderId } = data;
+  useEffect(() => {
+    const fetchAppointmentDetails = async () => {
+      try {
+        const response = await api.get(
+          `${Local.VIEW_APPOINTMENT}/${appointmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const { appoinment } = response.data;
+        const { firstname, lastname } = response.data.patient;
       
-        console.log(`Received message data:`, data);
-      
-        if (!chatRoomId || !senderId) {
-          console.error("Chat room ID or sender ID is missing.");
-          return;
+        setInitialValues({
+          appointmentDate: appoinment.date || "",
+          appointmentType: appoinment.type || "",
+        });
+
+        // Store patient name
+        setPatientName({ firstname, lastname });
+      } catch (error) {
+        toast.error("Failed to fetch appointment details");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchAppointmentDetails();
+    } else {
+      navigate("/login");
+    }
+  }, [appointmentId, token, navigate]);
+
+  const handleSubmit = async (values: typeof initialValues) => {
+    try {
+      const response = await api.put(
+        `${Local.UPDATE_APPOINTMENT}/${appointmentId}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success(response.data.message || "Appointment updated successfully");
+      navigate(-1);
+    } catch (error) {
+      toast.error("Failed to update appointment");
+      console.error(error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="update-appointment-container">
+      <div className="back1 fw-bold" onClick={() => navigate(-1)}><IoIosArrowBack />Back</div>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div className="form-group">
+              <div className='fieldflex row'>
+              <div className="form-field1 col">
+  <label className="form-label">Patient Name</label>
+  <div className="name-box">
+    {patientName.firstname} {patientName.lastname}
+  </div>
+</div>
+                <div className="form-field1 col">
+                  <label htmlFor="appointmentDate" className="add-appointment-lable">Appointment Date<span className="star">*</span></label>
+                  <Field type="date" name="appointmentDate" className="form-select1" />
+                  <ErrorMessage name="appointmentDate" component="div" className="text-danger" />
+                </div>
+                <div className="form-field1 col">
+                  <label htmlFor="appointmentType" className="add-appointment-lable">Appointment Type<span className="star">*</span></label>
+                  <Field as="select" name="appointmentType" className="form-select1">
+                    <option value="">Select</option>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Surgery">Surgery</option>
+                  </Field>
+                  <ErrorMessage name="appointmentType" component="div" className="text-danger" />
+                </div>
+              </div>
+            </div>
+            <div className="btn-subcancel">
+              <button type="button" onClick={() => navigate(-1)} className="btn btn-cancel1">Cancel</button>
+              <button type="submit" className="appointment-btn" disabled={isSubmitting}>
+                {isSubmitting ? "Updating..." : "Update Appointment"}
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default UpdateAppointment;
+/////////////////////////
+export const updateAppointment = async (req: any, res: any) => {
+    try {
+        const { uuid } = req.user;
+        const appointmentId = req.params.appointmentId;
+        const { appointmentDate, appointmentType} = req.body;
+
+        const appoinment = await Appointment.findOne({ where: { uuid:appointmentId } });
+        if (!appoinment) {
+            return res.status(404).json({ message: "Appointment not found" });
         }
 
-        try {
-            const user = await User.findOne({ where: { uuid: senderId } });
-        
-            if (!user) {
-              console.error("User not found.");
-              return;
-            }
-                const messageWithSenderDetails = {
-              ...data,
-              senderFirstName: user.firstname,
-              senderLastName: user.lastname
-            };
-        
-            io.to(chatRoomId).emit("receive_message", messageWithSenderDetails);
-        
-          } catch (error) {
-            console.error("Error fetching sender doctor details:", error);
-          }
-        });
-        
-        socket.on("disconnect", () => {
-          console.log(`Doctor Disconnected: ${socket.id}`);
-        });
-});
-sequelize.sync({alter:false}).then(()=>{
-    console.log('Database connected');
-    
-    httpServer.listen(Local.SERVER_PORT,  () => {
-        console.log(`Server is running on port ${Local.SERVER_PORT}`);
-        });
-}).catch((err)=>{
-    console.log("Error: ", err);
-})
+        appoinment.date = appointmentDate || appoinment.date;
+        appoinment.type = appointmentType || appoinment.type;
+
+        await appoinment.save();
+
+        return res.status(200).json({ message: "Profile updated successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error updating profile" });
+    }
+};
