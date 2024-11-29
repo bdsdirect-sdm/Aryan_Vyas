@@ -5,7 +5,8 @@ import api from '../api/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
 import { Local } from '../environment/env';
 import { io, Socket } from 'socket.io-client'; // Import socket.io
-
+import profileImg from "../photos/profile1.avif";
+// import "./Chat.css";
 // Create socket instance here
 let socket: Socket;
 
@@ -151,7 +152,7 @@ const Chat: React.FC = () => {
                                 className="list-group-item"
                                 onClick={() => handleSelectRoom(room.roomId)}
                             >
-                                <img className="p-img" src="profile1.png" alt="profile" />
+                                <img className="p-img" style={{width:50,height:50}} src={profileImg} alt="profile" />
                                 <span className="fw-bold">{room.patientName}</span>
                             </li>
                         ))
@@ -164,7 +165,8 @@ const Chat: React.FC = () => {
                 {selectedRoom ? (
                     <>
                         <div className="chat-header">
-                            <h6>Chat Room: {selectedRoom}</h6>
+                            <h1>Your Chat</h1>
+                            
                         </div>
                         <div className="messages-container">
                             {chatMessages.map((msg: any, index) => (
@@ -174,7 +176,6 @@ const Chat: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-
                         <div className="message-input">
                             <textarea
                                 className="form-control"
@@ -182,12 +183,12 @@ const Chat: React.FC = () => {
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <button
+                            <span
                                 className="btn btn-primary my-2"
                                 onClick={handleSendMessage}
                             >
                                 Send
-                            </button>
+                            </span>
                         </div>
                     </>
                 ) : (
