@@ -8,6 +8,7 @@ class ChatRooms extends Model {
   public referedToId!: string;
   public patientId!: string;
   public roomId!:string
+  patient: any;
 }
 
 ChatRooms.init(

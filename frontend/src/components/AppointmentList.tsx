@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQuery } from '@tanstack/react-query';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import './AppointmentList.css';
+import { useQuery } from "@tanstack/react-query";
+import { Local } from "../environment/env";
+import api from "../api/axiosInstance";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "./AppointmentList.css";
 import { FaRegEye } from "react-icons/fa";
-import { MdOutlineDateRange } from "react-icons/md";
+import { FaPenToSquare } from "react-icons/fa6";
 
 const AppointmentsList: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredAppointments, setFilteredAppointments] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);  // Track current page
-  const appointmentsPerPage = 5;  // Appointments to show per page
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const appointmentsPerPage = 5; // Appointments to show per page
   const [loading, setLoading] = useState(false);
-const handleEditAppointment=()=>{
-  navigate('/add-appointment')
-}
+  const handleEditAppointment = () => {
+    navigate("/add-appointment");
+  };
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [token, navigate]);
 
@@ -32,27 +32,26 @@ const handleEditAppointment=()=>{
       const response = await api.get(`${Local.GET_APPOINTMENT_LIST}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          
         },
-        
       });
-    
+
       return response.data;
-      
     } catch (err: any) {
-      
-      toast.error(`${err.message || 'Error fetching appointments data'}`);
-      
+      toast.error(`${err.message || "Error fetching appointments data"}`);
     }
   };
 
-
-  const { data: appointmentsData, error, isLoading, isError } = useQuery({
-    queryKey: ['appointments'],
+  const {
+    data: appointmentsData,
+    error,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["appointments"],
     queryFn: fetchAppointments,
   });
 
-console.log("appointmentlist>....",appointmentsData);
+  console.log("appointmentlist>....", appointmentsData);
 
   // Filter appointments based on search query
   const handleSearch = () => {
@@ -69,16 +68,21 @@ console.log("appointmentlist>....",appointmentsData);
 
   // Reset filtered list when search query is cleared
   useEffect(() => {
-    if (appointmentsData && searchQuery === '') {
+    if (appointmentsData && searchQuery === "") {
       setFilteredAppointments(appointmentsData); // Reset to original list if search query is cleared
     }
   }, [searchQuery, appointmentsData]);
 
   // Pagination Logic
-  const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
+  const totalPages = Math.ceil(
+    filteredAppointments.length / appointmentsPerPage
+  );
   const indexOfLastAppointment = currentPage * appointmentsPerPage;
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
-  const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
+  const currentAppointments = filteredAppointments.slice(
+    indexOfFirstAppointment,
+    indexOfLastAppointment
+  );
 
   // Change page
   const handlePageChange = (pageNumber: number) => {
@@ -105,7 +109,7 @@ console.log("appointmentlist>....",appointmentsData);
   if (isError) {
     return (
       <div className="text-danger">
-        Error: {error.message || 'Failed to load appointments data'}
+        Error: {error.message || "Failed to load appointments data"}
       </div>
     );
   }
@@ -116,11 +120,11 @@ console.log("appointmentlist>....",appointmentsData);
         <h5 className="appointments-list-title">Appointments List</h5>
         <div className="add-appointment-button">
           <button
-            onClick={() => navigate('/add-appointment')}
+            onClick={() => navigate("/add-appointment")}
             className="appointment-btn"
             disabled={loading}
           >
-            {loading ? 'Adding Appointment...' : 'Add Appointment'}
+            {loading ? "Adding Appointment..." : "Add Appointment"}
           </button>
         </div>
       </div>
@@ -135,62 +139,89 @@ console.log("appointmentlist>....",appointmentsData);
           onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
           aria-label="Search"
         />
-        <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-        <i className="fa fa-search"  style={{ marginRight: 5 }}></i>  Search
+        <button
+          className="btn btn-primary btn-search"
+          type="button"
+          onClick={handleSearch}
+        >
+          <i className="fa fa-search" style={{ marginRight: 5 }}></i> Search
         </button>
       </div>
 
       {/* Appointments List Table */}
       <div className="patient-table-container">
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Patient Name</th>
-            <th scope="col">Consultation Date</th>
-            <th scope="col">Doctor Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentAppointments.length > 0 ? (
-            currentAppointments.map((appointment: any) => (
-              <tr key={appointment.uuid}>
-                <td>{appointment.Patient?.firstname} {appointment.Patient?.lastname}</td>
-                <td>{appointment.date}</td>
-                <td>{appointment.User?.firstname} {appointment.User?.lastname}</td>
-                <td>{appointment.type}</td>
-                <td></td>
-                <td><Link to={`/edit-appointment/${appointment.uuid}`}><FaRegEye /> <span className='edit-appointment' style={{paddingLeft:20}} onClick={handleEditAppointment}><MdOutlineDateRange /></span></Link></td>
-              </tr>
-            ))
-          ) : (
+        <table className="table">
+          <thead>
             <tr>
-              <td colSpan={4} className="text-center">No appointments found</td>
+              <th scope="col">Patient Name</th>
+              <th scope="col">Consultation Date</th>
+              <th scope="col">Doctor Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentAppointments.length > 0 ? (
+              currentAppointments.map((appointment: any) => (
+                <tr key={appointment.uuid}>
+                  <td>
+                    {appointment.Patient?.firstname}{" "}
+                    {appointment.Patient?.lastname}
+                  </td>
+                  <td>{appointment.date}</td>
+                  <td>
+                    {appointment.User?.firstname} {appointment.User?.lastname}
+                  </td>
+                  <td>{appointment.type}</td>
+                  <td></td>
+                  <td>
+                    <Link to={`/view-appointment/${appointment.uuid}`}>
+                      <FaRegEye />
+                    </Link>
+                 <span style={{paddingLeft:20}}><Link to={`/update-appointment/${appointment.uuid}`}>
+                    <FaPenToSquare />
+                    </Link></span>
+                      
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="text-center">
+                  No appointments found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Pagination Controls */}
       <nav aria-label="Page navigation">
         <ul className="pagination justify-content-end">
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" aria-label="Previous" onClick={(e) => {
-              e.preventDefault();
-              if (currentPage > 1) {
-                handlePageChange(currentPage - 1);
-              }
-            }}>
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <a
+              className="page-link"
+              href="#"
+              aria-label="Previous"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                  handlePageChange(currentPage - 1);
+                }
+              }}
+            >
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
           {/* Page Number Buttons */}
           {pageNumbers.map((number) => (
-            <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? "active" : ""}`}
+            >
               <a
                 className="page-link"
                 href="#"
@@ -205,13 +236,22 @@ console.log("appointmentlist>....",appointmentsData);
           ))}
 
           {/* Next Button */}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" aria-label="Next" onClick={(e) => {
-              e.preventDefault();
-              if (currentPage < totalPages) {
-                handlePageChange(currentPage + 1);
-              }
-            }}>
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
+            <a
+              className="page-link"
+              href="#"
+              aria-label="Next"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                  handlePageChange(currentPage + 1);
+                }
+              }}
+            >
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>

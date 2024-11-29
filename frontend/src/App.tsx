@@ -21,8 +21,9 @@ import AppointmentList from './components/AppointmentList';
 
 import './App.css';
 import PatientDetails from './components/PatientsDetails';
-import EditAppointment from './components/EditAppointments';
-
+import ViewAppointment from './components/ViewAppointments';
+import UpdateAppointment from './components/UpdateAppointment';
+import UpdatePatientDetails from './components/UpdatePatientDetails';
 
 const App: React.FC = () => {
   const router = createBrowserRouter([
@@ -48,7 +49,9 @@ const App: React.FC = () => {
         { path: '/update-password', element: <UpdatePassword /> },
         { path: '/appointment-list', element: <AppointmentList /> },
         {path:'/patients-details/:patientId',element:<PatientDetails/>},
-        {path:'/edit-appointment/:appointmentId',element:<EditAppointment/>}
+        {path:'/view-appointment/:appointmentId',element:<ViewAppointment/>},
+        {path:'/update-appointment/:appointmentId',element:<UpdateAppointment/>},
+        {path:'/update-patient/:patientId',element:<UpdatePatientDetails/>}
       ]
     }
   ]);

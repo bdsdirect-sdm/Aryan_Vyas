@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-
-//import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Dashboard.css';
-import { useQuery } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -24,6 +23,27 @@ const Dashboard: React.FC = () => {
     }
   }, [token, navigate]);
 
+  const createChatRoomMutation = useMutation({
+    mutationFn: async ({ referedById, referedToId, patientId, roomId }: any) => {
+      try {
+        const response = await api.post(`${Local.BASE_URL}chat/createRoom`, {
+          referedById,
+          referedToId,
+          patientId,
+          roomId
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } catch (err) {
+        console.error("Error creating chat room", err);
+      }
+    }
+  });
+
+  
   const getUser = async () => {
     try {
       const response = await api.get(`${Local.GET_USER}`, {
@@ -124,7 +144,17 @@ const Dashboard: React.FC = () => {
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
-
+  const handleCreateChatRoom = (referedById: string, referedToId: string, patientId: string) => {
+    const roomId = uuidv4();
+    console.log("rommmmiiiidddd",roomId);
+    
+    createChatRoomMutation.mutate({
+      referedById,
+      referedToId,
+      patientId,
+      roomId
+    });
+  };
   return (
     <div className="dashboard-container">
 
@@ -190,6 +220,7 @@ const Dashboard: React.FC = () => {
                 <th scope="col">Refer to</th>
                 <th scope="col">Refer back</th>
                 <th scope="col">Status</th>
+                <th scope="col">Direct Message</th>
               </tr>
             </thead>
             <tbody>
@@ -205,6 +236,9 @@ const Dashboard: React.FC = () => {
                       {patient.referalstatus ? 'Completed' : 'Pending'}
                     </span>
                   </td>
+                  <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
+                      <Link className='text-primary' to='/chat'>Link</Link>
+                    </td>
                 </tr>
               ))}
             </tbody>
@@ -260,3 +294,5 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
+

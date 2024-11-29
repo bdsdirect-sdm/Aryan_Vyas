@@ -18,6 +18,7 @@ class User extends Model{
     public deleted_at!: Date;
     public status!: boolean;
     referredby: any;
+
     }
 
 User.init({

@@ -71,7 +71,7 @@ const PatientDetails: React.FC = () => {
                     <form>
                         <div className='name-info row'>
                             <div className="form-group2 col" style={{ marginTop: 15 }}>
-                                <label htmlFor="name">First Name: {patientData?.firstname} {patientData?.lastname}</label>
+                                <label htmlFor="name">Name: {patientData?.firstname} {patientData?.lastname}</label>
                             </div>
                             <div className="form-group2 col" style={{ marginTop: 15 }}>
                                 <label htmlFor="gender">Gender: {patientData?.gender}</label>

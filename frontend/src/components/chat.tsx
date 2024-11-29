@@ -3,11 +3,11 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
-// import './Chat.css';
 import { Local } from '../environment/env';
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client'; // Import socket.io
 
-// const socket: Socket = io(`${Local.BASE_URL}`);
+// Create socket instance here
+let socket: Socket;
 
 const fetchChatRooms = async (token: string) => {
     const response = await api.get(`${Local.BASE_URL}chat/chatRooms`, {
@@ -38,6 +38,7 @@ const sendChatMessage = async (messageData: any, token: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
+    console.log("message>>>>>>>>>>>>>.............",response)
     return response.data;
 };
 
@@ -56,6 +57,8 @@ const Chat: React.FC = () => {
         queryFn: () => fetchChatRooms(token!),
     });
 
+    console.log("chatrooooooooomsssss",chatRooms);
+    
     const { mutate: sendMessage } = useMutation({
         mutationFn: (messageData: any) => sendChatMessage(messageData, token!),
         onSuccess: () => {
@@ -71,13 +74,17 @@ const Chat: React.FC = () => {
             navigate('/login');
         }
 
+        // Initialize socket connection
+        socket = io(`${Local.BASE_URL}`);
+        
         socket.on('receive_message', (messageData) => {
             setChatMessages((prevMessages) => [...prevMessages, messageData]);
         });
 
-
+        // Cleanup on unmount
         return () => {
             socket.off('receive_message');
+            socket.disconnect();
         };
     }, [token, navigate]);
 
@@ -98,6 +105,7 @@ const Chat: React.FC = () => {
         setSelectedRoom(roomId);
         setChatMessages([]);
         fetchChatMessages(roomId, token!).then((messages) => {
+            console.log("inside", messages);
             setChatMessages(messages);
         });
     };
@@ -110,19 +118,25 @@ const Chat: React.FC = () => {
             senderId: userId,
             message,
         };
+      
+        setChatMessages((prevMessages) => [
+            ...prevMessages,
+            { senderId: userId, message, firstname: 'You' },
+        ]);
 
+      
         socket.emit('send_message', messageData);
 
+       
         sendMessage(messageData);
     };
 
     console.log(chatMessages);
 
-
     return (
         <div className="chat-container row">
             {/* Left Panel - Chat Rooms List */}
-            <div className="chat-header col">
+            <div className="chat-header col" style={{ marginLeft: "20%", width: '50%' }}>
                 <h5>Messages</h5>
                 <input type="text" className="form-control my-3" placeholder="Search..." />
                 <ul className="list-group">
@@ -138,8 +152,7 @@ const Chat: React.FC = () => {
                                 onClick={() => handleSelectRoom(room.roomId)}
                             >
                                 <img className="p-img" src="profile1.png" alt="profile" />
-                                <span className="fw-bold">{room.name}</span>
-                                <span className="fw-bold">{room.roomId}</span>
+                                <span className="fw-bold">{room.patientName}</span>
                             </li>
                         ))
                     )}
@@ -156,9 +169,8 @@ const Chat: React.FC = () => {
                         <div className="messages-container">
                             {chatMessages.map((msg: any, index) => (
                                 <div key={index} className="message">
-                                    <strong>{msg.senderId}: </strong>
+                                    <strong>{msg.senderId === userId ? 'You' : `${msg.senderFirstName}${" "} ${msg.senderLastName}`}: </strong>
                                     <span>{msg.message}</span>
-                                    <span>{msg.firstname}</span>
                                 </div>
                             ))}
                         </div>
