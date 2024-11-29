@@ -1,216 +1,85 @@
-export const getPatientDetails = async (req: any, res: Response) => {
-    try {
-        const patientId = req.params.patientId;
+import express from 'express';
+import http from "http";
+import cors from 'cors';
+import { Local } from './environment/env';
+import sequelize from './config/db';
+import User from './models/User';
+import userRouter from './routers/userRouter';
+import {createServer} from 'http';
+import chatRouter from './routers/chatRouter';
+import { Server,Socket } from 'socket.io';
+// import sequelize from 'seq';
 
-        const patient = await Patient.findOne({
-            where: { uuid: patientId },
-            include: [
-                {
-                    model: User,
-                    as: 'referedtoUser',
-                    attributes: ['firstname', 'lastname'],
-                },
-                {
-                    model: User,
-                    as: 'referedbyUser',
-                    attributes: ['firstname', 'lastname'],
-                },
-                {
-                    model: Address,
-                    attributes: ['street', 'city', 'state', 'pincode'],
-                }
-            ]
-        });
+const app = express();
 
-        const appoinment = await Appointment.findOne({where: {patientId}})
-
-        if (patient) {
-            // Construct the response object
-            const patientDetails = {
-                uuid: patient.uuid,
-                firstname: patient.firstname,
-                lastname: patient.lastname,
-                disease: patient.disease,
-                referalstatus: patient.referalstatus,
-                referback: patient.referback,
-                // createdAt: patient.createdAt,
-                // updatedAt: patient.updatedAt,
-                referedto: patient.referedtoUser,
-                referedby: patient.referedbyUser,
-                address: patient.Address,
-                appointment: appoinment
-            };
-
-            res.status(200).json({
-                patientDetails,
-                message: 'Patient Details Found',
-            });
-        } else {
-            res.status(404).json({ message: 'Patient Not Found' });
-        }
-    } catch (err) {
-        res.status(500).json({ message: `${err}` });
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST"],
+      credentials: true
     }
-};
+  });
 
+export const httpServer = createServer(app);
+   
+app.use(cors());
+app.use(express.json());
+app.use("/", userRouter);
+app.use("/chat", chatRouter);
 
-router.get('/patient-details/:patientId',userAuthMiddleware, getPatientDetails);
+io.on("connection",(socket:Socket)=>{
+    console.log(`A Doctor connected:${socket.id}`);
 
+    socket.on("join_room", (room: string) => {
+        console.log(`${socket.id} joined room ${room}`);
+        socket.join(room);  
+      });
 
-import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
-import api from '../api/axiosInstance';
-import { Local } from '../environment/env';
-import './PatientDetails.css'
+      socket.on("leave_room", (room: string) => {
+        console.log(`${socket.id} left room ${room}`);
+        socket.leave(room);
+      });
+      socket.on("send_message", async (data) => {
+        const { message, chatRoomId, senderId } = data;
+      
+        console.log(`Received message data:`, data);
+      
+        if (!chatRoomId || !senderId) {
+          console.error("Chat room ID or sender ID is missing.");
+          return;
+        }
 
-const PatientDetails: React.FC = () => {
-    const { patientId } = useParams<{ patientId: string }>();
-    const token = localStorage.getItem('token');
-    const navigate = useNavigate();
-
-    const getPatient = async () => {
         try {
-            const response = await api.get(`${Local.GET_PATIENT_DETAILS}/${patientId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            return response.data.patientDetails;
-        } catch (err) {
-            toast.error("Failed to fetch user data");
-            console.log(err)
-        }
-    };
-
-    const { data: patientData, isError, error, isLoading } = useQuery({
-        queryKey: ['patientData?'],
-        queryFn: getPatient
-    });
-
-
-    console.log("patttttttient-------", patientData);
-
-    useEffect(() => {
-        if (!token) {
-            navigate('/login')
-        }
-    }, [token]);
-
-    if (isLoading) {
-        return (
-            <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </div>
-        );
-    }
-
-    if (isError) {
-        return <div className="text-danger">Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
-    }
-
-    if (!patientData) {
-        return <div>Patient not found.</div>;
-    }
-
-    return (
-        <div className="patient-details-container">
-            <h5>Patient Details</h5>
-            <div className="patien-details">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="firstname">First Name</label>
-                        <input
-                            type="text"
-                            id="firstname"
-                            className="form-control"
-                            value={patientData?.firstname}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="lastname">Last Name</label>
-                        <input
-                            type="text"
-                            id="lastname"
-                            className="form-control"
-                            value={patientData?.lastname}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="disease">Disease</label>
-                        <input
-                            type="text"
-                            id="disease"
-                            className="form-control"
-                            value={patientData?.disease}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="referedBy">Referred By</label>
-                        <input
-                            type="text"
-                            id="referedBy"
-                            className="form-control"
-                            value={`${patientData?.referedby?.firstname} ${patientData?.referedby?.lastname}`}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="referedTo">Referred To</label>
-                        <input
-                            type="text"
-                            id="referedTo"
-                            className="form-control"
-                            value={`${patientData?.referedto?.firstname} ${patientData?.referedto?.lastname}`}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="referBack">Refer Back</label>
-                        <input
-                            type="text"
-                            id="referBack"
-                            className="form-control"
-                            value={patientData?.referback ? 'Yes' : 'No'}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="status">Status</label>
-                        <input
-                            type="text"
-                            id="status"
-                            className="form-control"
-                            value={patientData?.referalstatus ? 'Completed' : 'Pending'}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="address">Address</label>
-                        <input
-                            type="text"
-                            id="address"
-                            className="form-control"
-                            value={`${patientData?.address?.street}, ${patientData?.address?.city}, ${patientData?.address?.state}, ${patientData?.address?.pincode}`}
-                            readOnly
-                            disabled
-                        />
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
-};
-
-export default PatientDetails;
+            const user = await User.findOne({ where: { uuid: senderId } });
+        
+            if (!user) {
+              console.error("User not found.");
+              return;
+            }
+                const messageWithSenderDetails = {
+              ...data,
+              senderFirstName: user.firstname,
+              senderLastName: user.lastname
+            };
+        
+            io.to(chatRoomId).emit("receive_message", messageWithSenderDetails);
+        
+          } catch (error) {
+            console.error("Error fetching sender doctor details:", error);
+          }
+        });
+        
+        socket.on("disconnect", () => {
+          console.log(`Doctor Disconnected: ${socket.id}`);
+        });
+});
+sequelize.sync({alter:false}).then(()=>{
+    console.log('Database connected');
+    
+    httpServer.listen(Local.SERVER_PORT,  () => {
+        console.log(`Server is running on port ${Local.SERVER_PORT}`);
+        });
+}).catch((err)=>{
+    console.log("Error: ", err);
+})
