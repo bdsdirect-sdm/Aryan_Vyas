@@ -533,3 +533,56 @@ export const getUserChatRooms = async (req: any, res: Response): Promise<void> =
     }
 }
 
+
+
+
+//--------------------------------------------------------
+.chat-container{
+    margin-left: 250px;
+    padding: 20px;
+    background-color: #ecf1f3;
+    /* border-radius: 8px; */
+    min-height: 90vh;
+    /* margin-top: 6px; */
+}
+
+.p-img{
+    width: 50px;
+    margin-right: 15px;
+}
+
+.sent {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+  }
+  
+  .received {
+    background-color: #e4e6eb;
+    margin-right: auto;
+  }
+
+
+.messages-container{
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    /* width: fit-content; */
+    max-width: 40%;
+  }
+
+  .messages-container{
+    padding: 15px;
+  border-radius: 10px;
+  max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
