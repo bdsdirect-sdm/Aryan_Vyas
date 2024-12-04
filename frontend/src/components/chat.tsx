@@ -12,7 +12,7 @@ import "./Chat.css";
 
 // Create socket instance here
 let socket: Socket;
-const doctype=Number(localStorage.getItem("doctype"));
+const doctype = Number(localStorage.getItem("doctype"));
 
 const fetchChatRooms = async (token: string) => {
     const response = await api.get(`${Local.BASE_URL}chat/chatRooms`, {
@@ -30,7 +30,7 @@ const fetchChatMessages = async (chatRoomId: string, token: string) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        
+
         return response.data;
     } catch (err) {
         console.error(err);
@@ -44,28 +44,28 @@ const sendChatMessage = async (messageData: any, token: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    console.log("time",response.data)
+    console.log("time", response.data)
     return response.data;
 };
 
-    // Function to convert UTC time to IST (UTC +5:30) and format it using moment
-        const formatTimestampToIST = (timestamp: string) => {
-            const date = moment.utc(timestamp).add(5.5, 'hours'); // Using moment to add IST offset
-            
-            // Format time as hh:mm AM/PM
-            const formattedTime = date.format('hh:mm A'); 
+// Function to convert UTC time to IST (UTC +5:30) and format it using moment
+const formatTimestampToIST = (timestamp: string) => {
+    const date = moment.utc(timestamp).add(5.5, 'hours'); // Using moment to add IST offset
 
-            // Check if the message was sent today or tomorrow
-            if (date.isSame(moment(), 'day')) {
-                return `Today, ${formattedTime}`;  // If the message is sent today
-            }
-            if (date.isSame(moment().add(1, 'days'), 'day')) {
-                return `Tomorrow, ${formattedTime}`;  // If the message is sent tomorrow
-            }
+    // Format time as hh:mm AM/PM
+    const formattedTime = date.format('hh:mm A');
 
-            // If older, show the full date (e.g., December 4, 2024)
-            return date.format('MMMM D, YYYY, hh:mm A'); 
-        };
+    // Check if the message was sent today or tomorrow
+    if (date.isSame(moment(), 'day')) {
+        return `Today, ${formattedTime}`;  // If the message is sent today
+    }
+    if (date.isSame(moment().add(1, 'days'), 'day')) {
+        return `Tomorrow, ${formattedTime}`;  // If the message is sent tomorrow
+    }
+
+    // If older, show the full date (e.g., December 4, 2024)
+    return date.format('MMMM D, YYYY, hh:mm A');
+};
 
 const Chat: React.FC = () => {
     const navigate = useNavigate();
@@ -208,19 +208,19 @@ const Chat: React.FC = () => {
                         ) : (
                             filteredRooms?.map((room: any) => (
                                 <li
-                                key={room.roomId}
-                                className="list-group-item"
-                                onClick={() => handleSelectRoom(room.roomId)}
-                              >
-                                <img className="p-img" style={{ width: 50, height: 50 }} src={profileImg} alt="profile" />
-                                <span className="patient-name">{room.patientName}</span>
-                                {doctype === 2 ? (
-                                  <p className='doctor-name'>Referred To: {getReceiverName(chatMessages, userId)}</p>
-                                ) : (
-                                  <p className='doctor-name'>Referred By: {getReceiverName(chatMessages, userId)}</p>
-                                )}
-                              </li>
-                              
+                                    key={room.roomId}
+                                    className="list-group-item"
+                                    onClick={() => handleSelectRoom(room.roomId)}
+                                >
+                                    <img className="p-img" style={{ width: 50, height: 50 }} src={profileImg} alt="profile" />
+                                    <span className="patient-name">{room.patientName}</span>
+                                    {doctype === 2 ? (
+                                        <p className='doctor-name'>Referred To: {getReceiverName(chatMessages, userId)}</p>
+                                    ) : (
+                                        <p className='doctor-name'>Referred By: {getReceiverName(chatMessages, userId)}</p>
+                                    )}
+                                </li>
+
                             ))
                         )}
                     </ul>
