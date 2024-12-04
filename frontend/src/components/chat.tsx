@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState, useRef } from 'react'; // Add useRef import
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
 import { Local } from '../environment/env';
-import { io, Socket } from 'socket.io-client'; // Import socket.io
+import { io, Socket } from 'socket.io-client'; 
 import profileImg from "../photos/profile1.avif";
-import moment from 'moment'; // Import moment
+import moment from 'moment'; 
 import "./Chat.css";
 
-// Create socket instance here
 let socket: Socket;
 const doctype = Number(localStorage.getItem("doctype"));
 
