@@ -103,7 +103,9 @@ const Chat: React.FC = () => {
         }
 
 
-        socket = io(`${Local.BASE_URL}`);
+        socket = io(`${Local.BASE_URL,{
+            transports: ['websocket', 'polling'],   
+        }}`);
 
         socket.on('receive_message', (messageData) => {
             setChatMessages((prevMessages) => [...prevMessages, messageData]);
@@ -195,7 +197,7 @@ const Chat: React.FC = () => {
         <div className="chat-container">
             <div className='top row'>
 
-                <div className="chat-header">
+                <div className="chat-header col">
                     <h5>Messages</h5>
                     <input
                         type="text"
@@ -231,7 +233,7 @@ const Chat: React.FC = () => {
                 </div>
 
 
-                <div className="chat-messages">
+                <div className="chat-messages col">
                     {selectedRoom ? (
                         <>
 
@@ -279,7 +281,10 @@ const Chat: React.FC = () => {
                             </div>
                         </>
                     ) : (
-                        <div>No Chat To Show</div>
+                        <div className='ho1'>
+                        <span  className='color-height'>No Chat To Show</span>
+                        <span className='height-no-chat'>No Chat To Show</span>
+                        </div>
                     )}
                 </div>
             </div>

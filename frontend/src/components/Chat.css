@@ -1,22 +1,26 @@
 
 .chat-container {
-
+    /* width: 100%; */
+    position: fixed;
     margin-left: 215px;
     padding: 30px;
     min-height: 90vh;
     background-color: white;
     margin-top: 0px;
     border-top: 1px solid gainsboro;
-    border-left: 9px solid gainsboro;
-    border-right: 1px solid gainsboro;
+    border-left: 1px solid gainsboro;
+    border-right: 1px solid gainsboro;          
     border-bottom: 1px solid gainsboro;
     gap: 20px; /* Add space between left and right panels */
+    display: flex; /* Add this line to create a flexbox layout */
+    justify-content: space-between; /* Ensure space between left and right panels */
 }
 
 /* Left panel for chat rooms */
 .chat-header {
     flex: 1; /* Take 50% of the space */
     margin-bottom: 20px;
+    width: 670px;
 }
 
 .chat-header h5 {
@@ -42,6 +46,17 @@
   font-size: 12px;
   margin-top: -18px;
 
+}
+.ho1{
+    display: flex;
+}
+.color-height{
+    color:white;
+    margin-top: 600px;
+}
+.height-no-chat{
+    margin-top: 270px;
+    padding-left: 85px;
 }
 .message-time{
     font-size: 10px;

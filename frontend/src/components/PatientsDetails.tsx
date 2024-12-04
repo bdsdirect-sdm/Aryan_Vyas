@@ -159,7 +159,7 @@ const PatientDetails: React.FC = () => {
                         <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Notes</p>
 
                         <div className='name-info row'>
-                            <div className="form-group2 col p-3">
+                            <div className="form-group2 col">
                                 <label htmlFor="name">Notes: {patientData?.notes}</label>
                             </div>
                         </div>
