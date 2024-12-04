@@ -48,22 +48,20 @@ const sendChatMessage = async (messageData: any, token: string) => {
     return response.data;
 };
 
-// Function to convert UTC time to IST (UTC +5:30) and format it using moment
 const formatTimestampToIST = (timestamp: string) => {
-    const date = moment.utc(timestamp).add(5.5, 'hours'); // Using moment to add IST offset
+    const date = moment.utc(timestamp).add(5.5, 'hours');
 
-    // Format time as hh:mm AM/PM
+
     const formattedTime = date.format('hh:mm A');
 
-    // Check if the message was sent today or tomorrow
+
     if (date.isSame(moment(), 'day')) {
-        return `Today, ${formattedTime}`;  // If the message is sent today
+        return `Today, ${formattedTime}`;
     }
     if (date.isSame(moment().add(1, 'days'), 'day')) {
-        return `Tomorrow, ${formattedTime}`;  // If the message is sent tomorrow
+        return `Tomorrow, ${formattedTime}`;
     }
 
-    // If older, show the full date (e.g., December 4, 2024)
     return date.format('MMMM D, YYYY, hh:mm A');
 };
 
@@ -76,12 +74,14 @@ const Chat: React.FC = () => {
     const [message, setMessage] = useState<string>('');
     const [chatMessages, setChatMessages] = useState<any[]>([]);
     const [isJoined, setIsJoined] = useState(false);
-    const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
-    const [filteredRooms, setFilteredRooms] = useState<any[]>([]); // State for filtered rooms
-    const [receiverName, setReceiverName] = useState<string>(''); // State for receiver's name
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [filteredRooms, setFilteredRooms] = useState<any[]>([]);
+    const [receiverName, setReceiverName] = useState<string>('');
 
-    // Add a ref to the last message element to scroll to it
+
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
 
     const { data: chatRooms, isLoading: roomsLoading, error: roomsError } = useQuery({
         queryKey: ['chatRooms'],
@@ -103,14 +103,14 @@ const Chat: React.FC = () => {
             navigate('/login');
         }
 
-        // Initialize socket connection
+
         socket = io(`${Local.BASE_URL}`);
 
         socket.on('receive_message', (messageData) => {
             setChatMessages((prevMessages) => [...prevMessages, messageData]);
         });
 
-        // Cleanup on unmount
+
         return () => {
             socket.off('receive_message');
             socket.disconnect();
@@ -131,7 +131,7 @@ const Chat: React.FC = () => {
     }, [selectedRoom]);
 
     useEffect(() => {
-        // Filter chat rooms based on the search query
+
         if (chatRooms) {
             const filtered = chatRooms.filter((room: any) =>
                 room.patientName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -140,12 +140,17 @@ const Chat: React.FC = () => {
         }
     }, [searchQuery, chatRooms]);
 
-    // Scroll to the bottom whenever chatMessages changes
+
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [chatMessages]);
+
+
+        if (messageInputRef.current) {
+            messageInputRef.current.focus();
+        }
+    }, [chatMessages, selectedRoom]);
 
     const handleSelectRoom = (roomId: string) => {
         setSelectedRoom(roomId);
@@ -153,10 +158,10 @@ const Chat: React.FC = () => {
         fetchChatMessages(roomId, token!).then((messages) => {
             setChatMessages(messages);
         });
-        // Assuming receiver's name is in room.patientName, update receiver name state
+
         const selectedRoom = chatRooms.find((room: any) => room.roomId === roomId);
         if (selectedRoom) {
-            setReceiverName(selectedRoom.patientName); // Adjust this if receiver's name comes from elsewhere
+            setReceiverName(selectedRoom.patientName);
         }
     };
 
@@ -178,7 +183,7 @@ const Chat: React.FC = () => {
         sendMessage(messageData);
     };
 
-    // Function to get the receiver's name based on messages
+
     const getReceiverName = (messages: any[], userId: string) => {
         const receiverMessage = messages.find((msg: any) => msg.senderId !== userId);
         if (receiverMessage) {
@@ -190,7 +195,7 @@ const Chat: React.FC = () => {
     return (
         <div className="chat-container">
             <div className='top row'>
-                {/* Left Panel - Chat Rooms List */}
+
                 <div className="chat-header">
                     <h5>Messages</h5>
                     <input
@@ -226,18 +231,18 @@ const Chat: React.FC = () => {
                     </ul>
                 </div>
 
-                {/* Right Panel - Chat Window */}
+
                 <div className="chat-messages">
                     {selectedRoom ? (
                         <>
-                            {/* Chat header (Receiver's name) */}
+
                             <div className="chat-head">
                                 <p className="chat-heading">
                                     {getReceiverName(chatMessages, userId)}{" "}
                                 </p>
                             </div>
 
-                            {/* Chat messages container */}
+
                             <div className="messages-container">
                                 <div className="messages-part">
                                     {chatMessages.map((msg, index) => (
@@ -248,13 +253,13 @@ const Chat: React.FC = () => {
                                         </div>
                                     ))}
                                 </div>
-                                {/* This div helps scroll to the bottom */}
+
                                 <div ref={messagesEndRef} />
                             </div>
 
-                            {/* Message input */}
                             <div className="message-input">
                                 <textarea
+                                    ref={messageInputRef}
                                     className="form-control"
                                     placeholder="Type your message here..."
                                     value={message}
@@ -265,7 +270,6 @@ const Chat: React.FC = () => {
                                             handleSendMessage();
                                         }
                                     }}
-                                    autoFocus  // This will auto-focus the input when the component is loaded
                                 />
                                 <span
                                     className="btn btn-primary my-2 send-button"
