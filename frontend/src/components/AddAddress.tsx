@@ -45,8 +45,12 @@ const AddAddress = ({ close } : { close: () => void }) => {
     district: Yup.string().required("District is required"),
     state: Yup.string().required("State is required"),
     city: Yup.string().required("City is required"),
-    phone: Yup.string().required("Phone number is required"),
-    pincode: Yup.number().required("Pincode is required"),
+    phone: Yup.string() .required('Phone Number is required')
+    .matches(/^\d+$/, 'Phone Number must be a numeric value') 
+    .length(10, 'Phone Number must be exactly 10 digits long') ,
+    pincode: Yup.string() .required('Pincode is required')
+    .matches(/^\d+$/, 'Phone Number must be a numeric value')
+    .length(6, 'Phone Number must be exactly 6 digits long') ,
   })
 
   const addressHandler = (values:any) =>{

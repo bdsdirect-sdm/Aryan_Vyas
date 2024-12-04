@@ -19,7 +19,10 @@
 .patient-list-container .form-control {
     max-width: 500px;
 }
-
+.referal-patient{
+    display: flex;
+    justify-content: space-between;
+}
 .btn-search {
     height: 45px;
     margin-top: 8px;

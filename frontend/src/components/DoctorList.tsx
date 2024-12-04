@@ -98,19 +98,26 @@ const DoctorList: React.FC = () => {
       <h5 className="referral-title">Doctor List</h5>
 
       {/* Search Input and Button */}
-      <form className="d-flex mb-4 hii1" style={{marginTop:10}} role="search">
-        <input
-          className="form-control me-2 hi2"
-          type="search"
-          placeholder="Search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
-          aria-label="Search"
-        />
-        <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-        <i className="fa fa-search" style={{ marginRight: 1}}></i> Search
-        </button>
-      </form>
+      <form className="d-flex mb-4 hii1" style={{marginTop: 10}} role="search">
+  <input
+    className="form-control me-2 hi2"
+    type="search"
+    placeholder="Search"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); 
+        handleSearch(); 
+      }
+    }}
+    aria-label="Search"
+  />
+  <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
+    <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
+  </button>
+</form>
+
 
       <div className="table-container">
         <table className="table table-striped">

@@ -22,6 +22,7 @@ import {
   updateAppointment,
   updatePatientDetails,
   deletePatient,
+  updateStatus,
 } from "../controllers/userController";
 import userAuthMiddleware from "../middlewares/userAuth";
 import signupValidation from "../middlewares/formValidation.ts/signupValidation";
@@ -58,7 +59,7 @@ router.get(
 );
 
 router.put("/update-appointment/:appointmentId",userAuthMiddleware,updateAppointment)
-router.put("/update-patient/:padientId",userAuthMiddleware,updatePatientDetails);
+router.put("/update-patient/:patientId",userAuthMiddleware,updatePatientDetails);
 router.delete("/delete-patientDetails/:patientId", userAuthMiddleware, deletePatient);
-
+router.put("/update-status/:patientId",userAuthMiddleware,updateStatus)
 export default router;

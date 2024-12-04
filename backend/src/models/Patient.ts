@@ -14,7 +14,7 @@ class Patient extends Model {
     public disease!: string;
     public referedby!: string;
     public referedto!: string;
-    public referalstatus!: boolean;
+    public referalstatus!:'Pending' | 'Completed' | 'Rejected';
     public referback!: boolean
     // public address!: string;
     public companyName!: string;
@@ -63,9 +63,9 @@ Patient.init({
         allowNull: false,
     },
     referalstatus: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.ENUM('Pending', 'Completed', 'Rejected'),
         allowNull: true,
-        defaultValue: false,
+        defaultValue: 'Pending',
     },
     referback: {
         type: DataTypes.BOOLEAN,

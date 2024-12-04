@@ -137,11 +137,18 @@ export const getDocList = async (req: any, res: Response) => {
     if (user?.doctype == 1) {
       docList = await User.findAll({
         where: { uuid: { [Op.ne]: uuid } },
+        order: [
+          ['createdAt', 'DESC'],
+      ],
         include: Address,
       });
+      
     } else {
       docList = await User.findAll({
         where: { doctype: 1, uuid: { [Op.ne]: uuid } },
+        order: [
+          ['createdAt', 'DESC'],
+      ],
         include: Address,
       });
     }
@@ -166,6 +173,10 @@ export const getPatientList = async (req: any, res: Response) => {
         where: {
           [Op.or]: [{ referedby: uuid }, { referedto: uuid }],
         },
+        order: [
+          ['createdAt', 'DESC'],
+      ],
+        
         include: [
           {
             model: Appointments,
@@ -272,6 +283,7 @@ export const addPatient = async (req: any, res: Response) => {
         speciality,
         referedby: uuid,
       });
+      
       if (patient) {
         res.status(200).json({ message: "Patient added Successfully" });
       }
@@ -321,6 +333,9 @@ export const getDoctorList = async (req: any, res: Response) => {
     const user = await User.findOne({
       where: { uuid: uuid },
       include: Address,
+      order: [
+        ['createdAt', 'DESC'],
+    ],
     });
 
     if (user) {
@@ -539,6 +554,9 @@ export const getStaffList = async (req: any, res: Response): Promise<void> => {
     const staffList = await Staff.findAll({
       where: { userId: uuid },
       attributes: ["uuid", "staffName", "email", "phone", "gender"],
+      order: [
+        ['createdAt', 'DESC'],
+    ],
     });
     console.log("stafff list ---------------->", staffList);
     if (staffList.length > 0) {
@@ -657,6 +675,9 @@ export const getAppointmentList = async (
         userId: userId,
       },
       attributes: ["uuid", "date", "type"],
+      order: [
+        ['createdAt', 'DESC'],
+    ],
       include: [
         {
           model: Patient,
@@ -675,10 +696,12 @@ export const getAppointmentList = async (
             "laterality",
           ],
         },
+       
         {
           model: User,
           attributes: ["uuid", "firstname", "lastname", "email"],
         },
+        
       ],
     });
     console.log("apponmtsbdhgfye", appointments);
@@ -700,6 +723,9 @@ export const getPatientDetails = async (req: any, res: Response) => {
 
     const patient = await Patient.findOne({
       where: { uuid: patientId },
+      order: [
+        ['createdAt', 'DESC'],
+    ],
       include: [
         {
           model: User,
@@ -715,6 +741,7 @@ export const getPatientDetails = async (req: any, res: Response) => {
           model: Address,
           attributes: ["street", "city", "state", "pincode"],
         },
+        
         {
           model: Appointments,
           attributes: ["date", "type"],
@@ -786,28 +813,6 @@ export const getAppointmentDetails = async (req: any, res: Response) => {
   }
 };
 
-// export const updateAppointment = async (req: any, res: Response) => {
-//     try {
-//       const appointmentId = req.params.appointmentId;
-  
-//       const appoinment = await Appointment.findOne({
-//         where: { uuid: appointmentId },
-//       });
-  
-//       const patient = await Patient.findOne({
-//         where: { uuid: appoinment?.patientId },
-//       });
-  
-//       res.status(200).json({
-//         appoinment,
-//         patient,
-//         message: "Patient Details Found",
-//       });
-//     } catch (err) {
-//       res.status(500).json({ message: `${err}` });
-//     }
-//   };
-
 
 export const updateAppointment = async (req: any, res: any) => {
     try {
@@ -855,13 +860,8 @@ export const updatePatientDetails = async (req: any, res: any) => {
       laterality,
       timing,
       speciality,
-      referedtoUserId,
-      referedbyUserId,
-      appointmentDate,
-      appointmentType,
     } = req.body;
 
-   
     const patient = await Patient.findOne({
       where: { uuid: patientId },
     });
@@ -870,80 +870,29 @@ export const updatePatientDetails = async (req: any, res: any) => {
       return res.status(404).json({ message: "Patient Not Found" });
     }
 
-    await patient.update({
-      firstname,
-      lastname,
-      gender,
-      email,
-      dob,
-      disease,
-      referalstatus,
-      referback,
-      companyName,
-      policyStartingDate,
-      policyExpireDate,
-      notes,
-      phoneNumber,
-      laterality,
-      timing,
-      speciality,
-    });
+    patient.firstname = firstname || patient.firstname;
+    patient.lastname = lastname || patient.lastname;
+    patient.gender = gender || patient.gender;
+    // patient.email = email || patient.email;
+    patient.dob = dob || patient.dob;
+    patient.disease = disease || patient.disease;
+    patient.referalstatus = referalstatus || patient.referalstatus;
+    patient.referback = referback || patient.referback;
+    patient.companyName = companyName || patient.companyName;
+    patient.policyStartingDate = policyStartingDate || patient.policyStartingDate;
+    patient.policyExpireDate = policyExpireDate || patient.policyExpireDate;
+    patient.notes = notes || patient.notes;
+    patient.phoneNumber = phoneNumber || patient.phoneNumber;
+    patient.laterality = laterality || patient.laterality;
+    patient.timing = timing || patient.timing;
+    patient.speciality = speciality || patient.speciality;
 
-    if (referedtoUserId) {
-      await patient.referedtoUser(referedtoUserId);
-    }
-    if (referedbyUserId) {
-      await patient.referedbyUser(referedbyUserId);
-    }
+    await patient.save();
 
-    if (appointmentDate || appointmentType) {
-      const appointment = await Appointment.findOne({ where: { patientId } });
-      if (appointment) {
-        await appointment.update({
-          date: appointmentDate,
-          type: appointmentType,
-        });
-      } else {
-     
-        await Appointment.create({
-          patientId,
-          date: appointmentDate,
-          type: appointmentType,
-        });
-      }
-    }
-
-
-    const updatedPatient = await Patient.findOne({
-      where: { uuid: patientId },
-      include: [
-        {
-          model: User,
-          as: "referedtoUser",
-          attributes: ["firstname", "lastname", "doctype"],
-        },
-        {
-          model: User,
-          as: "referedbyUser",
-          attributes: ["firstname", "lastname", "doctype"],
-        },
-        {
-          model: Address,
-          attributes: ["street", "city", "state", "pincode"],
-        },
-        {
-          model: Appointments,
-          attributes: ["date", "type"],
-        },
-      ],
-    });
-
-    res.status(200).json({
-      patientDetails: updatedPatient,
-      message: "Patient Details Updated Successfully",
-    });
-  } catch (err) {
-    res.status(500).json({ message: `${err}` });
+    res.json({ message: "Patient Details Updated Successfully", patient });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error Updating Patient Details", error });
   }
 };
 
@@ -967,5 +916,30 @@ export const deletePatient = async (req: any, res: Response) => {
     }
   } catch (err) {
     res.status(500).json({ message: `Error deleting patient: ${err}` });
+  }
+};
+
+export const updateStatus = async (req:any, res:any) => {
+  try {
+    const patientId = req.params.patientId;
+    const referalstatus = req.body.referalstatus;
+
+    const patient = await Patient.findOne({ where: { uuid: patientId } });
+    
+    if (patient) {
+      if (patient.referalstatus !== 'Pending') {
+        return res.status(400).json({ message: "Cannot update status. It's already Completed or Rejected." });
+      }
+
+      patient.referalstatus = referalstatus || patient.referalstatus;
+      await patient.save();
+
+      res.json({ message: "Patient Status Updated Successfully", patient });
+    } else {
+      res.status(404).json({ message: "Patient Not Found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error Updating Patient Status", error });
   }
 };

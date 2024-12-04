@@ -18,9 +18,7 @@ const AppointmentsList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const appointmentsPerPage = 5; // Appointments to show per page
   const [loading, setLoading] = useState(false);
-  const handleEditAppointment = () => {
-    navigate("/add-appointment");
-  };
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -34,6 +32,7 @@ const AppointmentsList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+console.log("status",response);
 
       return response.data;
     } catch (err: any) {
@@ -51,9 +50,7 @@ const AppointmentsList: React.FC = () => {
     queryFn: fetchAppointments,
   });
 
-  console.log("appointmentlist>....", appointmentsData);
-
-  // Filter appointments based on search query
+  // Handle search query change
   const handleSearch = () => {
     if (appointmentsData) {
       setFilteredAppointments(
@@ -94,6 +91,13 @@ const AppointmentsList: React.FC = () => {
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
+
+  // Handle Enter key press for search
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch(); // Trigger search when Enter key is pressed
+    }
+  };
 
   if (isLoading) {
     return (
@@ -137,6 +141,7 @@ const AppointmentsList: React.FC = () => {
           placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+          onKeyDown={handleKeyDown}  // Trigger search on "Enter"
           aria-label="Search"
         />
         <button
@@ -174,15 +179,19 @@ const AppointmentsList: React.FC = () => {
                     {appointment.User?.firstname} {appointment.User?.lastname}
                   </td>
                   <td>{appointment.type}</td>
-                  <td></td>
+                  <td>
+            {appointment.Patient?.referalstatus === null ? "Pending": appointment.Patient?.referalstatus}
+</td>
+
                   <td>
                     <Link to={`/view-appointment/${appointment.uuid}`}>
                       <FaRegEye />
                     </Link>
-                 <span style={{paddingLeft:20}}><Link to={`/update-appointment/${appointment.uuid}`}>
-                    <FaPenToSquare />
-                    </Link></span>
-                      
+                    <span style={{ paddingLeft: 20 }}>
+                      <Link to={`/update-appointment/${appointment.uuid}`}>
+                        <FaPenToSquare />
+                      </Link>
+                    </span>
                   </td>
                 </tr>
               ))

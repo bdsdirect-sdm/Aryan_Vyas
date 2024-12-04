@@ -8,6 +8,8 @@ import './PatientList.css';
 import moment from 'moment';
 import { FaRegEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { FaPen } from "react-icons/fa6";
+
 const PatientList: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -15,7 +17,10 @@ const PatientList: React.FC = () => {
   const [filteredPatients, setFilteredPatients] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);  // Track current page
   const patientsPerPage = 5;  // Patients to show per page
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  
+  // Ensuring that doctype is a number, not a string
+  const doctype = Number(localStorage.getItem("doctype"));
 
   useEffect(() => {
     if (!token) {
@@ -30,6 +35,7 @@ const PatientList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("patientlist status>>>>>>>>", response);
       return response.data;
     } catch (err) {
       toast.error(`Error fetching patients: ${err}`);
@@ -41,20 +47,24 @@ const PatientList: React.FC = () => {
     queryFn: fetchPatient,
   });
 
+  // Handle keydown event for Enter key to trigger search
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      handleSearch(); // Trigger search when Enter key is pressed
+    }
+  };
+
   // Delete Patient API request
   const deletePatientMutation = useMutation({
     mutationFn: async (patientId: string) => {
-      try {     
+      try {
         await api.delete(`${Local.DELETE_PATIENT_DETAILS}/${patientId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         toast.success("Patient deleted successfully");
-        queryClient.invalidateQueries({ queryKey: ['patient'] })
-
-      
-        fetchPatient();
+        queryClient.invalidateQueries({ queryKey: ['patient'] });
       } catch (err) {
         toast.error(`Error deleting patient: ${err}`);
       }
@@ -63,6 +73,21 @@ const PatientList: React.FC = () => {
       toast.error(`Failed to delete patient: ${error}`);
     }
   });
+
+  // Update Status Mutation
+  const updateStatus = async (patientId: string, newStatus: string) => {
+    try {
+      await api.put(`${Local.UPDATE_STATUS}/${patientId}`, { referalstatus: newStatus }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("Patient status updated successfully");
+      queryClient.invalidateQueries({ queryKey: ['patient'] });
+    } catch (err) {
+      toast.error(`Error updating patient status: ${err}`);
+    }
+  };
 
   // Filter patients based on search query
   const handleSearch = () => {
@@ -122,6 +147,10 @@ const PatientList: React.FC = () => {
 
   return (
     <div className="patient-list-container">
+      <div className='referal-patient'>
+        <h6 style={{ marginTop: 15 }}>Referral Patient</h6>
+      </div>
+
       {/* Patient List Heading and Search */}
       <div className="search-border d-flex mb-4 hii1" style={{ marginTop: 10 }} role="search">
         <input
@@ -130,28 +159,28 @@ const PatientList: React.FC = () => {
           placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+          onKeyDown={handleKeyDown}  // Trigger search on "Enter"
           aria-label="Search"
         />
         <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-          <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search
+          <i className="fa fa-search" style={{ marginRight: 5 }}></i> Search
         </button>
       </div>
 
       {/* Patient Table */}
       <div className='table-responsive'>
-        <div className="table-container">
-          <table className="table table-striped">
+        <table className="table">
             <thead>
               <tr>
-                <th style={{ width: 121 }}>Patient Name</th>
+                <th >Patient Name</th>
                 <th>DOB</th>
                 <th>Consult</th>
-                <th style={{ width: 158 }}>Appointment Date</th>
-                <th style={{ width: 100 }}>Refer By</th>
-                <th style={{ width: 100 }}>Refer To</th>
-                <th style={{ width: 100 }}>Refer Back</th>
-                <th style={{ width: 117 }}>Consult Note</th>
-                <th>Status</th>
+                <th >Appointment Date</th>
+                <th >Refer By</th>
+                <th>Refer To</th>
+                <th >Refer Back</th>
+                <th >Consult Note</th>
+                <th style={{width:105}}>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -167,14 +196,32 @@ const PatientList: React.FC = () => {
                     <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                     <td>{patient.referback ? 'Yes' : 'No'}</td>
                     <td>{patient.notes}</td>
-                    <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
-                    <td><Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link>
-                   <span
-                    style={{color:"red"}}
-                        onClick={() => deletePatientMutation.mutate(patient.uuid)} 
+                    <td>
+                      {doctype === 1 && patient.referalstatus === 'Pending' && (
+                        <select
+                          value={patient.referalstatus}
+                          onChange={(e) => updateStatus(patient.uuid, e.target.value)}
+                          className="form-select-dropdown"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                      )}
+                      {doctype === 2 && (
+                        <span>{patient.referalstatus}</span>
+                      )}
+                    </td>
+                    <td>
+                      <Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link>
+                      <span
+                        style={{ color: "red" }}
+                        onClick={() => deletePatientMutation.mutate(patient.uuid)}
                       >
                         <MdDelete />
-                      
+                      </span>
+                      <span>
+                        <Link to={`/update-patient/${patient.uuid}`}><FaPen /></Link>
                       </span>
                     </td>
                   </tr>
@@ -185,8 +232,7 @@ const PatientList: React.FC = () => {
                 </tr>
               )}
             </tbody>
-          </table>
-        </div>
+            </table>
       </div>
 
       {/* Pagination */}
@@ -202,22 +248,16 @@ const PatientList: React.FC = () => {
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-
           {pageNumbers.map((number) => (
             <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
-              <a
-                className="page-link"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(number);
-                }}
-              >
+              <a className="page-link" href="#" onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(number);
+              }}>
                 {number}
               </a>
             </li>
           ))}
-
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
             <a className="page-link" href="#" aria-label="Next" onClick={(e) => {
               e.preventDefault();

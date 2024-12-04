@@ -1,0 +1,13 @@
+.update-patient-container {
+  margin-left: 220px;
+  margin-top: 2px;
+  padding: 20px;
+  background-color: #ecf1f3;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 90vh;
+}
+.update-patient-form{
+  background-color: white;
+  padding:30px;
+}

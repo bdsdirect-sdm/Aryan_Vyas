@@ -25,6 +25,8 @@ const PatientDetails: React.FC = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+            console.log("patient details",  response.data.patientDetails);
+            
             return response.data.patientDetails;
         } catch (err) {
             toast.error("Failed to fetch user data");
@@ -135,8 +137,8 @@ const PatientDetails: React.FC = () => {
                             <div className="form-group2 col p-3">
                                 <label htmlFor="text">Type: {patientData?.appointment?.type}</label>
                             </div>
-                            <div className="form-group2 col">
-
+                            <div className="form-group2 col p-3 ">
+                            <label htmlFor="text">Status: {patientData?.referalstatus}</label>
 </div>
                         </div>
 

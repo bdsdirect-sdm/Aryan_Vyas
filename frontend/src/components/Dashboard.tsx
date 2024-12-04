@@ -64,6 +64,8 @@ const Dashboard: React.FC = () => {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log("patient dashboard",response);
+      
       return response.data;
     } catch (err) {
       toast.error("Failed to fetch patient data");
@@ -168,7 +170,7 @@ const Dashboard: React.FC = () => {
               <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Nov 28</div>
+            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 4</div>
           </div>
         </div>
 
@@ -179,7 +181,7 @@ const Dashboard: React.FC = () => {
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 28</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 4</div>
           </div>
         </div>
 
@@ -190,7 +192,7 @@ const Dashboard: React.FC = () => {
               <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Nov 28</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 4</div>
           </div>
         </div>
       </div>
@@ -232,9 +234,7 @@ const Dashboard: React.FC = () => {
                   <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                   <td>{patient.referback ? 'Yes' : 'No'}</td>
                   <td>
-                    <span className={`badge ${patient.referalstatus ? 'bg-success' : 'bg-warning'}`}>
-                      {patient.referalstatus ? 'Completed' : 'Pending'}
-                    </span>
+                  {patient?.referalstatus === null ? "Pending": patient?.referalstatus}
                   </td>
                   <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
                       <Link className='text-primary' to='/chat'>Link</Link>

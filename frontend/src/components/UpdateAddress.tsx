@@ -75,28 +75,28 @@ const handleNavigate=()=>{
         <Form>
           <div className="form-group1">
             <label>Street<span className='star'>*</span></label>
-            <Field type="text" name="street" className="form-control" />
+            <Field type="text" name="street" className="form-control1" />
             <ErrorMessage name="street" component="div" className="text-danger" />
           </div>
           <br />
 
           <div className="form-group1">
             <label>District<span className='star'>*</span></label>
-            <Field type="text" name="district" className="form-control" />
+            <Field type="text" name="district" className="form-control1" />
             <ErrorMessage name="district" component="div" className="text-danger" />
           </div>
           <br />
 
           <div className="form-group1">
             <label>State<span className='star'>*</span></label>
-            <Field type="text" name="state" className="form-control" />
+            <Field type="text" name="state" className="form-control1" />
             <ErrorMessage name="state" component="div" className="text-danger" />
           </div>
           <br />
 
           <div className="form-group1">
             <label>City<span className='star'>*</span></label>
-            <Field type="text" name="city" className="form-control" />
+            <Field type="text" name="city" className="form-control1" />
             <ErrorMessage name="city" component="div" className="text-danger" />
           </div>
           <br />
@@ -110,7 +110,7 @@ const handleNavigate=()=>{
 
           <div className="form-group1">
             <label>Pincode<span className='star'>*</span></label>
-            <Field type="text" name="pincode" className="form-control" maxLength={6} />
+            <Field type="text" name="pincode" className="form-control1" maxLength={6} />
             <ErrorMessage name="pincode" component="div" className="text-danger" />
           </div>
           <br />

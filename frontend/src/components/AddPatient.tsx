@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import { FormControlLabel, Switch } from '@mui/material';
 import "./AddPatient.css";
 import { IoIosArrowBack } from "react-icons/io";
+import DatePicker from 'react-datepicker';
 const AddPatient: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -25,7 +26,7 @@ const AddPatient: React.FC = () => {
       });
       console.log(response)
       toast.success("Patient referred successfully");
-      navigate('/dashboard');
+      navigate('/patient');
     } catch (err: any) {
       toast.error(`${err.response?.data?.message || 'Error occurred'}`);
     }
@@ -57,17 +58,21 @@ const AddPatient: React.FC = () => {
   });
 
   const validationSchema = Yup.object().shape({
-    firstname: Yup.string().required('First Name is required'),
-    lastname: Yup.string().required('Last Name is required'),
+    firstname: Yup.string()
+    .matches(/^[A-Za-z]+$/, 'First Name must only contain letters')
+    .required('First Name is required'),
+  lastname: Yup.string()
+    .matches(/^[A-Za-z]+$/, 'Last Name must only contain letters')
+    .required('Last Name is required'),
     gender: Yup.string().required("Gender Is required"),
     email: Yup.string().email('Invalid email').required('Email is required'),
-    dob: Yup.date().required('DOB is required'),
+    dob: Yup.date().required('DOB is required').max(new Date(), 'Date of birth cannot be a future date'),
     disease: Yup.string().required("Disease is required"),
     referedto: Yup.string().required("Select Doctor"),
     address: Yup.string().required("Address is required"),
     referback: Yup.string().required("Please select an option"),
     companyName: Yup.string().required("Company Name Is Required"),
-    policyStartingDate: Yup.date().required("Policy Starting Date Is Required"),
+    policyStartingDate: Yup.date().required("Policy Starting Date Is Required").typeError('Invalid date format').max(new Date(), 'Policy Starting Date cannot be a future date'),
     policyExpireDate: Yup.date()
       .required('Policy Ending Date is required')
       .min(new Date(), 'Policy Ending Date must be a future date')
@@ -323,7 +328,7 @@ const AddPatient: React.FC = () => {
 
 
 
-              <div className="form-group row">
+              <div className="form-group row" >
                 <label className="notes">
                   Notes <span className="star">*</span>
                 </label>

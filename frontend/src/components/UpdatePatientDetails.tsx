@@ -1,305 +1,547 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
-import api from '../api/axiosInstance';
-import { Local } from '../environment/env';
-import './PatientDetails.css'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { Local } from "../environment/env";
+import api from "../api/axiosInstance";
+import "./UpdatePatientDetails.css";
 import { IoIosArrowBack } from "react-icons/io";
-import moment from 'moment';
+import moment from "moment";
 
 const UpdatePatientDetails: React.FC = () => {
   const { patientId } = useParams<{ patientId: string }>();
-  const token = localStorage.getItem('token');
-  const doctorType: string | null = localStorage.getItem("doctype");
-
-  const doctorTypeNumber = doctorType ? parseInt(doctorType, 10) : 0;
-
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState<any>({
-    firstname: '',
-    lastname: '',
-    gender: '',
-    email: '',
-    dob: '',
-    disease: '',
-    phoneNumber: '',
-    laterality: '',
-    timing: '',
-    speciality: '',
-    companyName: '',
-    policyStartingDate: '',
-    policyExpireDate: '',
-    notes: '',
-    referedtoUserId: '',
-    referedbyUserId: '',
-    appointmentDate: '',
-    appointmentType: '',
+  const token = localStorage.getItem("token");
+
+  const [initialValues, setInitialValues] = useState({
+    firstname: "",
+    lastname: "",
+    gender: "",
+    email: "",
+    dob: "",
+    disease: "",
+    phoneNumber: "",
+    laterality: "",
+    timing: "",
+    speciality: "",
+    companyName: "",
+    policyStartingDate: "",
+    policyExpireDate: "",
+    notes: "",
+    referedto:"",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [patientName, setPatientName] = useState<{ firstname: string; lastname: string; }>({
+    firstname: "",
+    lastname: "",
   });
 
-  const getPatient = async () => {
-    try {
-      const response = await api.get(`${Local.GET_PATIENT_DETAILS}/${patientId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log("update>>>>>>>>...................",response);
-      setFormData({ ...response.data.patientDetails });
-    } catch (err) {
-      toast.error("Failed to fetch patient data");
-      console.log(err);
-    }
-  };
-
-  const updatePatient = async () => {
-    try {
-      const response = await api.put(`${Local.UPDATE_PATIENT_DETAILS}/${patientId}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-
-      toast.success(response.data.message);
-      navigate(`/patient/${patientId}`);
-    } catch (err) {
-      toast.error("Failed to update patient details");
-      console.log(err);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const validationSchema = Yup.object({
+    firstname: Yup.string()
+    .matches(/^[A-Za-z]+$/, 'First Name must only contain letters')
+    .required('First Name is required'),
+  lastname: Yup.string()
+    .matches(/^[A-Za-z]+$/, 'Last Name must only contain letters')
+    .required('Last Name is required'),
+    gender: Yup.string().required("Gender Is required"),
+    // email: Yup.string().email("Invalid email format").required("Email is required"),
+    dob: Yup.date().required('DOB is required').max(new Date(), 'Date of birth cannot be a future date'),
+    disease: Yup.string().required("Disease is required"),
+    phoneNumber: Yup.string()
+    .required('Phone Number is required')
+    .matches(/^\d+$/, 'Phone Number must be a numeric value')
+    .length(10, 'Phone Number must be exactly 10 digits long') ,
+    laterality: Yup.string().required("Laterality is required"),
+    timing: Yup.string().required("Timing is required"),
+    speciality: Yup.string().required("Speciality is required"),
+    companyName: Yup.string().required("Company name is required"),
+    policyStartingDate: Yup.date().required("Policy Starting Date Is Required").typeError('Invalid date format').max(new Date(), 'Policy Starting Date cannot be a future date'),
+    policyExpireDate: Yup.date()
+      .required('Policy Ending Date is required')
+      .min(new Date(), 'Policy Ending Date must be a future date')
+      .typeError('Invalid date format'),
+    notes: Yup.string().required("Note Is required"),
+  });
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-    getPatient();
-  }, [token]);
+    const fetchPatientDetails = async () => {
+      try {
+        const response = await api.get(
+          `${Local.GET_PATIENT_DETAILS}/${patientId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // console.log("updatedetailes>>>>>>>>>a", response.data);
 
-  if (!formData) {
-    return <div>Loading...</div>;
+       
+        const { patientDetails } = response.data;
+        console.log("gender", patientDetails.referedto.firstname);
+        console.log("patientdetails>>>>",patientDetails)
+        const { firstname, lastname } = patientDetails;
+        console.log("moment(patientDetails.dob).format(", moment(patientDetails.dob).format("DD/MM/YYYY"))
+
+        setInitialValues({
+          firstname: patientDetails.firstname || "",
+          lastname: patientDetails.lastname || "",
+          gender: patientDetails.gender || "",
+          email: patientDetails.email,
+          dob: moment(patientDetails.dob).format("YYYY-MM-DD") || "",
+          disease: patientDetails.disease || "",
+          phoneNumber: patientDetails.phoneNumber || "",
+          laterality: patientDetails.laterality || "",
+          timing: patientDetails.timing || "",
+          speciality: patientDetails.speciality || "",
+          companyName: patientDetails.companyName || "",
+          policyStartingDate: moment(patientDetails.policyStartingDate).format("YYYY-MM-DD") || "",
+          policyExpireDate: moment(patientDetails.policyExpireDate).format("YYYY-MM-DD") || "",
+          notes: patientDetails.notes || "",
+          referedto: `${patientDetails.referedto?.firstname || ""} ${patientDetails.referedto?.lastname || ""}`
+,
+        });
+
+        // Store patient name
+        setPatientName({ firstname, lastname });
+      } catch (error) {
+        toast.error("Failed to fetch patient details");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchPatientDetails();
+    } else {
+      navigate("/login");
+    }
+  }, [patientId, token, navigate]);
+
+  const handleSubmit = async (values: typeof initialValues) => {
+    console.log("upppppppppppppdatttt>>>>>>>>>>>>>.........", values);
+    try {
+      const response = await api.put(
+        `${Local.UPDATE_PATIENT_DETAILS}/${patientId}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("upppppppppppppdatttt>>>>>>>>>>>>>.........", response);
+      toast.success(response.data.message || "Patient details updated successfully");
+      navigate(-1); // Go back to the previous page
+    } catch (error) {
+      toast.error("Failed to update patient details");
+      console.error(error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
   }
 
   return (
-    <div className="patient-details-container">
-      <div className='details-btn'>
-        <p className='back fw-bold' onClick={() => navigate("/patient")}><IoIosArrowBack /> Back</p>
-        <button className="appointment-btn" onClick={updatePatient}>Update Patient</button>
+    <div className="update-patient-details-container">
+      <div className="back1 fw-bold" onClick={() => navigate(-1)}>
+        <IoIosArrowBack /> Back
       </div>
-      <div className='patient-info'>
-        <h6 className="fw-bold" style={{ marginTop: '1.5rem', marginBottom: "1.5rem" }}>Basic Information</h6>
-        <div className="patient-details">
-          <form>
-            <div className='name-info row'>
-            <div className="form-group2 col" style={{ marginTop: 15 }}>
-  <label htmlFor="firstname">First Name:</label>
-  <input
-    type="text"
-    id="firstname"
-    name="firstname"
-    value={`${formData?.firstname} ${formData?.lastname}`}
-    onChange={handleChange}
-    required
-  />
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div className="update-patient-container">
+              <div className="update-patient-form">
+                <h5>Edit Patient Details</h5>
+                <div className="update-details row">
+                  <div className="form-group col">
+                    <label
+                      htmlFor="dob"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Date of Birth<span className="star">*</span>
+                    </label>
+                    <Field
+                      type="date"
+                      name="dob"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="dob"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="email"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Email
+                    </label>
+                    <Field
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      disabled
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="phoneNumber"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Phone Number
+                    </label>
+                    <Field
+                      type="text"
+                      name="phoneNumber"
+                      className="form-control"
+                      maxLength={10}
+                    />
+                    <ErrorMessage
+                      name="phoneNumber"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                </div>
+
+
+
+                <div className="update-details row">
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="firstname"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      First Name
+                    </label>
+                    <Field
+                      type="text"
+                      name="firstname"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="firstname"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                  <div className="form-group col">
+                    <label
+                      htmlFor="lastname"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Last Name
+                    </label>
+                    <Field
+                      type="text"
+                      name="lastname"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="lastname"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="gender"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Gender
+                    </label>
+                    <Field as="select" name="gender" className="form-control">
+                      {/* <option value="">Select</option> */}
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </Field>
+                    <ErrorMessage
+                      name="gender"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                </div>
+
+                <h5>Reason of consult</h5>
+                <div className="fieldflex row">
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="disease"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Reason
+                    </label>
+                    <Field as="select" name="disease" className="form-control">
+                      {/* <option value="">Select</option> */}
+                      <option value="Color Blindness">Color Blindness</option>
+                      <option value="Dry Eye">Dry Eye</option>
+                      <option value="Floaters">Floaters</option>
+                      <option value="Amblyopia (Lazy Eye)">Amblyopia (Lazy Eye)</option>
+                      <option value="Astigmatism">Astigmatism</option>
+                    </Field>
+                    <ErrorMessage
+                      name="disease"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="laterality"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Laterality
+                    </label>
+                    <Field as="select" name="laterality" className="form-control">
+                      {/* <option value="">Select</option> */}
+                      <option value="Left">Left</option>
+                      <option value="Right">Right</option>
+                      <option value="Both">Both</option>
+                    </Field>
+                    <ErrorMessage
+                      name="laterality"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                  <div className="form-group col">
+                  </div>
+                </div>
+
+                <div className="fieldflex row">
+                  <div className="form-group col">
+                    <label
+                      htmlFor="timing"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Timing
+                    </label>
+                    <Field
+                      as="select"
+                      name="timing"
+                      className="form-control">
+                      {/* <option value="">Select</option> */}
+                      <option value="routine">Routine(Within 1 month)</option>
+                      <option value="urgent">Urgent(Within 1 Week)</option>
+                      <option value="emergent">Emergent(Within 24 hours or less)</option>
+                    </Field>
+
+                    <ErrorMessage
+                      name="timing"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                  <div className="form-group col">
+                  </div>
+                  <div className="form-group col">
+                  </div>
+                </div>
+
+                <h5>Referral MD/OD</h5>
+                <div className="fieldflex row">
+                  <div className="form-group col">
+                    <label
+                      htmlFor="referedto"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      MD/OD Name
+                    </label>
+                    <Field
+                      type="text"
+                      name="referedto"
+                      className="form-control"
+                      disabled
+                    />
+                    <ErrorMessage
+                      name="referedto"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="speciality"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Speciality
+                    </label>
+                    <Field
+                      as="select"
+                      name="timing"
+                      className="form-control">
+                      {/* <option value="">Select</option> */}
+                      <option value="opticians">Opticians</option>
+                      <option value="optometrists">Optometrists</option>
+                      <option value="ophthalmologists">Ophthalmologists</option>
+                    </Field>
+                    <ErrorMessage
+                      name="speciality"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                  <div className="form-group col">
+      
+                  </div>
+                  </div>
+
+<h5>Insurance Details</h5>
+                  <div className="fieldflex row">
+                  <div className="form-group col">
+                    <label
+                      htmlFor="companyName"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Company Name
+                    </label>
+                    <Field
+                      as="select"
+                      name="companyName"
+                      className="form-control">
+                      <option value="">Select</option>
+                      <option value="Ayushman Baharat">Ayushman Baharat</option>
+                      <option value="LIC">LIC</option>
+                      <option value="Bharat Bima">Bharat Bima</option>
+                    </Field>
+                    <ErrorMessage
+                      name="companyName"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+               
+                  <div className="form-group col">
+                    <label
+                      htmlFor="policyStartingDate"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Policy Start Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="policyStartingDate"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="policyStartingDate"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  <div className="form-group col">
+                    <label
+                      htmlFor="policyExpireDate"
+                      className="add-appointment-lable"
+                      style={{ color: "black" }}
+                    >
+                      Policy Expiry Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="policyExpireDate"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="policyExpireDate"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+                  </div>
+             
+              <div className="fieldflex row" >
+              <div className="form-group col">
+                  <label
+                    htmlFor="notes"
+                    
+                    style={{ color: "black" }}
+                  >
+                    Note
+                  </label>
+                  <Field
+                    as="textarea"
+                    name="notes"
+                    className="form-control"
+                    
+                  />
+                  <ErrorMessage
+                    name="notes"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
 </div>
-
               
-              <div className="form-group2 col" style={{ marginTop: 15 }}>
-                <label htmlFor="gender">Gender:</label>
-                <input
-                  type="text"
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col" style={{ marginTop: 15 }}>
-                <label htmlFor="dob">Date of Birth:</label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col" style={{ marginTop: 15 }}>
-                <label htmlFor="phoneNumber">Phone:</label>
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col" style={{ marginTop: 15 }}>
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
+              <div className="btn-subcancel">
+              <button
+                  type="submit"
+                  className="appointment-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  className="btn btn-cancel1"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-
-            <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Reason of Consult</p>
-            <div className="name-info row">
-              <div className="form-group2 col p-3">
-                <label htmlFor="disease">Reason:</label>
-                <input
-                  type="text"
-                  id="disease"
-                  name="disease"
-                  value={formData.disease}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="laterality">Laterality:</label>
-                <input
-                  type="text"
-                  id="laterality"
-                  name="laterality"
-                  value={formData.laterality}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="timing">Timing:</label>
-                <input
-                  type="text"
-                  id="timing"
-                  name="timing"
-                  value={formData.timing}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Referral OD/MD</p>
-            <div className="name-info row">
-              <div className="form-group2 col p-3">
-                <label htmlFor="referedbyUser">MD/OD Name:</label>
-                <input
-                  type="text"
-                  id="referedbyUser"
-                  name="referedbyUserId"
-                  value={
-                    doctorTypeNumber === 1
-                      ? `${formData.referedbyUser?.firstname} ${formData.referedbyUser?.lastname}`
-                      : doctorTypeNumber === 2
-                        ? `${formData.referedtoUser?.firstname} ${formData.referedtoUser?.lastname}`
-                        : 'Not Available'
-                  }
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="referedbyLocation">Location:</label>
-                <input
-                  type="text"
-                  id="referedbyLocation"
-                  name="referedbyLocation"
-                  value={formData.address?.street || ''}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="speciality">Speciality:</label>
-                <input
-                  type="text"
-                  id="speciality"
-                  name="speciality"
-                  value={formData.speciality}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Appointment Details</p>
-            <div className="name-info row">
-              <div className="form-group2 col p-3">
-                <label htmlFor="appointmentDate">Appointment Date:</label>
-                <input
-                  type="datetime-local"
-                  id="appointmentDate"
-                  name="appointmentDate"
-                  value={formData.appointmentDate}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="appointmentType">Type:</label>
-                <input
-                  type="text"
-                  id="appointmentType"
-                  name="appointmentType"
-                  value={formData.appointmentType}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Insurance Details</p>
-            <div className="name-info row">
-              <div className="form-group2 col p-3">
-                <label htmlFor="companyName">Company Name:</label>
-                <input
-                  type="text"
-                  id="companyName"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="policyStartingDate">Policy Start Date:</label>
-                <input
-                  type="date"
-                  id="policyStartingDate"
-                  name="policyStartingDate"
-                  value={formData.policyStartingDate}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group2 col p-3">
-                <label htmlFor="policyExpireDate">Policy End Date:</label>
-                <input
-                  type="date"
-                  id="policyExpireDate"
-                  name="policyExpireDate"
-                  value={formData.policyExpireDate}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <p style={{ marginTop: '1.5rem', marginBottom: "1.5rem", fontSize: 16, color: "black" }}>Notes</p>
-            <div className="name-info row">
-              <div className="form-group2 col p-3">
-                <label htmlFor="notes">Notes:</label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-          </form>
-        </div>
-      </div>
+                </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

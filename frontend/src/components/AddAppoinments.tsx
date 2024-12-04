@@ -86,9 +86,11 @@ const AddAppointment: React.FC = () => {
   });
 
   const validationSchema = Yup.object().shape({
-    patientId: Yup.string().required('Patient is required'),
+    patientId: Yup.string().required('Patient name is required'),
     type: Yup.string().required("Appointment type is required"),
-    date: Yup.date().required("Date is required"),
+    date: Yup.date() .required('Policy Ending Date is required')
+    .min(new Date(), 'Policy Ending Date must be a future date')
+    .typeError('Invalid date format'),
   });
 
   const referAppointmentHandler = (values: any) => {

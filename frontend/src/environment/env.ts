@@ -24,6 +24,7 @@ interface config {
     UPDATE_APPOINTMENT:any;
     UPDATE_PATIENT_DETAILS:any;
     DELETE_PATIENT_DETAILS:any;
+    UPDATE_STATUS:any;
 }
 
 export const Local: config = {
@@ -52,4 +53,5 @@ export const Local: config = {
     UPDATE_APPOINTMENT:import.meta.env.VITE_UPDATE_APPOINTMENT,
     UPDATE_PATIENT_DETAILS:import.meta.env.VITE_UPDATE_PATIENT_DETAILS,
     DELETE_PATIENT_DETAILS:import.meta.env.VITE_DELETE_PATIENT_DETAILS,
+    UPDATE_STATUS:import.meta.env.VITE_UPDATE_STATUS,
 }
