@@ -11,7 +11,7 @@ import moment from 'moment';
 import { BiSend } from "react-icons/bi";
 import "./Chat.css";
 
-let socket: Socket;
+const socket : Socket=io(`${Local.BASE_URL}`)
 const doctype = Number(localStorage.getItem("doctype"));
 
 const fetchChatRooms = async (token: string) => {
@@ -30,7 +30,6 @@ const fetchChatMessages = async (chatRoomId: string, token: string) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-
         return response.data;
     } catch (err) {
         console.error(err);
@@ -44,16 +43,13 @@ const sendChatMessage = async (messageData: any, token: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    console.log("time", response.data)
+    console.log("time", response.data);
     return response.data;
 };
 
 const formatTimestampToIST = (timestamp: string) => {
     const date = moment.utc(timestamp).add(5.5, 'hours');
-
-
     const formattedTime = date.format('hh:mm A');
-
 
     if (date.isSame(moment(), 'day')) {
         return `Today, ${formattedTime}`;
@@ -78,9 +74,7 @@ const Chat: React.FC = () => {
     const [filteredRooms, setFilteredRooms] = useState<any[]>([]);
     const [receiverName, setReceiverName] = useState<string>('');
 
-
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
     const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
 
     const { data: chatRooms, isLoading: roomsLoading, error: roomsError } = useQuery({
@@ -98,26 +92,25 @@ const Chat: React.FC = () => {
         },
     });
 
+   
     useEffect(() => {
         if (!token) {
             navigate('/login');
+            return;
         }
-
-
-        socket = io(`${Local.BASE_URL,{
-            transports: ['websocket', 'polling'],   
-        }}`);
-
-        socket.on('receive_message', (messageData) => {
-            setChatMessages((prevMessages) => [...prevMessages, messageData]);
-        });
-
+            socket.on('receive_message', (messageData) => {
+                setChatMessages((prevMessages) => [...prevMessages, messageData]);
+            });
+        
 
         return () => {
-            socket.off('receive_message');
-            socket.disconnect();
+            if (socket) {
+                socket.off('receive_message'); 
+                socket.disconnect();     
+            }
         };
     }, [token, navigate]);
+
 
     useEffect(() => {
         if (selectedRoom && !isJoined) {
@@ -132,8 +125,8 @@ const Chat: React.FC = () => {
         };
     }, [selectedRoom]);
 
+    // Filter chat rooms based on search query
     useEffect(() => {
-
         if (chatRooms) {
             const filtered = chatRooms.filter((room: any) =>
                 room.patientName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -142,12 +135,11 @@ const Chat: React.FC = () => {
         }
     }, [searchQuery, chatRooms]);
 
-
+    // Auto scroll to the bottom of the chat and focus on the message input field
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-
 
         if (messageInputRef.current) {
             messageInputRef.current.focus();
@@ -184,7 +176,6 @@ const Chat: React.FC = () => {
         socket.emit('send_message', messageData);
         sendMessage(messageData);
     };
-
 
     const getReceiverName = (messages: any[], userId: string) => {
         const receiverMessage = messages.find((msg: any) => msg.senderId !== userId);
@@ -227,23 +218,19 @@ const Chat: React.FC = () => {
                                         <p className='doctor-name'>Referred By: {getReceiverName(chatMessages, userId)}</p>
                                     )}
                                 </li>
-
                             ))
                         )}
                     </ul>
                 </div>
 
-
                 <div className="chat-messages col">
                     {selectedRoom ? (
                         <>
-
                             <div className="chat-head">
                                 <p className="chat-heading">
                                     {getReceiverName(chatMessages, userId)}{" "}
                                 </p>
                             </div>
-
 
                             <div className="messages-container">
                                 <div className="messages-part">
@@ -283,8 +270,8 @@ const Chat: React.FC = () => {
                         </>
                     ) : (
                         <div className='ho1'>
-                        <span  className='color-height'>No Chat To Show</span>
-                        <span className='height-no-chat'>No Chat To Show</span>
+                            <span className='color-height'>No Chat To Show</span>
+                            <span className='height-no-chat'>No Chat To Show</span>
                         </div>
                     )}
                 </div>

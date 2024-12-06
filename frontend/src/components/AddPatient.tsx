@@ -329,6 +329,7 @@ const AddPatient: React.FC = () => {
 
 
               <div className="form-group row" >
+                <div className='col'>
                 <label className="notes">
                   Notes <span className="star">*</span>
                 </label>
@@ -343,6 +344,8 @@ const AddPatient: React.FC = () => {
                   component="div"
                   className="text-danger"
                 />
+                <div className='col'></div>
+              </div>
               </div>
 
 
