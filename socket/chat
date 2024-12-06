@@ -1,1 +1,73 @@
 
+  const handleNavigateToGraph = () => {
+    navigate('/graph', { state: { dataToSent } });
+  };
+//////////////
+ <div className='header-title d-flex justify-content-between'>
+        <h5 className="dashboard-title">Dashboard</h5>
+        <div className="dashboard-title btn btn-info" onClick={handleNavigateToGraph}><i className="fa-solid fa-chart-line"></i></div>
+      </div>
+///////////////////
+import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Chart, Tooltip, Legend, ArcElement, Colors, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from 'chart.js';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import '../../css/Chart.css'
+
+Chart.register(
+    Tooltip,
+    Legend,
+    ArcElement,
+    Colors,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement
+);
+
+const Graph: React.FC = () => {
+    const location = useLocation();
+    const { dataToSent } = location.state || {};
+
+    const options = {
+        responsive: true,
+    };
+
+    console.log("datfrom graph", dataToSent);
+
+
+    const data = {
+        labels: ['Refer Placed', 'Refer Completed', 'Total OD/MD'],
+        datasets: [
+            {
+                label: 'Count',
+                data: [dataToSent?.referCount, dataToSent?.referCompleted, dataToSent?.docCount],
+                hoverOffset: 50,
+            },
+        ],
+    };
+
+    return (
+        <div className='chat-container'>
+            <h2>Chart Data</h2>
+            <div className="charts">
+                <div className="row">
+                    <div className="pie">
+                        <Pie options={options} data={data} />
+                    </div>
+                    <div className="bar">
+                        <Bar options={options} data={data} />
+                    </div>
+                </div>
+                <div className="line">
+                    <Line options={options} data={data} />
+                </div>
+            </div>
+
+        </div>
+    );
+};
+
+export default Graph;
+
