@@ -83,7 +83,7 @@ const Graph: React.FC = () => {
     return (
         <div className='chart-container'>
             <div className='chart-heading'>
-                <h6 onClick={handleChartBack}><span className='back-icon'><IoIosArrowBack /></span><span>Chart Data</span></h6>
+                <h6 onClick={handleChartBack}><span className='back-icon'><IoIosArrowBack /></span><span>Graph Data</span></h6>
             </div>
 
             <div className='chart-options'>
