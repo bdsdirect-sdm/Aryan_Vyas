@@ -72,11 +72,13 @@ const AddStaff: React.FC = () => {
   });
 
   const validationSchema = Yup.object({
-    staffName: Yup.string().required('Staff Name is required'),
+    staffName: Yup.string()
+      .matches(/^[A-Za-z\s]+$/, 'Staff Name must only contain letters and spaces') // Only letters and spaces allowed
+      .required('Staff Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     phone: Yup.string().required('Phone Number is required')
-      .matches(/^\d+$/, 'Phone Number must be a numeric value')
-      .length(10, 'Phone Number must be exactly 10 digits long'),
+      .matches(/^\d+$/, 'Phone Number must be a numeric value') // Ensure it's numeric
+      .length(10, 'Phone Number must be exactly 10 digits long'), // Exactly 10 digits
     gender: Yup.string().required('Gender is required'),
   });
 
@@ -108,13 +110,12 @@ const AddStaff: React.FC = () => {
 
   const handleSearch = () => {
     if (searchQuery) {
-     
       setFilteredStaff(
         staffList.filter((staff: any) =>
-          staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) 
+          staff.staffName.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
-    } else {  
+    } else {
       setFilteredStaff(staffList);
     }
   };
@@ -127,6 +128,15 @@ const AddStaff: React.FC = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+  };
+  const handleStaffNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^A-Za-z\s]/g, ''); 
+    formik.setFieldValue('staffName', value);
+    };
+  // Prevent non-numeric input for phone number
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+    formik.setFieldValue('phone', value); // Update the formik field with the cleaned value
   };
 
   return (
@@ -150,7 +160,7 @@ const AddStaff: React.FC = () => {
                     id="staffName"
                     className="form-control1"
                     value={formik.values.staffName}
-                    onChange={formik.handleChange}
+                    onChange={handleStaffNameChange}
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.staffName && formik.errors.staffName && (
@@ -180,7 +190,7 @@ const AddStaff: React.FC = () => {
                     id="phone"
                     className="form-control1"
                     value={formik.values.phone}
-                    onChange={formik.handleChange}
+                    onChange={handlePhoneChange} // Custom handler to remove non-numeric characters
                     onBlur={formik.handleBlur}
                     maxLength={10}
                   />
@@ -215,20 +225,20 @@ const AddStaff: React.FC = () => {
         )}
 
         {/* Search Bar */}
-        <form className="d-flex mb-4 hi"  role="search">
-            <input
-              type="search"
-              className="form-control me-2 hi2"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                handleSearch(); 
-              }}
-            />
+        <form className="d-flex mb-4 hi" role="search">
+          <input
+            type="search"
+            className="form-control me-2 hi2"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              handleSearch();
+            }}
+          />
           <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-    <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
-  </button>
+            <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
+          </button>
         </form>
 
         {/* Display staff list */}
@@ -256,68 +266,64 @@ const AddStaff: React.FC = () => {
         </div>
 
         {/* Pagination Controls */}
-{/* Pagination Controls */}
-<nav aria-label="Page navigation">
-  <ul className="pagination justify-content-end">
-    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-      <a
-        className="page-link"
-        href="#"
-        aria-label="Previous"
-        onClick={(e) => {
-          e.preventDefault();
-          if (currentPage > 1) {
-            handlePageChange(currentPage - 1);
-          }
-        }}
-      >
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
+        <nav aria-label="Page navigation">
+          <ul className="pagination justify-content-end">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+              <a
+                className="page-link"
+                href="#"
+                aria-label="Previous"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage > 1) {
+                    handlePageChange(currentPage - 1);
+                  }
+                }}
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
 
-    {/* Page Number Buttons */}
-    {Array.from({ length: totalPages }, (_, index) => (
-      <li
-        key={index + 1}
-        className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
-      >
-        <a
-          className="page-link"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            handlePageChange(index + 1);
-          }}
-        >
-          {index + 1}
-        </a>
-      </li>
-    ))}
+            {/* Page Number Buttons */}
+            {Array.from({ length: totalPages }, (_, index) => (
+              <li
+                key={index + 1}
+                className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+              >
+                <a
+                  className="page-link"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(index + 1);
+                  }}
+                >
+                  {index + 1}
+                </a>
+              </li>
+            ))}
 
-    {/* Next Button */}
-    <li
-      className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
-    >
-      <a
-        className="page-link"
-        href="#"
-        aria-label="Next"
-        onClick={(e) => {
-          e.preventDefault();
-          if (currentPage < totalPages) {
-            handlePageChange(currentPage + 1);
-          }
-        }}
-      >
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
+            {/* Next Button */}
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+              <a
+                className="page-link"
+                href="#"
+                aria-label="Next"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage < totalPages) {
+                    handlePageChange(currentPage + 1);
+                  }
+                }}
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
 
       </div>
     </>
   );
 };
-
 export default AddStaff;

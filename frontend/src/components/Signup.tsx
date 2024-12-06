@@ -36,8 +36,10 @@ const Signup: React.FC = () => {
     }
 
     const validationSchema = Yup.object().shape({
-        firstname: Yup.string().required('First name is required'),
-        lastname: Yup.string().required('Last name is required'),
+        firstname: Yup.string().matches(/^[A-Za-z]+$/, 'First Name must only contain letters')
+        .required('First Name is required'),
+        lastname: Yup.string().matches(/^[A-Za-z]+$/, 'Last Name must only contain letters')
+        .required('Last Name is required'),
         doctype: Yup.number().required("Select Doctor Type"),
         email: Yup.string().email("Invalid Email").required("Email is required"),
         password: Yup.string().min(8, "Password must be at least 8 characters long").required("Password is required")

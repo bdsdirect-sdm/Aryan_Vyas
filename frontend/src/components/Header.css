@@ -6,22 +6,23 @@
     border-color: transparent;
     position: sticky;
     z-index: 1;
-    top:0;
-    height:100px;
+    top: 0;
+    height: 100px;
 }
 
 .header-left {
     display: flex;
     align-items: center;
 }
-.logo-class{
-        height: 6em;
-        padding: 0.5em;
-        margin: auto;
-        cursor: pointer;
+
+.logo-class {
+    height: 6em;
+    padding: 0.5em;
+    margin: auto;
+    cursor: pointer;
         position: relative;
         padding:27px;
-      }
+}
 
 .logo-text {
     font-size: 24px;
@@ -42,10 +43,10 @@
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    border: none;
 }
-.welcome{
-    color:#737a7d;   
+
+.welcome {
+    color: #737a7d;   
 }
 
 .dropdown-menu {
@@ -57,12 +58,12 @@
     position: absolute;
     right: 0;
     top: 50px;
-    display: none;
+    display: none; 
     z-index: 1;
 }
 
 .dropdown:hover .dropdown-menu {
-    display: block;
+    display: block; 
 }
 
 .dropdown-item {
@@ -72,7 +73,7 @@
 }
 
 .dropdown-item:hover {
-    background-color: #f1f1f1;
+    background-color: #f1f1f1; 
 }
 
 .header-divider {
@@ -87,7 +88,7 @@
     left: 0;
     width: 250px;
     background-color: white;
-    height: 100vh;
+    height: 100vh; 
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -112,34 +113,37 @@ hr{
 }
 
 .nav-link {
-    text-decoration: none;
+    text-decoration: none; 
     color: #212121;
     padding: 8px 15px;
-    font-size: 18px;
-    border-radius: 5px;
+    font-size: 18px; 
 }
 
+.nav-link.active {
+   background-color: #f4fffb;
+   color: #43d79e;
+}
 
 .nav-link:hover {
-    background-color: #f4fffb;
-    color: #43d79e;
+   background-color: #f4fffb; 
+   color: #43d79e;
 }
 
 .btn {
-    padding: 10px 15px;
-    margin-left: 10px;
-    text-decoration: none;
-    border-radius: 5px;
+   padding: 10px 15px;
+   margin-left: 10px;
+   text-decoration: none;
+   border-radius: 5px;
 }
 
 .login-btn {
-    background-color: #35c0e4;
-    color: white;
+   background-color: #35c0e4;
+   color: white;
 }
 
 .signup-btn {
-    background-color: #28a745;
-    color: white;
+   background-color: #28a745; 
+   color: white;
 }
 .google-icon{
     display: flex;
@@ -153,16 +157,10 @@ hr{
     box-sizing: border-box;
 }
 .house{
-    position: relative;
+   position: relative;
     top: 0%;
-    height: 20px;
-    width: 20px;
+   height: 20px;
+   width: 20px;
     box-sizing: border-box;
-    margin-right: 10px;
+   margin-right: 10px;
 }
-.nav-link{
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-}
-

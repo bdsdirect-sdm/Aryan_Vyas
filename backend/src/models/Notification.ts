@@ -28,3 +28,5 @@ Notification.init({
 })
 User.hasMany(Notification,{foreignKey:"senderId"});
 Notification.belongsTo(User,{foreignKey:"senderId"});
+
+export default Notification;

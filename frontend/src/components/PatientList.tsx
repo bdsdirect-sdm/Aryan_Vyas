@@ -172,13 +172,13 @@ const PatientList: React.FC = () => {
         <table className="table">
             <thead>
               <tr>
-                <th >Patient Name</th>
+                <th style={{width:124}}>Patient Name</th>
                 <th>DOB</th>
                 <th>Consult</th>
-                <th >Appointment Date</th>
-                <th >Refer By</th>
-                <th>Refer To</th>
-                <th >Refer Back</th>
+                <th style={{width:162}}>Appointment Date</th>
+                <th style={{width:100}}>Refer By</th>
+                <th style={{width:100}}>Refer To</th>
+                <th style={{width:105}}>Refer Back</th>
                 <th >Consult Note</th>
                 <th style={{width:105}}>Status</th>
                 <th>Action</th>
