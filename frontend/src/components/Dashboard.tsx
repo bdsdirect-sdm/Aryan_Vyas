@@ -9,14 +9,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Dashboard.css';
 import { v4 as uuidv4 } from 'uuid';
-
+import { MdOutlineAutoGraph } from "react-icons/md";
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  const [currentPage, setCurrentPage] = useState(1);  // Track current page
-  const patientsPerPage = 5;  // Number of patients to show per page
-
+  const [currentPage, setCurrentPage] = useState(1); 
+  const patientsPerPage = 5; 
+ 
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -99,7 +99,18 @@ const Dashboard: React.FC = () => {
     queryKey: ['doctorData'],
     queryFn: fetchDoctorList
   });
+  const userGraphData=userData?.data
+  console.log("userGraphdata",userGraphData)
 
+  const patientGraphData=patientData
+  console.log("patientGraphdata",patientGraphData)
+
+  const doctorGraphData=doctorData
+  console.log("doctorGraphdata",doctorGraphData)
+  
+  const handleNavigateToGraph = () => {
+    navigate('/chart', { state: { userGraphData,patientGraphData,doctorGraphData}});
+  };
   if (userLoading || patientLoading || doctorLoading) {
     return (
       <div className="loading-container">
@@ -127,7 +138,10 @@ const Dashboard: React.FC = () => {
   localStorage.setItem("lastname", user?.lastname)
 
   const totalRefersReceived = patientList?.length || 0;
-  const totalRefersCompleted = patientList?.filter((patient: { referalstatus: boolean }) => patient.referalstatus === true).length || 0;
+  
+  const totalRefersCompleted = patientList?.filter((patient: { referalstatus: string; }) => patient.referalstatus === "Completed").length || 0;
+
+
   const totalDoctors = doctorList?.length || 0;
 
   // Pagination Logic
@@ -160,6 +174,16 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
 
+
+
+        <div className='head-graph'>
+        <span className="graph-btn" onClick={handleNavigateToGraph}>Graph<span className='graph-icon'><MdOutlineAutoGraph /></span></span>
+        </div>
+       
+     
+
+
+
       <h6 className="dashboard-title fw-bold" style={{fontSize:16,color:"black"}}>Dashboard</h6>
     
       <div className="metrics-cards">
@@ -170,7 +194,7 @@ const Dashboard: React.FC = () => {
               <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 4</div>
+            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 6</div>
           </div>
         </div>
 
@@ -181,7 +205,7 @@ const Dashboard: React.FC = () => {
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 4</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 6</div>
           </div>
         </div>
 
@@ -192,7 +216,7 @@ const Dashboard: React.FC = () => {
               <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 4</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 6</div>
           </div>
         </div>
       </div>

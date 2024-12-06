@@ -18,12 +18,12 @@ import AddAppointment from './components/AddAppoinments';
 import UpdatePassword from './components/UpdatePassword';
 import UpdateAddress from './components/UpdateAddress';
 import AppointmentList from './components/AppointmentList';
-
 import './App.css';
 import PatientDetails from './components/PatientsDetails';
 import ViewAppointment from './components/ViewAppointments';
 import UpdateAppointment from './components/UpdateAppointment';
 import UpdatePatientDetails from './components/UpdatePatientDetails';
+import Graph from './components/Chart';
 
 const App: React.FC = () => {
   const router = createBrowserRouter([
@@ -51,7 +51,8 @@ const App: React.FC = () => {
         {path:'/patients-details/:patientId',element:<PatientDetails/>},
         {path:'/view-appointment/:appointmentId',element:<ViewAppointment/>},
         {path:'/update-appointment/:appointmentId',element:<UpdateAppointment/>},
-        {path:'/update-patient/:patientId',element:<UpdatePatientDetails/>}
+        {path:'/update-patient/:patientId',element:<UpdatePatientDetails/>},
+        {path:'/chart',element:<Graph/>},
       ]
     }
   ]);

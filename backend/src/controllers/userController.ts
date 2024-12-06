@@ -71,7 +71,7 @@ export const loginUser = async (req: any, res: Response) => {
       if (isMatch) {
         if (user.is_verified) {
           const token = jwt.sign({ uuid: user.uuid }, Security_Key, {
-            expiresIn: "1hr",
+            expiresIn: "2hr",
           });
           res
             .status(200)

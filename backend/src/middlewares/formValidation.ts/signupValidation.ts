@@ -9,7 +9,7 @@ const validationSchema = joi.object({
     lastname: joi.string().empty().required().messages({
         'any.required': "Last name is required.",
         'string.empty': "Last name should be empty."
-    }),
+    }),     
     email: joi.string().email().required().messages({
         'any.required': "Email is required.",
         'string.email': "Invalid email.",

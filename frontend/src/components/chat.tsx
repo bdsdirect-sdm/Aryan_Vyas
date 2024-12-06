@@ -7,7 +7,8 @@ import { jwtDecode } from 'jwt-decode';
 import { Local } from '../environment/env';
 import { io, Socket } from 'socket.io-client'; 
 import profileImg from "../photos/profile1.avif";
-import moment from 'moment'; 
+import moment from 'moment';
+import { BiSend } from "react-icons/bi";
 import "./Chat.css";
 
 let socket: Socket;
@@ -273,10 +274,10 @@ const Chat: React.FC = () => {
                                     }}
                                 />
                                 <span
-                                    className="btn btn-primary my-2 send-button"
+                                    className="send1-button"
                                     onClick={handleSendMessage}
                                 >
-                                    Send
+                                   <BiSend />
                                 </span>
                             </div>
                         </>

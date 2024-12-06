@@ -30,7 +30,19 @@
 .chat-header input {
     margin-top: 10px;
 }
-
+.link{
+    height:50px;
+    width:50px;
+}
+.send1-button{
+    cursor: pointer;
+    margin-top: 10px;
+    background-color: #43d79e;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
 /* Right panel for chat window */
 .chat-messages {
     flex: 1; /* Take 50% of the space */

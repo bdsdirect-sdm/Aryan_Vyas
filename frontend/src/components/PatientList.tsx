@@ -197,8 +197,9 @@ const PatientList: React.FC = () => {
                     <td>{patient.referback ? 'Yes' : 'No'}</td>
                     <td>{patient.notes}</td>
                     <td>
-                      {doctype === 1 && patient.referalstatus === 'Pending' && (
-                        <select
+                      {(doctype === 1 && patient.referalstatus !== 'Pending') || doctype === 2 ?  (
+                        <span>{patient.referalstatus}</span>):
+                        (<select
                           value={patient.referalstatus}
                           onChange={(e) => updateStatus(patient.uuid, e.target.value)}
                           className="form-select-dropdown"
@@ -207,9 +208,6 @@ const PatientList: React.FC = () => {
                           <option value="Completed">Completed</option>
                           <option value="Rejected">Rejected</option>
                         </select>
-                      )}
-                      {doctype === 2 && (
-                        <span>{patient.referalstatus}</span>
                       )}
                     </td>
                     <td>

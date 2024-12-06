@@ -5,53 +5,71 @@ import * as Yup from 'yup';
 import api from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import './AddStaff.css';
 
 const AddStaff: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [staffList, setStaffList] = useState<any[]>([]);
-  const [filteredStaff, setFilteredStaff] = useState<any[]>([]);
-  const [fetching, setFetching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filteredStaff, setFilteredStaff] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const staffPerPage = 5;
 
-  useEffect(() => {
-    const fetchStaff = async () => {
-      setFetching(true);
+  // Fetch staff list using useQuery
+  const { data: staffList = [], isFetching, isError } = useQuery({
+    queryKey: ['staffList'],
+    queryFn: async () => {
       const token = localStorage.getItem('token');
       if (!token) {
         toast.error('Please log in to view staff.');
         navigate('/login');
+        return [];
+      }
+
+      const response = await api.get(import.meta.env.VITE_GET_STAFF, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return response.data;
+    },
+    staleTime: 60000, // Cache for 1 minute
+  });
+
+  // Set filtered staff when staff list is fetched
+  useEffect(() => {
+    if (staffList.length > 0) {
+      setFilteredStaff(staffList); // Initialize filtered staff with the full list
+    }
+  }, [staffList]);
+
+  // Add staff using useMutation
+  const mutation = useMutation({
+    mutationFn: async (staffData: any) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Please log in to add staff.');
+        navigate('/login');
         return;
       }
 
-      try {
-        const response = await api.get(import.meta.env.VITE_GET_STAFF, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          setStaffList(response.data);
-          setFilteredStaff(response.data);
-        } else {
-          toast.error('Failed to fetch staff list.');
-        }
-      } catch (err: any) {
-        toast.error('Error fetching staff list');
-        console.log(err);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchStaff();
-  }, [navigate]);
+      await api.post('/add-Staff', staffData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    },
+    onSuccess: () => {
+      toast.success('Staff added successfully');
+      queryClient.invalidateQueries();
+      formik.resetForm();
+      closeModal();
+    },
+    onError: () => {
+      toast.error('Failed to add staff');
+    },
+  });
 
   const validationSchema = Yup.object({
     staffName: Yup.string().required('Staff Name is required'),
@@ -70,65 +88,34 @@ const AddStaff: React.FC = () => {
       gender: 'Male',
     },
     validationSchema,
-    onSubmit: async (values) => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        toast.error('Please log in to add staff.');
-        navigate('/login');
-        return;
-      }
-
+    onSubmit: (values) => {
       const staffData = {
         staffName: values.staffName,
         email: values.email,
         phone: values.phone,
         gender: values.gender,
       };
-
-      try {
-        setLoading(true);
-        const response = await api.post('/add-Staff', staffData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 201) {
-          toast.success('Staff added successfully');
-          formik.resetForm();
-          closeModal();
-          await fetchStaff(); // Fetch the updated staff list
-        } else {
-          toast.error('Failed to add staff');
-        }
-      } catch (err: any) {
-        console.log(err.response?.data?.message);
-      } finally {
-        setLoading(false);
-      }
+      mutation.mutate(staffData); // Call mutate to add staff
     },
   });
 
+  // Open and close modal
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  // Search functionality
-  const handleSearch = () => {
-    if (searchQuery) {
-      setFilteredStaff(
-        staffList.filter((staff: any) =>
-          `${staff.staffName}`.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredStaff(staffList); // Reset if search query is empty
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    formik.resetForm(); // Reset form fields when the modal is closed
   };
 
-  // Event handler for "Enter" key press
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleSearch();
+  const handleSearch = () => {
+    if (searchQuery) {
+     
+      setFilteredStaff(
+        staffList.filter((staff: any) =>
+          staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) 
+        )
+      );
+    } else {  
+      setFilteredStaff(staffList);
     }
   };
 
@@ -145,7 +132,7 @@ const AddStaff: React.FC = () => {
   return (
     <>
       <div className="add-staff-container">
-        <div className='add-staff'>
+        <div className="add-staff">
           <h5 className="appointments-list-title">Staff List</h5>
           <button className="btn-add-staff" onClick={openModal}>+ Add Staff</button>
         </div>
@@ -157,7 +144,7 @@ const AddStaff: React.FC = () => {
               <h3>Add Staff</h3>
               <form className="add-staff-form" onSubmit={formik.handleSubmit}>
                 <div className="form-group1">
-                  <label htmlFor="staffName">Staff Name<span className='star'>*</span></label>
+                  <label htmlFor="staffName">Staff Name<span className="star">*</span></label>
                   <input
                     type="text"
                     id="staffName"
@@ -172,7 +159,7 @@ const AddStaff: React.FC = () => {
                 </div>
 
                 <div className="form-group1">
-                  <label htmlFor="email">Email<span className='star'>*</span></label>
+                  <label htmlFor="email">Email<span className="star">*</span></label>
                   <input
                     type="email"
                     id="email"
@@ -187,7 +174,7 @@ const AddStaff: React.FC = () => {
                 </div>
 
                 <div className="form-group1">
-                  <label htmlFor="phone">Phone Number<span className='star'>*</span></label>
+                  <label htmlFor="phone">Phone Number<span className="star">*</span></label>
                   <input
                     type="text"
                     id="phone"
@@ -203,7 +190,7 @@ const AddStaff: React.FC = () => {
                 </div>
 
                 <div className="form-group1">
-                  <label htmlFor="gender">Gender<span className='star'>*</span></label>
+                  <label htmlFor="gender">Gender<span className="star">*</span></label>
                   <select
                     id="gender"
                     className="form-control1"
@@ -220,110 +207,114 @@ const AddStaff: React.FC = () => {
                   )}
                 </div>
 
-                <div className="add-staff-div">
-                  <button className="btn btn-cancel1" onClick={closeModal}>Cancel</button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={loading}
-                  >
-                    {loading ? 'Adding Staff...' : 'Add Staff'}
-                  </button>
-                </div>
+                <button type="submit" className="btn btn-primary">Add Staff</button>
+                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
               </form>
             </div>
           </div>
         )}
 
-        {/* Search Input */}
-        <form className="d-flex mb-4 hii1" style={{ marginTop: 25 }} role="search" onSubmit={(e) => e.preventDefault()}>
-          <input
-            className="form-control1 me-2 hi2"
-            type="search"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={handleKeyDown} // Added this event handler for Enter key press
-            aria-label="Search"
-          />
+        {/* Search Bar */}
+        <form className="d-flex mb-4 hi"  role="search">
+            <input
+              type="search"
+              className="form-control me-2 hi2"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                handleSearch(); 
+              }}
+            />
           <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-            <i className="fa fa-search" style={{ marginRight: 5 }}></i>Search
-          </button>
+    <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
+  </button>
         </form>
 
-        {/* Staff List Table */}
-        {fetching ? (
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        ) : currentStaff.length > 0 ? (
-          <div className="staff-list-container">
-            <div className="patient-table-container">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Staff Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Gender</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentStaff.map((staff: any, index: number) => (
-                    <tr key={staff.id}>
-                      <td>{staff.staffName}</td>
-                      <td>{staff.email}</td>
-                      <td>{staff.phone}</td>
-                      <td>{staff.gender}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ) : (
-          <p>No staff found.</p>
-        )}
+        {/* Display staff list */}
+        <div className="staff-list-table">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Staff Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentStaff.map((staff: any) => (
+                <tr key={staff.id}>
+                  <td>{staff.staffName}</td>
+                  <td>{staff.email}</td>
+                  <td>{staff.phone}</td>
+                  <td>{staff.gender}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {/* Pagination Controls */}
-        <div className="pagination-controls d-flex justify-content-end mt-4 pagination-color">
-          <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                <a
-                  className="page-link"
-                  href="#"
-                  aria-label="Previous"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              {/* Loop to create page numbers */}
-              {[...Array(totalPages)].map((_, index) => (
-                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => handlePageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </a>
-                </li>
-              ))}
-              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                <a
-                  className="page-link"
-                  href="#"
-                  aria-label="Next"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+{/* Pagination Controls */}
+<nav aria-label="Page navigation">
+  <ul className="pagination justify-content-end">
+    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+      <a
+        className="page-link"
+        href="#"
+        aria-label="Previous"
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            handlePageChange(currentPage - 1);
+          }
+        }}
+      >
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+
+    {/* Page Number Buttons */}
+    {Array.from({ length: totalPages }, (_, index) => (
+      <li
+        key={index + 1}
+        className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+      >
+        <a
+          className="page-link"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handlePageChange(index + 1);
+          }}
+        >
+          {index + 1}
+        </a>
+      </li>
+    ))}
+
+    {/* Next Button */}
+    <li
+      className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+    >
+      <a
+        className="page-link"
+        href="#"
+        aria-label="Next"
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage < totalPages) {
+            handlePageChange(currentPage + 1);
+          }
+        }}
+      >
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
       </div>
     </>
   );
