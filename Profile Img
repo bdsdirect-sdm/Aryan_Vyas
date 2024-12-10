@@ -435,3 +435,61 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
+//////////////////////////////////////////////////////
+
+export const registerUser = async (req: Request, res: Response) :Promise<void> => {
+    console.log(req.body)
+    try {
+        const { firstName, lastName, email, password, address, dob, phoneNumber, role } = req.body;
+        const isExist = await User.findOne({ where: { email: email } });
+        if (isExist) {
+            res.status(httpStatusCodes.BAD_REQUEST).json({ message: "Invalid Credintials" });
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const otp = otpGenerator();
+        const hashedOtp= await bcrypt.hash(otp,10)
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
+
+
+console.log("req:", req);
+console.log("req.body:", req.body);
+const filesData = req.files as {
+    profilePicture?: Express.Multer.File[];
+  };    
+
+console.log("req.files:", req.files);
+console.log("filesData:", filesData);
+console.log(req.files);
+  
+
+const profilePicture = filesData.profilePicture && filesData.profilePicture.length > 0 ? filesData.profilePicture[0].originalname : null;
+
+        const user = await User.create(
+            {
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+                address,
+                dob,
+                phoneNumber,
+                profilePicture,
+                role,
+                otp:hashedOtp,
+                expiresAt
+            })
+        if (user) { 
+            sendOTP(email,otp,user.expiresAt)
+            console.log(user.expiresAt)
+            res.status(httpStatusCodes.CREATED).json({ opt: otp, message: "Data Saved Successfully" })
+        }
+        else {
+            res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error Occured" })
+        }
+    }
+    catch (error) {
+        res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).json({ message: error })
+    }
+};
+
