@@ -23,7 +23,7 @@ const validationSchema = joi.object({
     })
 });
 
-
+    
 const signupValidation = (req:any, res:any, next:NextFunction) => {
     const value = validationSchema.validate(req.body);
 

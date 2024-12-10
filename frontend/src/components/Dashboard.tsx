@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
               <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 6</div>
+            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 10</div>
           </div>
         </div>
 
@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 6</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 10</div>
           </div>
         </div>
 
@@ -216,7 +216,7 @@ const Dashboard: React.FC = () => {
               <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 6</div>
+            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 10</div>
           </div>
         </div>
       </div>

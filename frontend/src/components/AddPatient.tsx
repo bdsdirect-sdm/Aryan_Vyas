@@ -330,19 +330,21 @@ const AddPatient: React.FC = () => {
 
               <div className="form-group row" >
                 <div className='col'>
-                <label className="notes">
+                <label className="notes"style={{marginLeft:-10}}>
                   Notes <span className="star">*</span>
                 </label>
                 <Field
                   as="textarea"
                   name="notes"
                   className="form-control"
+                  style={{marginLeft:-10}}
                 />
 
                 <ErrorMessage
                   name="notes"
                   component="div"
                   className="text-danger"
+                  style={{marginLeft:-10}}
                 />
                 <div className='col'></div>
               </div>

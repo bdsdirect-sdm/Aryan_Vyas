@@ -53,10 +53,18 @@ const AddAddress = ({ close } : { close: () => void }) => {
     .length(6, 'Phone Number must be exactly 6 digits long') ,
   })
 
-  const addressHandler = (values:any) =>{
-    addressMutation.mutate(values);
-    console.log("Address Saved------->", addressMutation.data);
-  }
+  const addressHandler = async (values: any) => {
+    try {
+      await addressMutation.mutateAsync(values);  
+      console.log("Address Saved------->", addressMutation.data);
+
+      window.location.reload();
+    } catch (err) {
+      console.error("Error saving address:", err);
+      toast.error("Error saving address.");
+    }
+  };
+  
   return (
     <Formik
     initialValues={{

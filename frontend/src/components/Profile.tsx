@@ -54,12 +54,21 @@ const Profile: React.FC = () => {
   const [formData, setFormData] = useState<User | null>(null);
 
   const handleDelete = (addressUuid: string) => {
+  
+    const isConfirmed = window.confirm('Are you sure you want to delete this address?');
+  
+    if (!isConfirmed) {
+  
+      return;
+    }
+  
     const token = localStorage.getItem('token');
     if (!token) {
       setError('User not authenticated');
       setLoading(false);
       return;
     }
+  
     axios
       .delete(`${Local.BASE_URL}${Local.DELETE_ADDRESS}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -81,6 +90,7 @@ const Profile: React.FC = () => {
         toast.error('Error deleting address!');
       });
   };
+  
 
   const handleOpenEditModal = () => {
     if (profile) {

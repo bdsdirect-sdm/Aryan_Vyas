@@ -129,15 +129,15 @@ const AddStaff: React.FC = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-  const handleStaffNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^A-Za-z\s]/g, ''); 
-    formik.setFieldValue('staffName', value);
-    };
+  // const handleStaffNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value.replace(/[^A-Za-z\s]/g, ''); 
+  //   formik.setFieldValue('staffName', value);
+  //   };
   // Prevent non-numeric input for phone number
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-    formik.setFieldValue('phone', value); // Update the formik field with the cleaned value
-  };
+  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+  //   formik.setFieldValue('phone', value); // Update the formik field with the cleaned value
+  // };
 
   return (
     <>
@@ -160,7 +160,7 @@ const AddStaff: React.FC = () => {
                     id="staffName"
                     className="form-control1"
                     value={formik.values.staffName}
-                    onChange={handleStaffNameChange}
+                    onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.staffName && formik.errors.staffName && (
@@ -190,7 +190,7 @@ const AddStaff: React.FC = () => {
                     id="phone"
                     className="form-control1"
                     value={formik.values.phone}
-                    onChange={handlePhoneChange} // Custom handler to remove non-numeric characters
+                    onChange={formik.handleChange} // Custom handler to remove non-numeric characters
                     onBlur={formik.handleBlur}
                     maxLength={10}
                   />

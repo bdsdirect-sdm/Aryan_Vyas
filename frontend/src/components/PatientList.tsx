@@ -15,11 +15,10 @@ const PatientList: React.FC = () => {
   const token = localStorage.getItem('token');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPatients, setFilteredPatients] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);  // Track current page
-  const patientsPerPage = 5;  // Patients to show per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const patientsPerPage = 5;
   const queryClient = useQueryClient();
   
-  // Ensuring that doctype is a number, not a string
   const doctype = Number(localStorage.getItem("doctype"));
 
   useEffect(() => {
@@ -47,23 +46,34 @@ const PatientList: React.FC = () => {
     queryFn: fetchPatient,
   });
 
-  // Handle keydown event for Enter key to trigger search
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      handleSearch(); // Trigger search when Enter key is pressed
+      handleSearch();
     }
   };
 
-  // Delete Patient API request
+
   const deletePatientMutation = useMutation({
     mutationFn: async (patientId: string) => {
+      const isConfirmed = window.confirm('Are you sure you want to delete this patient?');
+      
+      if (!isConfirmed) {
+        return;
+      }
+  
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('User not authenticated');
+        return;
+      }
+  
       try {
         await api.delete(`${Local.DELETE_PATIENT_DETAILS}/${patientId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        toast.success("Patient deleted successfully");
+        toast.success('Patient deleted successfully');
         queryClient.invalidateQueries({ queryKey: ['patient'] });
       } catch (err) {
         toast.error(`Error deleting patient: ${err}`);
@@ -71,10 +81,10 @@ const PatientList: React.FC = () => {
     },
     onError: (error) => {
       toast.error(`Failed to delete patient: ${error}`);
-    }
+    },
   });
+  
 
-  // Update Status Mutation
   const updateStatus = async (patientId: string, newStatus: string) => {
     try {
       await api.put(`${Local.UPDATE_STATUS}/${patientId}`, { referalstatus: newStatus }, {
