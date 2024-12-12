@@ -150,6 +150,9 @@ select:focus {
     font-weight: 600;
     margin-left: 10px;
 }
+    .login-link:hover{
+        color:#2899b6;
+    }
 
 /* Bottom text for redirection to Login page */
 .bottom-sec {

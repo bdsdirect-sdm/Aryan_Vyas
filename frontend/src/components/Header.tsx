@@ -20,6 +20,7 @@ const Header: React.FC = () => {
   const doctype: any = localStorage.getItem('doctype');
 
   const [activeLink, setActiveLink] = useState('/dashboard');
+  const [dropdownOpen, setDropdownOpen] = useState(false);  // Toggle state for dropdown visibility
 
   const handleLogoClick = () => {
     console.log('Logo clicked, navigating to dashboard');
@@ -71,29 +72,35 @@ const Header: React.FC = () => {
           <div className="user-actions">
             {token ? (
               <div className="dropdown">
-                <h6 className="dropdown-toggle" aria-expanded="false">
+                <h6
+                  className="dropdown-toggle"
+                  aria-expanded={dropdownOpen ? "true" : "false"} 
+                  onClick={() => setDropdownOpen(prevState => !prevState)} 
+                >
                   Hi, {firstname} {lastname}
                   <br className='welcome'></br>Welcome back
                 </h6>
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link to="/profile" className="dropdown-item">Profile</Link>
-                  </li>
-                  <li>
-                    <Link to="/update-password" className="dropdown-item">Change Password</Link>
-                  </li>
-                  <li>
-                    <button
-                      className="dropdown-item"
-                      onClick={() => {
-                        localStorage.clear();
-                        navigate('/login');
-                      }}
-                    >
-                      Logout <LuLogOut />
-                    </button>
-                  </li>
-                </ul>
+                {dropdownOpen && (  
+                  <ul className="dropdown-menu">
+                    <li>
+                      <Link to="/profile" className="dropdown-item">Profile</Link>
+                    </li>
+                    <li>
+                      <Link to="/update-password" className="dropdown-item">Change Password</Link>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          localStorage.clear();
+                          navigate('/login');
+                        }}
+                      >
+                        Logout <LuLogOut />
+                      </button>
+                    </li>
+                  </ul>
+                )}
               </div>
             ) : (
               <>

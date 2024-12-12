@@ -119,7 +119,7 @@ const Login: React.FC = () => {
                   Login
                 </button>
                 <div className="bottom-sec">
-            <p>Don't have an Account? <span><Link to="/" color='#57cdec'>Sign Up</Link></span></p>
+            <p>Don't have an Account? <span><Link to="/" className="login-link">Sign Up</Link></span></p>
           </div>
                 </div>
               </Form>
