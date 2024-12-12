@@ -25,6 +25,8 @@ interface config {
     UPDATE_PATIENT_DETAILS:any;
     DELETE_PATIENT_DETAILS:any;
     UPDATE_STATUS:any;
+    PROFILE_PHOTO:any;
+    GET_PROFILE_PHOTO:any;
 }
 
 export const Local: config = {
@@ -54,4 +56,6 @@ export const Local: config = {
     UPDATE_PATIENT_DETAILS:import.meta.env.VITE_UPDATE_PATIENT_DETAILS,
     DELETE_PATIENT_DETAILS:import.meta.env.VITE_DELETE_PATIENT_DETAILS,
     UPDATE_STATUS:import.meta.env.VITE_UPDATE_STATUS,
+    PROFILE_PHOTO:import.meta.env.VITE_PROFILE_PHOTO,
+    GET_PROFILE_PHOTO:import.meta.env.VITE_GET_PROFILE_PHOTO
 }

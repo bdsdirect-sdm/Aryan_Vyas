@@ -23,10 +23,13 @@ import {
   updatePatientDetails,
   deletePatient,
   updateStatus,
+  uploadProfilePhoto,
+  getImage,
 } from "../controllers/userController";
 import userAuthMiddleware from "../middlewares/userAuth";
 import signupValidation from "../middlewares/formValidation.ts/signupValidation";
 import loginValidation from "../middlewares/formValidation.ts/loginValidation";
+import { upload } from "../utils/multer";
 
 const router = Router();
 
@@ -62,4 +65,6 @@ router.put("/update-appointment/:appointmentId",userAuthMiddleware,updateAppoint
 router.put("/update-patient/:patientId",userAuthMiddleware,updatePatientDetails);
 router.delete("/delete-patientDetails/:patientId", userAuthMiddleware, deletePatient);
 router.put("/update-status/:patientId",userAuthMiddleware,updateStatus)
+router.post("/profile-photo",upload.single('profilePhoto'),userAuthMiddleware,uploadProfilePhoto)
+router.get("/get-profile-photo",userAuthMiddleware,getImage)
 export default router;

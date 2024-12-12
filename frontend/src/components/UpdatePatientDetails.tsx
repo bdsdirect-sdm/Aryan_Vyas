@@ -503,7 +503,7 @@ const UpdatePatientDetails: React.FC = () => {
                   <label
                     htmlFor="notes"
                     
-                    style={{ color: "black" }}
+                    style={{ color: "black",marginLeft:0}}
                   >
                     Note
                   </label>
@@ -511,7 +511,7 @@ const UpdatePatientDetails: React.FC = () => {
                     as="textarea"
                     name="notes"
                     className="form-control"
-                    
+                    style={{marginLeft:0 }}
                   />
                   <ErrorMessage
                     name="notes"

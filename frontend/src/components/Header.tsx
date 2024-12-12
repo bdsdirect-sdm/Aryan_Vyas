@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { PiHouseLight } from "react-icons/pi";
@@ -8,6 +8,9 @@ import { BiBookReader } from "react-icons/bi";
 import { LuLogOut } from "react-icons/lu";
 import logoImg from "../photos/logo1.png";
 import './Header.css';
+import api from '../api/axiosInstance';
+import { Local } from '../environment/env';
+import { useQuery } from '@tanstack/react-query';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -24,6 +27,27 @@ const Header: React.FC = () => {
     navigate('/dashboard');
   };
 
+  const getProfilePhoto = async () => {
+    try {
+      const apiUrl = `${Local.BASE_URL}${Local.GET_PROFILE_PHOTO}`;
+      const response = await api.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("Profile Photo:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching profile photo", error);
+      return null;
+    }
+  };
+
+  const { data: profilePhoto, isError, error, isLoading } = useQuery({
+    queryKey: ['profilePhoto'],
+    queryFn: getProfilePhoto,
+  });
+
   return (
     <>
       <header className="header-container">
@@ -36,6 +60,14 @@ const Header: React.FC = () => {
         </div>
 
         <div className="header-right">
+          <div className='header-photo-div'>
+            {/* {console.log(Local.BASE_URL,profilePhoto)} */}
+            <img
+              src={profilePhoto ? `${Local.BASE_URL}${profilePhoto.profilePhoto}` : "avatar.avif"}
+              alt="Profile photo"
+              className='header-photo'
+            />
+          </div>
           <div className="user-actions">
             {token ? (
               <div className="dropdown">
@@ -143,7 +175,6 @@ const Header: React.FC = () => {
                 Staff
               </Link>
             </div>
-
           </nav>
         </div>
       )}

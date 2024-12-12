@@ -4,7 +4,7 @@ import { v4 as UUIDV4 } from "uuid";
 
 class User extends Model{
     public uuid!: string;
-    public profile_photo!: string;
+    public profilePhoto!: string;
     public dob!:Date;
     public phone!: string;
     public gender!: string;
@@ -35,7 +35,7 @@ User.init({
         type: DataTypes.STRING,
         allowNull:false
     },
-    profile_photo:{
+    profilePhoto:{
         type: DataTypes.STRING,
         allowNull:true
     },

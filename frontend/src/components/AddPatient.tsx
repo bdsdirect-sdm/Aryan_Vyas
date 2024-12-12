@@ -328,23 +328,23 @@ const AddPatient: React.FC = () => {
 
 
 
-              <div className="form-group row" >
-                <div className='col'>
-                <label className="notes"style={{marginLeft:-10}}>
+              <div className="eferral-fields1 row" >
+                <div className='form-group col'>
+                <label className="notes">
                   Notes <span className="star">*</span>
                 </label>
                 <Field
                   as="textarea"
                   name="notes"
                   className="form-control"
-                  style={{marginLeft:-10}}
+                  
+                  style={{marginLeft:0,height:100}}
                 />
 
                 <ErrorMessage
                   name="notes"
                   component="div"
                   className="text-danger"
-                  style={{marginLeft:-10}}
                 />
                 <div className='col'></div>
               </div>

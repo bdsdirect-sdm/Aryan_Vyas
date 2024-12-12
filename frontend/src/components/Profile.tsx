@@ -1,4 +1,5 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect } from 'react';
@@ -9,6 +10,7 @@ import { Local } from '../environment/env';
 import AddAddress from './AddAddress';
 import UpdateAddress from './UpdateAddress'; // Import UpdateAddress component
 import { AiOutlineDelete } from "react-icons/ai";
+import { useMutation } from '@tanstack/react-query';
 import { BsPencilSquare } from "react-icons/bs";
 import './Profile.css';
 // import { BiUnderline } from 'react-icons/bi';
@@ -25,6 +27,7 @@ interface Address {
 
 interface User {
   uuid: string;
+  profilePhoto: string;
   firstname: string;
   lastname: string;
   email: string;
@@ -51,24 +54,65 @@ const Profile: React.FC = () => {
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [showUpdateAddressModal, setShowUpdateAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null); // To store the selected address for update
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [formData, setFormData] = useState<User | null>(null);
+  const token = localStorage.getItem('token');
+
+
+  const updateProfileImage = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('profilePhoto', file);
+
+      const response = await axios.post(`${Local.BASE_URL}${Local.PROFILE_PHOTO}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Profile image updated successfully!');
+      window.location.reload(); // Reload the window after successful update
+    },
+    onError: () => {
+      toast.error('Error updating profile image!');
+    },
+  });
+
+  const handleImageClick = () => {
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    fileInput?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      updateProfileImage.mutate(file);
+    }
+  };
+
+
 
   const handleDelete = (addressUuid: string) => {
-  
+
     const isConfirmed = window.confirm('Are you sure you want to delete this address?');
-  
+
     if (!isConfirmed) {
-  
+
       return;
     }
-  
+
     const token = localStorage.getItem('token');
     if (!token) {
       setError('User not authenticated');
       setLoading(false);
       return;
     }
-  
+
     axios
       .delete(`${Local.BASE_URL}${Local.DELETE_ADDRESS}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -90,7 +134,7 @@ const Profile: React.FC = () => {
         toast.error('Error deleting address!');
       });
   };
-  
+
 
   const handleOpenEditModal = () => {
     if (profile) {
@@ -176,40 +220,63 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <div>
-        <p className='fw-bold' style={{color:"black"}}>Profile</p>
+        <p className='fw-bold' style={{ color: "black" }}>Profile</p>
       </div>
       <div className='profile'>
         <div className='profile-photo-heading'>
-          <div>
+          <div className='profile-photo'>
+            {/* <img
+                src="avatar.avif"
+                alt="Profile photo"
+                className="googleIcon-4"
+              />{user.firstname} {user.lastname} */}
+
             <img
-              src="avatar.avif"
-              alt="Profile photo"
-              className="googleIcon-4"
-            />{user.firstname} {user.lastname}</div>
+              src={user.profilePhoto ? Local.BASE_URL + user.profilePhoto : 'avatar.avif'}
+              className="profile-img"
+              aria-expanded="false"
+              onClick={handleImageClick}
+              alt="Profile"
+              style={{ cursor: 'pointer' }}
+            />
+            <h6 className="photo-line" style={{ marginTop: 38 }}>
+              {user.firstname} {user.lastname}
+            </h6>
+
+            <input
+              id="file-input"
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+
+
+          </div>
           <button onClick={handleOpenEditModal} className="btn btn-primary mb-4">
             Edit Profile
           </button>
         </div>
 
         <div className="profile-info2">
-          <div className='info row'style={{marginBottom:15}}>
+          <div className='info row' style={{ marginBottom: 15 }}>
             <div className='col'>
               <span className='infoheading' >Name: </span>{user.firstname} {user.lastname}
             </div>
 
             <div className='col'>
               <span className='infoheading'>Gender: {user.gender}</span>
-              </div>
+            </div>
 
             <div className='col'>
               {/* <span className='infoheading'>Gender:{user.gender}</span> */}
-              </div>
+            </div>
           </div>
 
           <div className='info row'>
             <div className='col'>
               <span className='infoheading'>Phone:</span> {user.phone}
-              </div>
+            </div>
             <div className='col'>
               <span className='infoheading'>Email:</span> {user.email}
             </div>
@@ -219,7 +286,7 @@ const Profile: React.FC = () => {
           </div>
 
           <div className='insurance-top'>
-          <a href="#" className='insurance' style={{ marginTop: 20, textDecoration: 'underline' }}>Insurance Details</a>
+            <a href="#" className='insurance' style={{ marginTop: 20, textDecoration: 'underline' }}>Insurance Details</a>
 
           </div>
 
@@ -246,17 +313,17 @@ const Profile: React.FC = () => {
 
                   {/* <hr className='horizontal-line'></hr> */}
                   {/* <button
-                    onClick={() => handleOpenUpdateAddressModal(add)}
-                    // src="update.png"
-                    // alt="Update Address"
-                    className="btn btn-addAddress"
-                  >Update</button>*/}
+                      onClick={() => handleOpenUpdateAddressModal(add)}
+                      // src="update.png"
+                      // alt="Update Address"
+                      className="btn btn-addAddress"
+                    >Update</button>*/}
                   {/* <button
-                    onClick={() => handleDelete(add.uuid)}
-                      src="delete.png"
-                       alt="Delete Address"
-                    className="btn btn-addAddress"
-                  >Delete</button> */}
+                      onClick={() => handleDelete(add.uuid)}
+                        src="delete.png"
+                        alt="Delete Address"
+                      className="btn btn-addAddress"
+                    >Delete</button> */}
                   <div className='line'></div>
                 </div>
               ))}

@@ -8,6 +8,8 @@ import userRouter from './routers/userRouter';
 import {createServer} from 'http';
 import chatRouter from './routers/chatRouter';
 import { Server,Socket } from 'socket.io';
+import path from 'path';
+
 // import sequelize from 'seq';
 
 const app = express();
@@ -25,6 +27,9 @@ export const httpServer = createServer(app);
    
 app.use(cors());
 app.use(express.json());
+const uploadsPath=path.join(__dirname, "..","uploads");
+app.use("/uploads",express.static(uploadsPath));
+
 app.use("/", userRouter);
 app.use("/chat", chatRouter);
 

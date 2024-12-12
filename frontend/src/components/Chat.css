@@ -1,7 +1,6 @@
-
 .chat-container {
     position: fixed;
-    margin-left: 215px;
+    margin-left: 224px;
     padding: 30px;
     min-height: 90vh;
     background-color: white;
@@ -41,21 +40,20 @@
     border-radius: 5px;
     border: none;
 }
-
+.doctor-name{
+    font-size: 11px;
+}
 .chat-messages {
     flex: 1;
     display: flex;
     flex-direction: column;
     max-height: 84vh; 
-        overflow: hidden;
+    overflow: hidden;
     border-left: 1px solid gainsboro;
     margin-top: -30px;
 }
-.doctor-name{
-    margin-left: 50px;
-  font-size: 12px;
-  margin-top: -18px;
-
+.list-group-item{
+    display: block;
 }
 .ho1{
     display: flex;
@@ -78,7 +76,7 @@
 
 .chat-head {
     flex: 0 0 auto; 
-        margin-bottom: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     border-bottom: 1px solid gainsboro;
     margin-left: -12px;

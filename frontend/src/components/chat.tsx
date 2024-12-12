@@ -6,7 +6,7 @@ import api from '../api/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
 import { Local } from '../environment/env';
 import { io, Socket } from 'socket.io-client'; 
-import profileImg from "../photos/profile1.avif";
+// import profileImg from "../photos/profile1.avif";    
 import moment from 'moment';
 import { BiSend } from "react-icons/bi";
 import "./Chat.css";
@@ -210,7 +210,7 @@ const Chat: React.FC = () => {
                                     className="list-group-item"
                                     onClick={() => handleSelectRoom(room.roomId)}
                                 >
-                                    <img className="p-img" style={{ width: 50, height: 50 }} src={profileImg} alt="profile" />
+                                    {/* <img className="p-img" style={{ width: 50, height: 50 }} src={profileImg} alt="profile" /> */}
                                     <span className="patient-name">{room.patientName}</span>
                                     {doctype === 2 ? (
                                         <p className='doctor-name'>Referred To: {getReceiverName(chatMessages, userId)}</p>
