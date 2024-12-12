@@ -50,14 +50,11 @@ export const registerUser = async (req: any, res: Response) => {
 export const uploadProfilePhoto = async (req: any, res: any) => {
   try {
       const { uuid } = req.user;
-      
       const imgPath = req.file ? req.file.path : null;
-
       const user = await User.findOne({ where: { uuid: uuid } });
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
-
       user.profilePhoto = imgPath || user.profilePhoto;
       await user.save();
 
@@ -75,7 +72,6 @@ export const getImage = async (req: any, res: Response): Promise<void> => {
         if (user) {
             const profilePhoto = user.profilePhoto;
             res.status(200).json({
-                message: "User Found",
                 profilePhoto: profilePhoto
             });
         } else {
