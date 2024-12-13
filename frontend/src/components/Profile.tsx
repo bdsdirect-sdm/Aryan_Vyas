@@ -10,7 +10,7 @@ import { Local } from '../environment/env';
 import AddAddress from './AddAddress';
 import UpdateAddress from './UpdateAddress'; // Import UpdateAddress component
 import { AiOutlineDelete } from "react-icons/ai";
-import { useMutation } from '@tanstack/react-query';
+import { useMutation,useQuery, useQueryClient } from '@tanstack/react-query';
 import { BsPencilSquare } from "react-icons/bs";
 import './Profile.css';
 // import { BiUnderline } from 'react-icons/bi';
@@ -57,6 +57,7 @@ const Profile: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [formData, setFormData] = useState<User | null>(null);
   const token = localStorage.getItem('token');
+  const queryClient = useQueryClient()
 
 
   const updateProfileImage = useMutation({
@@ -75,7 +76,9 @@ const Profile: React.FC = () => {
     },
     onSuccess: () => {
       toast.success('Profile image updated successfully!');
-      window.location.reload(); // Reload the window after successful update
+      queryClient.invalidateQueries({ queryKey: ['profilePhoto'] })
+      getUser();
+      // window.location.reload(); // Reload the window after successful update
     },
     onError: () => {
       toast.error('Error updating profile image!');
@@ -155,6 +158,23 @@ const Profile: React.FC = () => {
 
   const handleCloseUpdateAddressModal = () => setShowUpdateAddressModal(false);
 
+  const getUser=async ()=>{
+    const response = await axios.get(`${Local.BASE_URL}${Local.GET_USER}`, {
+           headers: { Authorization: `Bearer ${token}` },
+         })
+         .then((response) => {
+          console.log(response, ">>>>>>>>>>>.");
+           setProfile(response.data);
+           setLoading(false);
+         })
+         
+         
+         .catch(() => {
+           setError('Error fetching profile');
+           setLoading(false);
+         });
+       }
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -164,18 +184,7 @@ const Profile: React.FC = () => {
       return;
     }
 
-    axios
-      .get(`${Local.BASE_URL}${Local.GET_USER}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setProfile(response.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError('Error fetching profile');
-        setLoading(false);
-      });
+    getUser();
   }, []);
 
   const handleProfileSubmit = () => {

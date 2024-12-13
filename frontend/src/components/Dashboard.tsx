@@ -268,10 +268,15 @@ const Dashboard: React.FC = () => {
                   <td>{patient.disease}</td>
                   <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                   <td>{patient.referback ? 'Yes' : 'No'}</td>
-                  <td>
-                  {patient?.referalstatus === null ? "Pending": patient?.referalstatus}
-                  </td>
-                  <td><Link to ={`/consult-note/${patient.uuid}`}style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>Yes</Link></td>
+                   <td>
+                      <span
+                        className={`form-select-dropdown ${patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected'}`}
+                        style={{ padding: "2px 10px", width: 100, marginTop: -2 }}
+                      >
+                        {patient.referalstatus === null ? "Pending" : patient.referalstatus}
+                      </span>
+                    </td>
+                  <td><Link to ={`/consult-note/${patient.uuid}`}style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>View</Link></td>
                   <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
                       <Link className='text-primary' to='/chat' style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>Link</Link>
                     </td>

@@ -40,3 +40,14 @@
     margin-bottom: 20px;
     padding: 10px;
 }
+.form-select-dropdown.pending {
+    background-color: rgb(255, 249, 228);
+}
+
+.form-select-dropdown.completed {
+    background-color: rgb(232, 250, 244);
+}
+
+.form-select-dropdown.rejected {
+    background-color: rgb(255, 228, 228);
+}

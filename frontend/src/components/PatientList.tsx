@@ -34,7 +34,7 @@ const PatientList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("patientlist status>>>>>>>>", response);
+      console.log("patientlist list>>>>>>>>", response);
       return response.data;
     } catch (err) {
       toast.error(`Error fetching patients: ${err}`);
@@ -51,7 +51,6 @@ const PatientList: React.FC = () => {
       handleSearch();
     }
   };
-
 
   const deletePatientMutation = useMutation({
     mutationFn: async (patientId: string) => {
@@ -84,7 +83,6 @@ const PatientList: React.FC = () => {
     },
   });
   
-
   const updateStatus = async (patientId: string, newStatus: string) => {
     try {
       await api.put(`${Local.UPDATE_STATUS}/${patientId}`, { referalstatus: newStatus }, {
@@ -186,10 +184,11 @@ const PatientList: React.FC = () => {
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>DOB</th>
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult</th>
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Appointment Date</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Created At</th>
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer By</th>
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer To</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer Back</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult Note</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Return to referrer</th>
+                {/* <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult Note</th> */}
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
                 <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Action</th>
               </tr>
@@ -201,18 +200,26 @@ const PatientList: React.FC = () => {
                     <td>{patient.firstname} {patient.lastname}</td>
                     <td>{moment(patient.dob).format('DD-MM-YYYY')}</td>
                     <td>{patient.disease}</td>
-                    <td>{patient.appointmentDate}</td>
+                    <td>{patient.appointmentDate || '-'}</td>
+                    <td>{moment(patient.createdAt).format('DD-MM-YYYY')}</td>
                     <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
                     <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                     <td>{patient.referback ? 'Yes' : 'No'}</td>
-                    <td>{patient.notes}</td>
+                    {/* <td>{patient.notes}</td> */}
                     <td>
-                      {(doctype === 1 && patient.referalstatus !== 'Pending') || doctype === 2 ?  (
-                        <span>{patient.referalstatus}</span>):
-                        (<select
+                      {(doctype === 1 && patient.referalstatus !== 'Pending') || doctype === 2 ? (
+                        <span
+                          className={`form-select-dropdown ${patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected'}`}
+                          style={{ padding: "2px 10px", width: 100, marginTop: -2, backgroundColor: patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected' }}
+                        >
+                          {patient.referalstatus}
+                        </span>
+                      ) : (
+                        <select
                           value={patient.referalstatus}
                           onChange={(e) => updateStatus(patient.uuid, e.target.value)}
                           className="form-select-dropdown"
+                          style={{ padding: "2px 10px", width: 100, marginTop: -2, border:"none",backgroundColor: patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected' }}
                         >
                           <option value="Pending">Pending</option>
                           <option value="Completed">Completed</option>
@@ -220,6 +227,7 @@ const PatientList: React.FC = () => {
                         </select>
                       )}
                     </td>
+
                     <td>
                       <Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link>
                       <span

@@ -78,7 +78,7 @@ const ConsultNote: React.FC = () => {
             {/* {console.log("hello",patient.firstname)}; */}
             <div className='note'>
 
-            <div className='note-patient-info'>
+            <div className='note-patient-info'style={{fontSize:15.5}}>
             <p className='name-note-heading'>Patient Name:<span className="name-note"> {`${patient.firstname} ${patient.lastname}`}</span></p> 
 
             <p className='referedby-heading'>Referred By:<span className="name-note"> {patient.referedby ? `${patient.referedby.firstname} ${patient.referedby.lastname}` : 'No referral information'}</span></p>
@@ -86,8 +86,8 @@ const ConsultNote: React.FC = () => {
             <p className='referedto-heading'>Referred To:<span className="name-note"> {patient.referedto ? `${patient.referedto.firstname} ${patient.referedto.lastname}` : 'No referral information'}</span></p>
             </div>  
 
-            <div className='note-data-info'>
-            <p className='note-data-heading'><td>{patient.appointmentType}</td><td>{patient.appointmentType}</td>Consult Notes:<span className="note-data"> {patient.notes || 'No notes available'}</span></p>
+            <div className='note-data-info' style={{fontSize:15.5}}>
+            <p className='note-data-heading'>Consult Notes:<span className="note-data"> {patient.notes || 'No notes available'}</span></p>
             </div>
           </div>
           </div>

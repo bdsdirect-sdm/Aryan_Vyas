@@ -158,12 +158,12 @@ console.log("status",response);
         <table className="table">
           <thead>
             <tr>
-              <th scope="col">Patient Name</th>
-              <th scope="col">Consultation Date</th>
-              <th scope="col">Doctor Name</th>
-              <th scope="col">Type</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consultation Date</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor Name</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Type</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -180,8 +180,13 @@ console.log("status",response);
                   </td>
                   <td>{appointment.type}</td>
                   <td>
-            {appointment.Patient?.referalstatus === null ? "Pending": appointment.Patient?.referalstatus}
-</td>
+                    <span
+                      className={`form-select-dropdown ${appointment.Patient?.referalstatus === "Pending" ? 'pending' : appointment.Patient?.referalstatus === "Completed" ? 'completed' : 'rejected'}`}
+                      style={{ padding: "2px 10px", width: 100, marginTop: -2 }}
+                    >
+                      {appointment.Patient?.referalstatus === null ? "Pending" : appointment.Patient?.referalstatus}
+                    </span>
+                  </td>
 
                   <td>
                     <Link to={`/view-appointment/${appointment.uuid}`}>
