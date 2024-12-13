@@ -119,13 +119,13 @@ const DoctorList: React.FC = () => {
 </form>
 
 
-      <div className="table-container">
-        <table className="table table-striped">
+      <div className="patient-table-container">
+        <table className="table ">
           <thead>
             <tr>
-              <th scope="col">Doctor First Name</th>
-              <th scope="col">Doctor Last Name</th>
-              <th scope="col">Email</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor First Name</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor Last Name</th>
+              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Email</th>
             </tr>
           </thead>
           <tbody>

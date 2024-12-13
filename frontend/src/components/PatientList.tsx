@@ -182,16 +182,16 @@ const PatientList: React.FC = () => {
         <table className="table">
             <thead>
               <tr>
-                <th style={{width:124}}>Patient Name</th>
-                <th>DOB</th>
-                <th>Consult</th>
-                <th style={{width:162}}>Appointment Date</th>
-                <th style={{width:100}}>Refer By</th>
-                <th style={{width:100}}>Refer To</th>
-                <th style={{width:105}}>Refer Back</th>
-                <th >Consult Note</th>
-                <th style={{width:105}}>Status</th>
-                <th>Action</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>DOB</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Appointment Date</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer By</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer To</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer Back</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult Note</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Action</th>
               </tr>
             </thead>
             <tbody>

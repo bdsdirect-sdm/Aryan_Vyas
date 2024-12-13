@@ -242,14 +242,14 @@ const AddStaff: React.FC = () => {
         </form>
 
         {/* Display staff list */}
-        <div className="staff-list-table">
+        <div className="patient-table-container">
           <table className="table">
             <thead>
               <tr>
-                <th>Staff Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Gender</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Staff Name</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Email</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Phone</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}  >Gender</th>
               </tr>
             </thead>
             <tbody>

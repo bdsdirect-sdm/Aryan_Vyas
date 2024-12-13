@@ -66,12 +66,12 @@
 .page-link{
   color:black;
 }
-.table {
+/* .table {
   width: 100%;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+} */
 .add-staff{
   display: flex;
   justify-content: space-between;
@@ -79,13 +79,13 @@
 .referral-title{
   margin-top: 10px;
 }
-.table th,
+/* .table th,
 .table td {
   text-align: center;
   padding: 12px 20px;
-}
+} */
 
-.table th {
+/* .table th {
   color: rgba(0, 0, 0, 0.87);
   font-weight: bold;
 }
@@ -101,7 +101,7 @@
 .table tbody tr:hover {
   background-color: #e9ecef;
   cursor: pointer;
-}
+} */
 
 .spinner-border {
   margin: 20px auto;

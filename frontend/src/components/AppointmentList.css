@@ -34,7 +34,7 @@
     width: 100%;
     max-width: 50%;
   }
-  .table {
+  /* .table {
     width: 100%;
     border-collapse: collapse;
   }
@@ -52,7 +52,7 @@
     vertical-align: middle;
     font-size: 15px;
   }
-  
+   */
   .btn-outline-primary {
     background-color: transparent;
     color: #007bff;

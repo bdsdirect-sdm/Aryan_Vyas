@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import './Dashboard.css';
 import { v4 as uuidv4 } from 'uuid';
 import { MdOutlineAutoGraph } from "react-icons/md";
+import moment from 'moment';
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -238,31 +239,41 @@ const Dashboard: React.FC = () => {
 
       <div className="patient-list-section">
         <div className="patient-table-container">
-          <table className="table">
-            <thead>
+          <table className="table"> 
+            <thead className='table-head'>
               <tr>
-                <th scope="col">Patient Name</th>
-                <th scope="col">Disease</th>
-                <th scope="col">Refer by</th>
-                <th scope="col">Refer to</th>
-                <th scope="col">Refer back</th>
-                <th scope="col">Status</th>
-                <th scope="col">Direct Message</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>DOB</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Created At</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer by</th>
+                <th scope='col' style={{padding:"14px 10px",textAlign:"center"}}>Consultation date</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Type</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Disease</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer to</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer back</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult note</th>
+                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Direct Message</th>
               </tr>
             </thead>
             <tbody>
               {currentPatients?.map((patient: any, index: number) => (
                 <tr key={index}>
-                  <td>{patient.firstname} {patient.lastname}</td>
-                  <td>{patient.disease}</td>
+                  <td><Link to={`/patients-details/${patient.uuid}`} style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>{patient.firstname} {patient.lastname}</Link></td>
+                  <td>{moment(patient.dob).format("DD-MM-YYYY")}</td>
+                  <td>{moment(patient.createdAt).format("DD-MM-YYYY")}</td>
                   <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
+                  <td>{moment(patient.consultationdate).format("DD-MM-YYYY")}</td>
+                  <td>{patient.appointmentType || '-'}</td>
+                  <td>{patient.disease}</td>
                   <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                   <td>{patient.referback ? 'Yes' : 'No'}</td>
                   <td>
                   {patient?.referalstatus === null ? "Pending": patient?.referalstatus}
                   </td>
+                  <td><Link to ={`/consult-note/${patient.uuid}`}style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>Yes</Link></td>
                   <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
-                      <Link className='text-primary' to='/chat'>Link</Link>
+                      <Link className='text-primary' to='/chat' style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>Link</Link>
                     </td>
                 </tr>
               ))}
