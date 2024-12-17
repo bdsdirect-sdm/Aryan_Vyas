@@ -112,13 +112,21 @@ const AddStaff: React.FC = () => {
     if (searchQuery) {
       setFilteredStaff(
         staffList.filter((staff: any) =>
-          staff.staffName.toLowerCase().includes(searchQuery.toLowerCase())
+          staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        staff.phone.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
-    } else {
-      setFilteredStaff(staffList);
-    }
+    } 
+    // else {
+    //   setFilteredStaff(staffList);
+    // }
   };
+  useEffect(() => {
+    if (searchQuery === '') {
+      setFilteredStaff(staffList); // Reset to original list if search query is cleared
+    }
+  }, [searchQuery, staffList]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredStaff.length / staffPerPage);
@@ -231,10 +239,14 @@ const AddStaff: React.FC = () => {
             className="form-control me-2 hi2"
             placeholder="Search"
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              handleSearch();
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); 
+        handleSearch(); 
+      }
+    }}
+    aria-label="Search"
           />
           <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
             <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
@@ -246,10 +258,10 @@ const AddStaff: React.FC = () => {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Staff Name</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Email</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Phone</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}  >Gender</th>
+                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Staff Name</th>
+                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Email</th>
+                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Phone</th>
+                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}  >Gender</th>
               </tr>
             </thead>
             <tbody>
@@ -327,3 +339,4 @@ const AddStaff: React.FC = () => {
   );
 };
 export default AddStaff;
+

@@ -153,7 +153,7 @@ const UpdatePatientDetails: React.FC = () => {
 
   return (
     <div className="update-patient-details-container">
-      <div className="back1 fw-bold" onClick={() => navigate(-1)}>
+      <div className="back1 fw-bold" style={{marginBottom:5,cursor:"pointer"}} onClick={() => navigate(-1)}>
         <IoIosArrowBack /> Back
       </div>
       <Formik
@@ -166,7 +166,7 @@ const UpdatePatientDetails: React.FC = () => {
           <Form>
             <div className="update-patient-container">
               <div className="update-patient-form">
-                <h5>Edit Patient Details</h5>
+                <h6>Edit Patient Details</h6>
                 <div className="update-details row">
                   <div className="form-group col">
                     <label
@@ -297,7 +297,7 @@ const UpdatePatientDetails: React.FC = () => {
                   </div>
                 </div>
 
-                <h5>Reason of consult</h5>
+                <h6>Reason of consult</h6>
                 <div className="fieldflex row">
 
                   <div className="form-group col">
@@ -378,7 +378,7 @@ const UpdatePatientDetails: React.FC = () => {
                   </div>
                 </div>
 
-                <h5>Referral MD/OD</h5>
+                <h6>Referral MD/OD</h6>
                 <div className="fieldflex row">
                   <div className="form-group col">
                     <label
@@ -431,7 +431,7 @@ const UpdatePatientDetails: React.FC = () => {
                   </div>
                   </div>
 
-<h5>Insurance Details</h5>
+<h6>Insurance Details</h6>
                   <div className="fieldflex row">
                   <div className="form-group col">
                     <label
@@ -511,7 +511,7 @@ const UpdatePatientDetails: React.FC = () => {
                     as="textarea"
                     name="notes"
                     className="form-control"
-                    style={{marginLeft:0 }}
+                    style={{marginLeft:0 ,height:100}}
                   />
                   <ErrorMessage
                     name="notes"

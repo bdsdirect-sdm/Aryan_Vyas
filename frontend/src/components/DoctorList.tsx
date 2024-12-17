@@ -31,6 +31,8 @@ const DoctorList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("Doctor List>>>>>>>>>>>>>>>>",response.data );
+      
       return response.data;
     } catch (err) {
       toast.error(`Error fetching doctor data: ${err}`);
@@ -44,15 +46,17 @@ const DoctorList: React.FC = () => {
   });
 
   // Filter doctors based on search query
-  const handleSearch = () => {
-    if (doctors?.doctorList) {
-      setFilteredDoctors(
-        doctors.doctorList.filter((doctor: any) =>
-          `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
-    }
-  };
+const handleSearch = () => {
+  if (doctors?.doctorList) {
+    setFilteredDoctors(
+      doctors.doctorList.filter((doctor: any) =>
+        `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doctor.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doctor.phone.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }
+};
 
   // Reset filtered list when search query is cleared
   useEffect(() => {
@@ -123,9 +127,11 @@ const DoctorList: React.FC = () => {
         <table className="table ">
           <thead>
             <tr>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor First Name</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor Last Name</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Email</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Doctor First Name</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Doctor Last Name</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Email</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Phone</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Type</th>
             </tr>
           </thead>
           <tbody>
@@ -136,11 +142,13 @@ const DoctorList: React.FC = () => {
                   <td>{doctor.firstname}</td>
                   <td>{doctor.lastname}</td>
                   <td>{doctor.email}</td>
+                  <td>{doctor.phone}</td>
+                  <td>{doctor.doctype === 1 ? 'MD' : doctor.doctype === 2 ? 'OD' : '-'}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="text-center">No doctors found</td>
+                <td colSpan={12} className="text-center">No doctors found</td>
               </tr>
             )}
           </tbody>

@@ -15,9 +15,9 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const patientsPerPage = 5; 
- 
+  const [currentPage, setCurrentPage] = useState(1);
+  const patientsPerPage = 5;
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
     }
   });
 
-  
+
   const getUser = async () => {
     try {
       const response = await api.get(`${Local.GET_USER}`, {
@@ -65,8 +65,8 @@ const Dashboard: React.FC = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log("patient dashboard",response);
-      
+      console.log("patient dashboard", response);
+
       return response.data;
     } catch (err) {
       toast.error("Failed to fetch patient data");
@@ -100,17 +100,17 @@ const Dashboard: React.FC = () => {
     queryKey: ['doctorData'],
     queryFn: fetchDoctorList
   });
-  const userGraphData=userData?.data
-  console.log("userGraphdata",userGraphData)
+  const userGraphData = userData?.data
+  console.log("userGraphdata", userGraphData)
 
-  const patientGraphData=patientData
-  console.log("patientGraphdata",patientGraphData)
+  const patientGraphData = patientData
+  console.log("patientGraphdata", patientGraphData)
 
-  const doctorGraphData=doctorData
-  console.log("doctorGraphdata",doctorGraphData)
-  
+  const doctorGraphData = doctorData
+  console.log("doctorGraphdata", doctorGraphData)
+
   const handleNavigateToGraph = () => {
-    navigate('/chart', { state: { userGraphData,patientGraphData,doctorGraphData}});
+    navigate('/chart', { state: { userGraphData, patientGraphData, doctorGraphData } });
   };
   if (userLoading || patientLoading || doctorLoading) {
     return (
@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
   localStorage.setItem("lastname", user?.lastname)
 
   const totalRefersReceived = patientList?.length || 0;
-  
+
   const totalRefersCompleted = patientList?.filter((patient: { referalstatus: string; }) => patient.referalstatus === "Completed").length || 0;
 
 
@@ -163,9 +163,9 @@ const Dashboard: React.FC = () => {
   }
   const handleCreateChatRoom = (referedById: string, referedToId: string, patientId: string) => {
     const roomId = uuidv4();
-    console.log("rommmmiiiidddd",roomId);
-    
-    
+    console.log("rommmmiiiidddd", roomId);
+
+
     createChatRoomMutation.mutate({
       referedById,
       referedToId,
@@ -173,52 +173,61 @@ const Dashboard: React.FC = () => {
       roomId
     });
   };
+  const setRoomDetailsToLocal = (referedById: string, patientFirstname: string, patientLastname: string, referedtoFirstname: string, referedtoLastname: string, referedbyFirstname: string, referedbyLastname: string) => {
+    localStorage.setItem("patientFirstName", patientFirstname)
+    localStorage.setItem("patientLastName", patientLastname)
+    if (referedById === user) {
+      localStorage.setItem("doctor_name", referedtoFirstname + ' ' + referedtoLastname)
+    } else {
+      localStorage.setItem("doctor_name", referedbyFirstname + ' ' + referedbyLastname)
+    }
+  }
   return (
     <div className="dashboard-container">
 
 
 
-        <div className='head-graph'>
+      <div className='head-graph'>
         <span className="graph-btn" onClick={handleNavigateToGraph}>Graph<span className='graph-icon'><MdOutlineAutoGraph /></span></span>
-        </div>
-       
-     
+      </div>
 
 
 
-      <h6 className="dashboard-title fw-bold" style={{fontSize:16,color:"black"}}>Dashboard</h6>
-    
+
+
+      <h6 className="dashboard-title fw-bold" style={{ fontSize: 16, color: "black" }}>Dashboard</h6>
+
       <div className="metrics-cards">
         <div className="card" onClick={() => navigate('/patient')}>
-          <div className='card-heading'style={{color:"black"}}>Referrals Received</div>
+          <div className='card-heading' style={{ color: "black" }}>Referrals Received</div>
           <div className="card-body2">
             <div className='icon d-flex'>
-              <img src="referReceived.png" alt="EyeRefer" className='icon-2'/>
+              <img src="referReceived.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{color: "#737A7D"}}>Last update:Dec 10</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
           </div>
         </div>
 
         <div className="card">
-          <div className='card-heading'style={{color:"black"}}>Total Refers Completed</div>
+          <div className='card-heading' style={{ color: "black" }}>Total Refers Completed</div>
           <div className="card-body2">
             <div className='icon d-flex'>
-              <img src="referCompleted.png" alt="EyeRefer" className='icon-2'/>
+              <img src="referCompleted.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 10</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
           </div>
         </div>
 
         <div className="card" onClick={() => navigate('/doctor')}>
-          <div className='card-heading'style={{color:"black"}}>Total Doctors OD/MD</div>
+          <div className='card-heading' style={{ color: "black" }}>Total Doctors OD/MD</div>
           <div className="card-body2">
             <div className='icon d-flex'>
-              <img src="od_md.png" alt="EyeRefer" className='icon-2'/>
+              <img src="od_md.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold'  style={{color: "#737A7D"}}>Last update:Dec 10</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
           </div>
         </div>
       </div>
@@ -227,39 +236,39 @@ const Dashboard: React.FC = () => {
         {user?.doctype === 2 ? (
           <>
             <h6 className="refer-title">Refer a Patient</h6>
-            <button className="appointment-btn"  style={{ marginTop: -10}} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
+            <button className="appointment-btn" style={{ marginTop: -10 }} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
           </>
         ) : (
           <>
-            <h6 className="refer-title fw-bold" style={{color:"black"}}>Referrals Placed</h6>
-            <button className="appointment-btn fw-bold"  style={{marginTop:-5}}onClick={() => navigate("/add-appointment")}>+Add Appointment</button>
+            <h6 className="refer-title fw-bold" style={{ color: "black" }}>Referrals Placed</h6>
+            <button className="appointment-btn fw-bold" style={{ marginTop: -5 }} onClick={() => navigate("/add-appointment")}>+Add Appointment</button>
           </>
         )}
       </div>
 
       <div className="patient-list-section">
         <div className="patient-table-container">
-          <table className="table"> 
+          <table className="table">
             <thead className='table-head'>
               <tr>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>DOB</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Created At</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer by</th>
-                <th scope='col' style={{padding:"14px 10px",textAlign:"center"}}>Consultation date</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Type</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Disease</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer to</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer back</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult note</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Direct Message</th>
+                <th scope="col table-heading" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Patient Name</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>DOB</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Created At</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Refer by</th>
+                <th scope='col' style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Consultation date</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Type</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Disease</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Refer to</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Refer back</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Status</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Consult note</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Direct Message</th>
               </tr>
             </thead>
             <tbody>
               {currentPatients?.map((patient: any, index: number) => (
                 <tr key={index}>
-                  <td><Link to={`/patients-details/${patient.uuid}`} style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>{patient.firstname} {patient.lastname}</Link></td>
+                  <td><Link to={`/patients-details/${patient.uuid}`} style={{ color: "rgb(46, 113, 244)", borderBottom: "1px solid" }}>{patient.firstname} {patient.lastname}</Link></td>
                   <td>{moment(patient.dob).format("DD-MM-YYYY")}</td>
                   <td>{moment(patient.createdAt).format("DD-MM-YYYY")}</td>
                   <td>{patient.referedby.firstname} {patient.referedby.lastname}</td>
@@ -268,18 +277,38 @@ const Dashboard: React.FC = () => {
                   <td>{patient.disease}</td>
                   <td>{patient.referedto.firstname} {patient.referedto.lastname}</td>
                   <td>{patient.referback ? 'Yes' : 'No'}</td>
-                   <td>
-                      <span
-                        className={`form-select-dropdown ${patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected'}`}
-                        style={{ padding: "2px 10px", width: 100, marginTop: -2 }}
-                      >
-                        {patient.referalstatus === null ? "Pending" : patient.referalstatus}
-                      </span>
-                    </td>
-                  <td><Link to ={`/consult-note/${patient.uuid}`}style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>View</Link></td>
-                  <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
+                  <td>
+                    <span
+                      className={`form-select-dropdown ${patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected'}`}
+                      style={{ padding: "2px 10px", width: 100, marginTop: -2 }}
+                    >
+                      {patient.referalstatus === null ? "Pending" : patient.referalstatus}
+                    </span>
+                  </td>
+                  <td><Link to={`/consult-note/${patient.uuid}`} style={{ color: "rgb(46, 113, 244)", borderBottom: "1px solid" }}>View</Link></td>
+                  {/* <td onClick={() => handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid)}>
                       <Link className='text-primary' to='/chat' style={{color:"rgb(46, 113, 244)",borderBottom:"1px solid"}}>Link</Link>
-                    </td>
+                    </td> */}
+
+                  <td
+                    onClick={() => {
+                      handleCreateChatRoom(patient.referedby.uuid, patient.referedto.uuid, patient.uuid);
+                      setRoomDetailsToLocal(
+                        patient.referedby.uuid,
+                        patient.firstname,
+                        patient.lastname,
+                        patient.referedto.firstname,
+                        patient.referedto.lastname,
+                        patient.referedby.firstname,
+                        patient.referedby.lastname
+                      );
+                      navigate(`/chat`);
+                    }}
+                  >
+                    <div style={{ cursor: "pointer", color:"rgb(46, 113, 244)"}}>
+                    <u>Link</u>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

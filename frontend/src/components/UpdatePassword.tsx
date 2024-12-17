@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './UpdatePassword.css'; // Optional: Add custom CSS for styling
 
 const UpdatePassword: React.FC = () => {
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const handleCancel = () => {
@@ -101,7 +102,7 @@ const UpdatePassword: React.FC = () => {
           </div>
           <div className='btn-reset'>
             <button onClick={handleCancel} className='cancel-btn btn btn-outline-success'>Cancel</button>
-            <button type="submit" className="password-btn btn btn-info " disabled={loading}>
+            <button type="submit" className="password-btn btn btn-info " disabled={loading} style={{backgroundColor:"#35c0e4",borderColor:"#35c0e4"}}>
               Change Password
             </button>
           </div>

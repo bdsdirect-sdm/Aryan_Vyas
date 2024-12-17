@@ -180,17 +180,20 @@ const PatientList: React.FC = () => {
         <table className="table">
             <thead>
               <tr>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>DOB</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Appointment Date</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Created At</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer By</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Refer To</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Return to referrer</th>
-                {/* <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consult Note</th> */}
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
-                <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Action</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Patient Name</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>DOB</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Consult</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Appointment Date</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Created At</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Refer By</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Refer To</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Return to referrer</th>
+                {/* <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Consult Note</th> */}
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Status</th>
+                {doctype === 2 ? (
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Edit</th>
+                ) : null}
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -219,7 +222,7 @@ const PatientList: React.FC = () => {
                           value={patient.referalstatus}
                           onChange={(e) => updateStatus(patient.uuid, e.target.value)}
                           className="form-select-dropdown"
-                          style={{ padding: "2px 10px", width: 100, marginTop: -2, border:"none",backgroundColor: patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected' }}
+                          style={{ padding: "2px 15px", width: 100, marginTop: -2, border:"none",backgroundColor: patient.referalstatus === "Pending" ? 'pending' : patient.referalstatus === "Completed" ? 'completed' : 'rejected' }}
                         >
                           <option value="Pending">Pending</option>
                           <option value="Completed">Completed</option>
@@ -227,24 +230,28 @@ const PatientList: React.FC = () => {
                         </select>
                       )}
                     </td>
-
+                    
+                      {doctype === 2 ? (
+                        <td>
+                        <Link to={`/update-patient/${patient.uuid}`}><FaPen /></Link>
+                      </td> ): null}
+                    
                     <td>
                       <Link to={`/patients-details/${patient.uuid}`}><FaRegEye /></Link>
-                      <span
-                        style={{ color: "red" }}
-                        onClick={() => deletePatientMutation.mutate(patient.uuid)}
-                      >
-                        <MdDelete />
-                      </span>
-                      <span>
-                        <Link to={`/update-patient/${patient.uuid}`}><FaPen /></Link>
-                      </span>
+                      {doctype === 2 && (
+                        <span
+                          style={{ color: "red" ,marginLeft:15}}
+                          onClick={() => deletePatientMutation.mutate(patient.uuid)}
+                        >
+                          <MdDelete />
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={10} className="text-center">No patients found</td>
+                  <td colSpan={12} className="text-center">No patients found</td>
                 </tr>
               )}
             </tbody>

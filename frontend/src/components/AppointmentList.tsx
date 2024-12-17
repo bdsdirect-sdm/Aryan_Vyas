@@ -158,12 +158,12 @@ console.log("status",response);
         <table className="table">
           <thead>
             <tr>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Patient Name</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Consultation Date</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Doctor Name</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Type</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Status</th>
-              <th scope="col" style={{padding:"14px 10px",textAlign:"center"}}>Action</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Patient Name</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Consultation Date</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Doctor Name</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Type</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Status</th>
+              <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Action</th>
             </tr>
           </thead>
           <tbody>

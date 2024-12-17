@@ -58,10 +58,17 @@
   text-wrap: nowrap;
   padding: 14px 10px;
 }
+
 .table td{
     padding: 14px 10px;
-  color: #232A2E;
-  text-align: center;
+    text-align: center;
+    font-size: 12px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.01071em;
+    color: rgba(0, 0, 0, 0.87);
 }
 .loading-container {
     display: flex;
