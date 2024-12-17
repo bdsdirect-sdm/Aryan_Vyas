@@ -171,6 +171,7 @@ const AddStaff: React.FC = () => {
                     value={formik.values.staffName}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    placeholder='Enter Staff Name'
                   />
                   {formik.touched.staffName && formik.errors.staffName && (
                     <div className="text-danger1">{formik.errors.staffName}</div>
@@ -186,6 +187,7 @@ const AddStaff: React.FC = () => {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    placeholder='Enter Staff Email'
                   />
                   {formik.touched.email && formik.errors.email && (
                     <div className="text-danger1">{formik.errors.email}</div>
@@ -202,6 +204,7 @@ const AddStaff: React.FC = () => {
                     onChange={formik.handleChange} // Custom handler to remove non-numeric characters
                     onBlur={formik.handleBlur}
                     maxLength={10}
+                    placeholder='Enter Staff Phone number'
                   />
                   {formik.touched.phone && formik.errors.phone && (
                     <div className="text-danger1">{formik.errors.phone}</div>

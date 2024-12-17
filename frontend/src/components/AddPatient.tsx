@@ -337,7 +337,7 @@ const AddPatient: React.FC = () => {
                   as="textarea"
                   name="notes"
                   className="form-control"
-                  
+                  placeholder="Notes"
                   style={{marginLeft:0,height:100}}
                 />
 
