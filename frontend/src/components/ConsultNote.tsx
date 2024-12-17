@@ -1,44 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IoIosArrowBack } from "react-icons/io";
 import './ConsultNote.css';
 
 const ConsultNote: React.FC = () => {
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token");
- 
-    useEffect(() => {
-      if (!token) {
-        navigate("/login");
-      }
-    }, [token, navigate]);
-  const fetchPatientList = async () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const { patientId } = useParams();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
+  const fetchNotes = async () => {
     try {
-      const response = await api.get(`${Local.GET_PATIENT_LIST}`, {
+      const response = await api.get(`${Local.GET_NOTES}/${patientId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('patient informaion', response);
+      console.log("Patient Notes>>>>>>>>>>", response.data);
       return response.data;
     } catch (err) {
-      toast.error('Failed to fetch patient data');
+      toast.error('Failed to fetch patient note');
     }
   };
 
-  const { data: patientData, isError: patientError, error: patientErrorMsg, isLoading: patientLoading } = useQuery({
-    queryKey: ['patientData'],
-    queryFn: fetchPatientList,
+  const { data: patientData, isError, isLoading } = useQuery({
+    queryKey: ['patientNote', patientId],
+    queryFn: fetchNotes,
   });
 
-  if (patientLoading) {
+  if (isLoading) {
     return (
       <div className="loading-container">
         <div>Loading...</div>
@@ -49,53 +49,62 @@ const ConsultNote: React.FC = () => {
     );
   }
 
-  if (patientError) {
+  if (isError) {
     return (
       <div className="error-container">
-        <div>Error: {patientErrorMsg?.message || 'Failed to load patient data'}</div>
+        <div>Error: Failed to load patient data</div>
       </div>
     );
   }
 
-  const { patientList } = patientData || {};
+  if (patientData) {
+    const { patientNote, referedByUser, referedToUser } = patientData;
 
-  if (!patientList) {
+
+    const { firstname, lastname, notes } = patientNote;
+    const patientName = `${firstname} ${lastname}`;
+
+
+    const referedByName = referedByUser ? `${referedByUser.firstname} ${referedByUser.lastname}` : 'No referral information';
+
+    const referedToName = referedToUser ? `${referedToUser.firstname} ${referedToUser.lastname}` : 'No referral information';
+
     return (
-      <div className="error-container">
-        <div>No patients found</div>
+      <div className="patient-consult-note-container">
+        <p className="note-back" onClick={() => navigate("/dashboard")}>
+          <span className='arrow-note-back'><IoIosArrowBack /></span>Consult Notes
+        </p>
+
+        <div className="patient-consult-note">
+          <div className='note'>
+            <div className='note-patient-info' style={{ fontSize: 15.5 }}>
+              <p className='name-note-heading'>
+                Patient Name: <span className="name-note">{patientName}</span>
+              </p>
+              <p className='referedby-heading'>
+                Referred By: <span className="name-note">{referedByName}</span>
+              </p>
+              <p className='referedto-heading'>
+                Referred To: <span className="name-note">{referedToName}</span>
+              </p>
+            </div>
+
+            <div className='note-data-info' style={{ fontSize: 15.5 }}>
+              <p className='note-data-heading'>
+                Consult Notes: <span className="note-data">{notes || 'No notes available'}</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="patient-consult-note-container">
-      <p className="note-back" onClick={() => navigate("/dashboard")}><span className='arrow-note-back'><IoIosArrowBack /></span>Consult Notes</p>
-      {patientList.length === 0 ? (
-        <p>No patients available</p>
-      ) : (
-        patientList.map((patient: any) => (
-          <div key={patient.uuid} className="patient-consult-note">
-            {/* {console.log("hello",patient.firstname)}; */}
-            <div className='note'>
-
-            <div className='note-patient-info'style={{fontSize:15.5}}>
-            <p className='name-note-heading'>Patient Name:<span className="name-note"> {`${patient.firstname} ${patient.lastname}`}</span></p> 
-
-            <p className='referedby-heading'>Referred By:<span className="name-note"> {patient.referedby ? `${patient.referedby.firstname} ${patient.referedby.lastname}` : 'No referral information'}</span></p>
-
-            <p className='referedto-heading'>Referred To:<span className="name-note"> {patient.referedto ? `${patient.referedto.firstname} ${patient.referedto.lastname}` : 'No referral information'}</span></p>
-            </div>  
-
-            <div className='note-data-info' style={{fontSize:15.5}}>
-            <p className='note-data-heading'>Consult Notes:<span className="note-data"> {patient.notes || 'No notes available'}</span></p>
-            </div>
-          </div>
-          </div>
-        ))
-      )}
+    <div className="error-container">
+      <div>No patient data available</div>
     </div>
-);
-
+  );
 };
 
 export default ConsultNote;

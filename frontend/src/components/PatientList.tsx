@@ -162,6 +162,7 @@ const PatientList: React.FC = () => {
       {/* Patient List Heading and Search */}
       <div className="search-border d-flex mb-4 hii1" style={{ marginTop: 10 }} role="search">
         <input
+         style={{height:50}}
           className="form-control me-2 hi2"
           type="search"
           placeholder="Search"
@@ -170,8 +171,8 @@ const PatientList: React.FC = () => {
           onKeyDown={handleKeyDown}  // Trigger search on "Enter"
           aria-label="Search"
         />
-        <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
-          <i className="fa fa-search" style={{ marginRight: 5 }}></i> Search
+        <button className="btn btn-primary btn-search" style={{height:50,width:130}} type="button" onClick={handleSearch}>
+          <i className="fa fa-search" style={{ marginRight:5}}></i> Search
         </button>
       </div>
 

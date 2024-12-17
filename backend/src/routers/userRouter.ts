@@ -25,6 +25,7 @@ import {
   updateStatus,
   uploadProfilePhoto,
   getImage,
+  getNotes,
 } from "../controllers/userController";
 import userAuthMiddleware from "../middlewares/userAuth";
 import signupValidation from "../middlewares/formValidation.ts/signupValidation";
@@ -67,4 +68,5 @@ router.delete("/delete-patientDetails/:patientId", userAuthMiddleware, deletePat
 router.put("/update-status/:patientId",userAuthMiddleware,updateStatus)
 router.post("/profile-photo",upload.single('profilePhoto'),userAuthMiddleware,uploadProfilePhoto)
 router.get("/get-profile-photo",userAuthMiddleware,getImage)
+router.get("/view-notes/:patientId",userAuthMiddleware,getNotes)
 export default router;

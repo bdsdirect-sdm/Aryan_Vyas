@@ -33,7 +33,8 @@ const AddStaff: React.FC = () => {
       const response = await api.get(import.meta.env.VITE_GET_STAFF, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      console.log("StaffList",response.data);
+      
       return response.data;
     },
     staleTime: 60000, // Cache for 1 minute
@@ -235,12 +236,13 @@ const AddStaff: React.FC = () => {
         {/* Search Bar */}
         <form className="d-flex mb-4 hi" role="search">
           <input
+           style={{height:50}}
             type="search"
             className="form-control me-2 hi2"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-    onKeyDown={(e) => {
+            onKeyDown={(e) => {
       if (e.key === 'Enter') {
         e.preventDefault(); 
         handleSearch(); 
@@ -248,7 +250,7 @@ const AddStaff: React.FC = () => {
     }}
     aria-label="Search"
           />
-          <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
+          <button className="btn btn-primary btn-search" style={{height:50,width:130}} type="button" onClick={handleSearch}>
             <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
           </button>
         </form>

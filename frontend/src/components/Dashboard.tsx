@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log("patient dashboard", response);
+      console.log("patient dashboard", response); 
 
       return response.data;
     } catch (err) {

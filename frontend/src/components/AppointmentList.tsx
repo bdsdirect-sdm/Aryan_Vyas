@@ -136,6 +136,7 @@ console.log("status",response);
       {/* Search Input and Button */}
       <div className="search-border d-flex mb-4 hi" role="search">
         <input
+        style={{height:50}}
           className="form-control me-2 hi2"
           type="search"
           placeholder="Search"
@@ -147,6 +148,7 @@ console.log("status",response);
         <button
           className="btn btn-primary btn-search"
           type="button"
+          style={{height:50,width:130}}
           onClick={handleSearch}
         >
           <i className="fa fa-search" style={{ marginRight: 5 }}></i> Search

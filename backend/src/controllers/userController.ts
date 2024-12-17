@@ -82,6 +82,41 @@ export const getImage = async (req: any, res: Response): Promise<void> => {
     }
 }
 
+export const getNotes = async (req: any, res: any) => {
+  try {
+    const { uuid } = req.user;
+    const { patientId } = req.params;
+    console.log("----------------------", patientId);
+
+    const patientNote: any = await Patient.findOne({
+      where: { uuid: patientId },
+    });
+
+  
+    if (!patientNote) {
+      return res.status(404).json({ message: "Patient note not found" });
+    }
+
+    const referedByUser = await User.findOne({
+      where: { uuid: patientNote.referedby },
+    });
+
+    const referedToUser = await User.findOne({
+      where: { uuid: patientNote.referedto }, 
+    });
+
+  
+    return res.status(200).json({
+      patientNote,
+      referedByUser,
+      referedToUser,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching notes" });
+  }
+};
 
 export const verifyUser = async (req: any, res: Response) => {
   try {

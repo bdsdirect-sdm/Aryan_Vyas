@@ -104,6 +104,7 @@ const handleSearch = () => {
       {/* Search Input and Button */}
       <form className="d-flex mb-4 hii1" style={{marginTop: 10}} role="search">
   <input
+  style={{height:50}}
     className="form-control me-2 hi2"
     type="search"
     placeholder="Search"
@@ -117,7 +118,7 @@ const handleSearch = () => {
     }}
     aria-label="Search"
   />
-  <button className="btn btn-primary btn-search" type="button" onClick={handleSearch}>
+  <button className="btn btn-primary btn-search" style={{height:50,width:130}} type="button" onClick={handleSearch}>
     <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
   </button>
 </form>
