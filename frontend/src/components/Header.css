@@ -8,52 +8,52 @@
     z-index: 1;
     top: 0;
     height: 100px;
-}
-
-.header-left {
+  }
+  
+  .header-left {
     display: flex;
     align-items: center;
-}
-
-.logo-class {
+  }
+  
+  .logo-class {
     height: 6em;
     padding: 0.5em;
     margin: auto;
     cursor: pointer;
-        position: relative;
-        padding:27px;
-}
-
-.logo-text {
+    position: relative;
+    padding: 27px;
+  }
+  
+  .logo-text {
     font-size: 24px;
     color: #333;
-}
-
-.header-right {
+  }
+  
+  .header-right {
     display: flex;
     align-items: center;
-}
-.header-photo{
-    height:70px;
-    width:70px;
+  }
+  .header-photo {
+    height: 70px;
+    width: 70px;
     border-radius: 50px;
-}
-.dropdown {
+  }
+  .dropdown {
     position: relative;
-}
-
-.dropdown-toggle {
+  }
+  
+  .dropdown-toggle {
     color: black;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.welcome {
-    color: #737a7d;   
-}
-
-.dropdown-menu {
+  }
+  
+  .welcome {
+    color: #737a7d;
+  }
+  
+  .dropdown-menu {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -62,109 +62,120 @@
     position: absolute;
     right: 0;
     top: 50px;
-    display: none; 
+    display: none;
     z-index: 1;
-}
-
-.dropdown:hover .dropdown-menu {
-    display: block; 
-}
-
-.dropdown-item {
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-item {
     padding: 10px 15px;
     text-decoration: none;
     color: #333;
-}
-
-.dropdown-item:hover {
-    background-color: #f1f1f1; 
-}
-
-.header-divider {
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .header-divider {
     height: 1px;
     background-color: #ddd;
     margin-top: 20px;
-}
-
-.sidebar {
+  }
+  
+  .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     width: 250px;
     background-color: white;
-    height: 100vh; 
+    height: 100vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-}
-
-.logo-text{
+  }
+  
+  .logo-text {
     font-size: 18px;
     font-weight: bold;
-    padding-left:10px;
-}
-hr{
+    padding-left: 10px;
+  }
+  hr {
     color: gray;
-  width: 147%;
-  position: relative;
-  left: -23%;
-  float: left;  
-}
-.nav-links {
+    width: 147%;
+    position: relative;
+    left: -23%;
+    float: left;
+  }
+  .nav-links {
     display: flex;
     flex-direction: column;
-}
-
-.nav-link {
-    text-decoration: none; 
+  }
+  
+  .nav-link {
+    text-decoration: none;
     color: #212121;
     padding: 8px 15px;
-    font-size: 18px; 
-}
-
-.nav-link.active {
-   background-color: #f4fffb;
-   color: #43d79e;
-}
-
-.nav-link:hover {
-   background-color: #f4fffb; 
-   color: #43d79e;
-}
-
-.btn {
-   padding: 10px 15px;
-   margin-left: 10px;
-   text-decoration: none;
-   border-radius: 5px;
-}
-
-.login-btn {
-   background-color: #35c0e4;
-   color: white;
-}
-
-.signup-btn {
-   background-color: #28a745; 
-   color: white;
-}
-.google-icon{
+    font-size: 18px;
+  }
+  
+  .nav-link.active {
+    background-color: #f4fffb;
+    color: #43d79e;
+  }
+  
+  .nav-link:hover {
+    background-color: #f4fffb;
+    color: #43d79e;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    margin-left: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .login-btn {
+    background-color: #35c0e4;
+    color: white;
+  }
+  
+  .signup-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  .google-icon {
     display: flex;
     align-items: center;
-}
-.googleIcon-2{
-    height:20px;
+  }
+  .googleIcon-2 {
+    height: 20px;
     width: 20px;
     margin-bottom: 10px;
     margin-right: 0px;
     box-sizing: border-box;
-}
-.house{
-   position: relative;
+  }
+  .house {
+    position: relative;
     top: 0%;
-   height: 20px;
-   width: 20px;
+    height: 20px;
+    width: 20px;
     box-sizing: border-box;
-   margin-right: 10px;
-}
+    margin-right: 10px;
+  }
+  .notification-icon {
+    font-size: 1.5rem;
+    margin-left: 750px;
+    cursor: pointer;
+  }
+  .notification-icon:hover {
+    color:#f1f1f1;;
+    background-color: #43d79e;
+    border-radius: 20px;
+  }
+  

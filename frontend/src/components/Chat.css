@@ -84,6 +84,7 @@
 .user-message{
     display: flex;
     justify-content: flex-start;
+    word-wrap: anywhere;
 }
 .chat-heading {
     font-size: 15px;
@@ -120,6 +121,8 @@
     padding: 10px;
     border-radius: 10px;
     max-width: 60%;
+    word-wrap: break-word; /* Ensures long words wrap */
+    overflow-wrap: break-word; /* Ensures long words wrap */
 }
 
 .message.sent .chat-message {
@@ -145,6 +148,7 @@ textarea.form-control {
     height: 45px;
     margin-top: 10px;
     margin-left: 12px;
+   
 }
 
 .send-button {

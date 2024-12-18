@@ -9,6 +9,8 @@ import {createServer} from 'http';
 import chatRouter from './routers/chatRouter';
 import { Server,Socket } from 'socket.io';
 import path from 'path';
+import notificationRouter from './routers/notificationRouter';
+import Notifications from './models/Notification';
 
 // import sequelize from 'seq';
 
@@ -17,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "*",
       methods: ["GET", "POST"],
       credentials: true,
     }
@@ -32,6 +34,7 @@ app.use("/uploads",express.static(uploadsPath));
 
 app.use("/", userRouter);
 app.use("/chat", chatRouter);
+app.use("/notifications", notificationRouter);
 
 io.on("connection",(socket:Socket)=>{
     console.log(`A Doctor connected:${socket.id}`);
@@ -74,6 +77,33 @@ io.on("connection",(socket:Socket)=>{
             console.error("Error fetching sender doctor details:", error);
           }
         });
+
+        socket.on("send_notification", async (data) => {
+          const { receiverId, senderId, notificationMessage } = data;
+      
+          if (!receiverId || !senderId || !notificationMessage) {
+            console.error(
+              "Receiver ID, Sender ID or Notification message is missing."
+            );
+            return;
+          }
+      
+          try {
+            await Notifications.create({
+              receiverId,
+              senderId,
+              notifications: notificationMessage,
+            });
+      
+            io.emit("receive_notification", {
+              senderId,
+              message: notificationMessage,
+              receiverId,
+            });
+          } catch (error) {
+            console.error("Error sending notification:", error);
+          }
+        });
         
         socket.on("disconnect", () => {
           console.log(`Doctor Disconnected: ${socket.id}`);
@@ -82,7 +112,7 @@ io.on("connection",(socket:Socket)=>{
 sequelize.sync({alter:false}).then(()=>{
     console.log('Database connected');
     
-    httpServer.listen(Local.SERVER_PORT,  () => {
+    server.listen(Local.SERVER_PORT,  () => {
         console.log(`Server is running on port ${Local.SERVER_PORT}`);
         });
 }).catch((err)=>{

@@ -10,7 +10,15 @@ import * as Yup from 'yup';
 import { FormControlLabel, Switch } from '@mui/material';
 import "./AddPatient.css";
 import { IoIosArrowBack } from "react-icons/io";
-import DatePicker from 'react-datepicker';
+
+
+import { io } from "socket.io-client";
+import { jwtDecode } from "jwt-decode";
+// const socket = io(`${Local.BASE_URL}`);
+// const token: any = localStorage.getItem("token");
+// const decoded: any = jwtDecode(token);
+// const userId = decoded.uuid;
+
 const AddPatient: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -25,6 +33,9 @@ const AddPatient: React.FC = () => {
         }
       });
       console.log(response)
+      // emitNotification(response.data.patient.referedto);
+      // console.log(response.data.patient.referedto);
+      toast.success("Patient referred successfully");
       toast.success("Patient referred successfully");
       navigate('/patient');
     } catch (err: any) {
@@ -109,6 +120,19 @@ const AddPatient: React.FC = () => {
       </div>
     );
   }
+
+  // const emitNotification = (doctorId: string) => {
+  //   const senderId = userId;
+  //   const notificationMessage = "You have a new patient referral";
+
+  //   // Emit the notification through socket
+  //   socket.emit("send_notification", {
+  //     receiverId: doctorId,
+  //     senderId: senderId,
+  //     notificationMessage: notificationMessage,
+  //   });
+  //   // toast.success("Notification emitted to doctor");
+  // };
 
   return (
     <div className="add-patient-container">

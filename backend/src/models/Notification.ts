@@ -1,32 +1,41 @@
+import { Model, DataTypes } from 'sequelize';
 import sequelize from "../config/db";
-import { Model,DataTypes } from "sequelize";
-import { v4 as UUIDV4 } from "uuid";
-import User from "./User";
+import User from './User';
 
-class Notification extends Model{
-    public notification!:any;
+class Notifications extends Model {
+  public id!: number;
+  public receiverId!: string;
+  public senderId!: string;
+  public notifications!: string;
 }
 
-Notification.init({
-    uuid: {
-        type:DataTypes.UUID,
-        defaultValue:UUIDV4,
-        primaryKey:true,
-        allowNull:false,
-        },
-    senderId:{
-        type:DataTypes.UUID,
-        allowNull:false
+Notifications.init(
+  {
+    receiverId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    
     },
-    notification:{
-        type:DataTypes.STRING,
-        allowNull:false
-        },
-},{
+    senderId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    notifications: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    isSeen:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+  },
+  {
     sequelize,
-    modelName:"Notification"
-})
-User.hasMany(Notification,{foreignKey:"senderId"});
-Notification.belongsTo(User,{foreignKey:"senderId"});
+    modelName: 'Notifications',
+  }
+);
 
-export default Notification;
+User.hasMany(Notifications, { foreignKey: "senderId" });
+Notifications.belongsTo(User, { foreignKey: "senderId"});
+
+export default Notifications;

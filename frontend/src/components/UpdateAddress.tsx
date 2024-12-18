@@ -19,7 +19,7 @@ interface Address {
   phone: string;
 }
 
-const UpdateAddress = ({ address, close }: { address: Address, close: () => void }) => {
+const UpdateAddress:any = ({ address, close }: { address: Address, close: () => void }) => {
   const navigate = useNavigate();
 
   useEffect(() => {

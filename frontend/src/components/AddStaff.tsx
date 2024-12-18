@@ -74,13 +74,13 @@ const AddStaff: React.FC = () => {
 
   const validationSchema = Yup.object({
     staffName: Yup.string()
-      .matches(/^[A-Za-z\s]+$/, 'Staff Name must only contain letters and spaces') // Only letters and spaces allowed
+      .matches(/^[A-Za-z\s]+$/, 'Staff Name must only contain letters and spaces') 
       .required('Staff Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     phone: Yup.string().required('Phone Number is required')
-      .matches(/^\d+$/, 'Phone Number must be a numeric value') // Ensure it's numeric
-      .length(10, 'Phone Number must be exactly 10 digits long'), // Exactly 10 digits
-    gender: Yup.string().required('Gender is required'),
+      .matches(/^\d+$/, 'Phone Number must be a numeric value') 
+      .length(10, 'Phone Number must be exactly 10 digits long'),
+    gender: Yup.string().nullable().required('Gender is required'), // Gender validation
   });
 
   const formik = useFormik({
@@ -88,7 +88,7 @@ const AddStaff: React.FC = () => {
       staffName: '',
       email: '',
       phone: '',
-      gender: 'Male',
+      gender: '', // Default gender is empty string (no selection)
     },
     validationSchema,
     onSubmit: (values) => {
@@ -118,11 +118,9 @@ const AddStaff: React.FC = () => {
         staff.phone.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
-    } 
-    // else {
-    //   setFilteredStaff(staffList);
-    // }
+    }
   };
+
   useEffect(() => {
     if (searchQuery === '') {
       setFilteredStaff(staffList); // Reset to original list if search query is cleared
@@ -138,15 +136,6 @@ const AddStaff: React.FC = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-  // const handleStaffNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value.replace(/[^A-Za-z\s]/g, ''); 
-  //   formik.setFieldValue('staffName', value);
-  //   };
-  // Prevent non-numeric input for phone number
-  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-  //   formik.setFieldValue('phone', value); // Update the formik field with the cleaned value
-  // };
 
   return (
     <>
@@ -220,6 +209,7 @@ const AddStaff: React.FC = () => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                    <option value="">Select Gender</option> {/* Default option */}
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -229,7 +219,7 @@ const AddStaff: React.FC = () => {
                   )}
                 </div>
 
-                <button type="submit" className="btn btn-primary">Add Staff</button>
+                <button type="submit" className="btn btn-primary" style={{ marginLeft: 0 }}>Add Staff</button>
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
               </form>
             </div>
@@ -239,21 +229,21 @@ const AddStaff: React.FC = () => {
         {/* Search Bar */}
         <form className="d-flex mb-4 hi" role="search">
           <input
-           style={{height:50}}
+            style={{ height: 50 }}
             type="search"
             className="form-control me-2 hi2"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault(); 
-        handleSearch(); 
-      }
-    }}
-    aria-label="Search"
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+            aria-label="Search"
           />
-          <button className="btn btn-primary btn-search" style={{height:50,width:130}} type="button" onClick={handleSearch}>
+          <button className="btn btn-primary btn-search" style={{ height: 50, width: 130 }} type="button" onClick={handleSearch}>
             <i className="fa fa-search" style={{ marginRight: 1 }}></i> Search
           </button>
         </form>
@@ -263,10 +253,10 @@ const AddStaff: React.FC = () => {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Staff Name</th>
-                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Email</th>
-                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Phone</th>
-                <th scope="col"style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}  >Gender</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Staff Name</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Email</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Phone</th>
+                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Gender</th>
               </tr>
             </thead>
             <tbody>
@@ -338,10 +328,8 @@ const AddStaff: React.FC = () => {
             </li>
           </ul>
         </nav>
-
       </div>
     </>
   );
 };
 export default AddStaff;
-

@@ -11,7 +11,7 @@ import moment from 'moment';
 import { BiSend } from "react-icons/bi";
 import "./Chat.css";
 
-const socket : Socket=io(`${Local.BASE_URL}`)
+const socket: Socket = io(`${Local.BASE_URL}`);
 const doctype = Number(localStorage.getItem("doctype"));
 
 const fetchChatRooms = async (token: string) => {
@@ -92,25 +92,23 @@ const Chat: React.FC = () => {
         },
     });
 
-   
     useEffect(() => {
         if (!token) {
             navigate('/login');
             return;
         }
-            socket.on('receive_message', (messageData) => {
+
+        socket.on('receive_message', (messageData) => {
+            // Add the message only if it's not already in the chatMessages state
+            if (!chatMessages.find(msg => msg.message === messageData.message && msg.senderId === messageData.senderId)) {
                 setChatMessages((prevMessages) => [...prevMessages, messageData]);
-            });
-        
+            }
+        });
 
         return () => {
-            if (socket) {
-                socket.off('receive_message'); 
-                socket.disconnect();     
-            }
+            socket.off('receive_message');
         };
-    }, [token, navigate]);
-
+    }, [token, navigate, chatMessages]);
 
     useEffect(() => {
         if (selectedRoom && !isJoined) {
@@ -168,13 +166,19 @@ const Chat: React.FC = () => {
             message,
         };
 
+        // Add the sent message locally before emitting it to the socket
         setChatMessages((prevMessages) => [
             ...prevMessages,
             { senderId: userId, message, firstname: 'You' },
         ]);
 
+        // Emit the message to the server via socket
         socket.emit('send_message', messageData);
+
+        // Send the message to the server via the mutation hook
         sendMessage(messageData);
+
+        setMessage(''); // Clear the message input after sending
     };
 
     const getReceiverName = (messages: any[], userId: string) => {
@@ -188,7 +192,6 @@ const Chat: React.FC = () => {
     return (
         <div className="chat-container">
             <div className='top row'>
-
                 <div className="chat-header col">
                     <h5>Messages</h5>
                     <input
@@ -252,6 +255,7 @@ const Chat: React.FC = () => {
                                     className="form-control"
                                     placeholder="Type your message here..."
                                     value={message}
+                                    maxLength={500}
                                     onChange={(e) => setMessage(e.target.value)}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' && !e.shiftKey) {

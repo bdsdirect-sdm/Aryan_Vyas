@@ -11,6 +11,7 @@ import './Dashboard.css';
 import { v4 as uuidv4 } from 'uuid';
 import { MdOutlineAutoGraph } from "react-icons/md";
 import moment from 'moment';
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -18,6 +19,8 @@ const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const patientsPerPage = 5;
 
+
+  
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -205,7 +208,7 @@ const Dashboard: React.FC = () => {
               <img src="referReceived.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 18</div>
           </div>
         </div>
 
@@ -216,7 +219,7 @@ const Dashboard: React.FC = () => {
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 18</div>
           </div>
         </div>
 
@@ -227,7 +230,7 @@ const Dashboard: React.FC = () => {
               <img src="od_md.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:Dec 17</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 18</div>
           </div>
         </div>
       </div>

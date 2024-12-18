@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { PiHouseLight } from "react-icons/pi";
 import { MdOutlinePersonalInjury, MdOutlineMarkChatRead, MdOutlinePersonPin } from "react-icons/md";
@@ -10,8 +10,11 @@ import logoImg from "../photos/logo1.png";
 import './Header.css';
 import api from '../api/axiosInstance';
 import { Local } from '../environment/env';
-import { useQuery } from '@tanstack/react-query';
-
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { FaBell } from "react-icons/fa";
+// import {io} from 'socket.io-client';
+// const socket = io(`${Local.BASE_URL}`)
+// import { toast } from 'react-toastify';
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -21,6 +24,7 @@ const Header: React.FC = () => {
 
   const [activeLink, setActiveLink] = useState('/dashboard');
   const [dropdownOpen, setDropdownOpen] = useState(false);  // Toggle state for dropdown visibility
+  // const queryClient = useQueryClient()
 
   const handleLogoClick = () => {
     console.log('Logo clicked, navigating to dashboard');
@@ -48,6 +52,34 @@ const Header: React.FC = () => {
     queryKey: ['profilePhoto'],
     queryFn: getProfilePhoto,
   });
+  // const getUser = async () => {
+  //   try {
+  //     const response = await api.get(`${Local.GET_USER}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`
+  //       }
+  //     });
+  //     return response.data;
+  //   } catch (err) {
+  //     toast.error("Failed to fetch user data");
+  //   }
+  // };
+  // const { data: userData} = useQuery({
+  //   queryKey: ['userData', token],
+  //   queryFn: getUser
+  // });
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/login");
+  //   }
+  //   socket.on('receive_notification', (data: any) => {
+  //     if (data.receiverId === userData?.uuid) {
+  //       queryClient.invalidateQueries({ queryKey: ['userData'] });
+  //       toast.success(data.message);
+  //     }
+  //   });
+
+  // }, [token, navigate, userData?.uuid]);
 
   return (
     <>
@@ -59,7 +91,9 @@ const Header: React.FC = () => {
             <hr />
           </div>
         </div>
-
+        <div>
+        <span><div><FaBell className='notification-icon'/></div></span>
+        </div>
         <div className="header-right">
           <div className='header-photo-div'>
             {/* {console.log(Local.BASE_URL,profilePhoto)} */}
