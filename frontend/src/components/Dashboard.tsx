@@ -89,6 +89,28 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const fetchViewCompletedAppointments= async()=>{
+    try{
+      const response = await api.get(`${Local.VIEW_COMPLETED_APPOINTMENTS}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("fetchViewCompletedAppointments>>>>>>>",response.data);
+      
+      return response.data;
+      }catch (err) {
+        toast.error("Failed to fetch completed appointments");
+      }
+    }
+
+    const{data: completedAppointment, isError: completedAppointmentError, error: completedAppointmentErrorMsg, isLoading: completedAppointmentLoading } = useQuery({
+      queryKey: ['completedAppointment', token],
+      queryFn: fetchViewCompletedAppointments
+    });
+
+
+
   const { data: userData, isError: userError, error: userErrorMsg, isLoading: userLoading } = useQuery({
     queryKey: ['userData', token],
     queryFn: getUser
@@ -115,7 +137,7 @@ const Dashboard: React.FC = () => {
   const handleNavigateToGraph = () => {
     navigate('/chart', { state: { userGraphData, patientGraphData, doctorGraphData } });
   };
-  if (userLoading || patientLoading || doctorLoading) {
+  if (userLoading || patientLoading || doctorLoading || completedAppointmentLoading) {
     return (
       <div className="loading-container">
         <div>Loading...</div>
@@ -126,10 +148,10 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  if (userError || patientError || doctorError) {
+  if (userError || patientError || doctorError || completedAppointmentError) {
     return (
       <div className="error-container">
-        <div>Error: {userErrorMsg?.message || patientErrorMsg?.message || doctorErrorMsg?.message}</div>
+        <div>Error: {userErrorMsg?.message || patientErrorMsg?.message || doctorErrorMsg?.message ||completedAppointmentErrorMsg?.message}</div>
       </div>
     );
   }
