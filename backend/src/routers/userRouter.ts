@@ -26,6 +26,7 @@ import {
   uploadProfilePhoto,
   getImage,
   getNotes,
+  completeAppointmentList,
 } from "../controllers/userController";
 import userAuthMiddleware from "../middlewares/userAuth";
 import signupValidation from "../middlewares/formValidation.ts/signupValidation";
@@ -69,4 +70,6 @@ router.put("/update-status/:patientId",userAuthMiddleware,updateStatus)
 router.post("/profile-photo",upload.single('profilePhoto'),userAuthMiddleware,uploadProfilePhoto)
 router.get("/get-profile-photo",userAuthMiddleware,getImage)
 router.get("/view-notes/:patientId",userAuthMiddleware,getNotes)
+router.get("/completed-appointment",userAuthMiddleware,completeAppointmentList)
+
 export default router;

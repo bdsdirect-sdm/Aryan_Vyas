@@ -1,0 +1,9 @@
+.notification-container{
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 20px;
+    background-color: #ecf1f3;
+    height: calc(100vh - 60px);
+    overflow-y: auto; 
+    margin-top: 0px;
+}

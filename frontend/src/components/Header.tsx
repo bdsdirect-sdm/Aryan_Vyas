@@ -92,7 +92,7 @@ const Header: React.FC = () => {
           </div>
         </div>
         <div>
-        <span><div><FaBell className='notification-icon'/></div></span>
+        <span><Link to={"/notification"} style={{color:"black"}}><FaBell className='notification-icon'/></Link></span>
         </div>
         <div className="header-right">
           <div className='header-photo-div'>

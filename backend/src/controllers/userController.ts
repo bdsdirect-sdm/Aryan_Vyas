@@ -12,6 +12,7 @@ import Appointments from "../models/Appointments";
 import { any } from "joi";
 import Appointment from "../models/Appointments";
 import path from 'path';
+import sequelize from "sequelize";
 
 const Security_Key: any = Local.SECRET_KEY;
 
@@ -1013,5 +1014,56 @@ export const updateStatus = async (req:any, res:any) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error Updating Patient Status", error });
+  }
+};
+
+export const completeAppointmentList = async (req: any, res: any): Promise<void> => {
+  try {
+    const { uuid } = req.user;
+    const user = await User.findOne({ where: { uuid } });
+
+    if (user) {
+      const patients = await Patient.findAll({
+        where: {
+          [Op.or]: [
+            { referedby: user.uuid },
+            { referedto: user.uuid },
+          ],
+          referalstatus: 'Completed',
+        },
+        include: [
+          {
+            model: User,
+            as: 'referedbyUser',
+            attributes: ['firstname', 'lastname', 'email'],
+          },
+          {
+            model: User,
+            as: 'referedtoUser',
+            attributes: ['firstname', 'lastname', 'email'],
+          },
+        ],
+      });
+      if (patients.length > 0) {
+        res.status(200).json({
+          message: 'Completed patients list fetched successfully',
+          data: patients.map((patient) => ({
+            uuid: patient.uuid,
+            firstname: patient.firstname,
+            lastname: patient.lastname,
+            referalstatus: patient.referalstatus,
+            referedbyUser: patient.referedbyUser,
+            referedtoUser: patient.referedtoUser,
+          })),
+        });
+      } else {
+        res.status(404).json({ message: 'No completed patients found for this doctor' });
+      }
+    } else {
+      res.status(404).json({ message: 'User (doctor) not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error Finding Completed Appointments', error });
   }
 };

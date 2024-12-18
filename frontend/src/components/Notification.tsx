@@ -2,7 +2,7 @@ import React from 'react'
 import "../components/Notification.css"
 const Notification = () => {
   return (
-    <div>Notification</div>
+    <div className='notification-container'>Notification</div>
   )
 }
 
