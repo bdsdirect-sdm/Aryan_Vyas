@@ -7,7 +7,7 @@
     margin-top: 0px;
     border-top: 1px solid gainsboro;
     border-left: 1px solid gainsboro;
-    border-right: 1px solid gainsboro;          
+    border-right: 1px solid gainsboro;
     border-bottom: 1px solid gainsboro;
     gap: 20px;
     display: flex;
@@ -17,7 +17,7 @@
 .chat-header {
     flex: 1;
     margin-bottom: 20px;
-    width: 670px;
+    width: 775px;
 }
 
 .chat-header h5 {
@@ -27,78 +27,89 @@
 .chat-header input {
     margin-top: 10px;
 }
-.link{
-    height:50px;
-    width:50px;
+
+.link {
+    height: 50px;
+    width: 50px;
 }
-.send1-button{
+
+.send1-button {
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 0px;
     background-color: #43d79e;
     color: white;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 0px;
     border: none;
+    margin-left: -37px;
 }
-.doctor-name{
+
+.doctor-name {
     font-size: 11px;
 }
+
 .chat-messages {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: 84vh; 
+    max-height: 84vh;
     overflow: hidden;
     border-left: 1px solid gainsboro;
     margin-top: -30px;
+    margin-left: 0px;
 }
-.list-group-item{
+
+.list-group-item {
     display: block;
 }
-.ho1{
+
+.ho1 {
     display: flex;
 }
-.color-height{
-    color:white;
+
+.color-height {
+    color: white;
     margin-top: 600px;
 }
-.height-no-chat{
+
+.height-no-chat {
     margin-top: 270px;
     padding-left: 85px;
 }
-.message-time{
+
+.message-time {
     font-size: 10px;
     font-size: 10px;
-  display: flex;
-  justify-content: end;
-  margin-left: 20px;
+    display: flex;
+    justify-content: end;
+    margin-left: 20px;
 }
 
 .chat-head {
-    flex: 0 0 auto; 
+    flex: 0 0 auto;
     margin-bottom: 10px;
     padding: 10px;
     border-bottom: 1px solid gainsboro;
     margin-left: -12px;
 }
-.user-message{
+
+.user-message {
     display: flex;
     justify-content: flex-start;
     word-wrap: anywhere;
 }
+
 .chat-heading {
     font-size: 15px;
     margin-top: 5px;
 }
 
-
 .messages-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow-y: auto; 
-    flex: 1; 
-    padding-right: 10px;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .message {
@@ -109,11 +120,11 @@
 }
 
 .message.sent {
-    justify-content: flex-end; 
+    justify-content: flex-end;
 }
 
 .message.received {
-    justify-content: flex-start; 
+    justify-content: flex-start;
 }
 
 .chat-message {
@@ -121,17 +132,19 @@
     padding: 10px;
     border-radius: 10px;
     max-width: 60%;
-    word-wrap: break-word; /* Ensures long words wrap */
-    overflow-wrap: break-word; /* Ensures long words wrap */
+    word-wrap: break-word;
+    /* Ensures long words wrap */
+    overflow-wrap: break-word;
+    /* Ensures long words wrap */
 }
 
 .message.sent .chat-message {
-    background-color:#d6f7ea;
-font-size: 12px;
+    background-color: #d6f7ea;
+    font-size: 12px;
 }
 
 .message.received .chat-message {
-    background-color:#f7f5f5;
+    background-color: #f7f5f5;
     font-size: 12px;
 
 }
@@ -145,10 +158,10 @@ font-size: 12px;
 
 textarea.form-control {
     max-width: 100%;
-    height: 45px;
-    margin-top: 10px;
-    margin-left: 12px;
-   
+    height: 50px;
+    margin-top: 0px;
+    margin-left: 0px;
+
 }
 
 .send-button {
