@@ -26,6 +26,7 @@ import UpdatePatientDetails from './components/UpdatePatientDetails';
 import Graph from './components/Chart';
 import ConsultNote from './components/ConsultNote';
 import Notification from './components/Notification';
+import CompletedAppointmentList from './components/CompletedAppointmentList';
 
 const App: React.FC = () => {
   const router = createBrowserRouter([
@@ -57,6 +58,7 @@ const App: React.FC = () => {
         {path:'/chart',element:<Graph/>},
         {path:"/consult-note/:patientId",element:<ConsultNote/>},
         {path:"/notification",element:<Notification/>},
+        {path:"/complete-appointment-list",element:<CompletedAppointmentList/>}
       ]
     }
   ]);

@@ -83,36 +83,37 @@ Patient.init({
         type: DataTypes.DATE,
         allowNull: true,
     },
-    phoneNumber:{
+    phoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    notes:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    notes: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    laterality:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    laterality: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    timing:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    timing: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    speciality:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    speciality: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
 }, {
     sequelize,
     modelName: 'Patient'
-})
+});
 
-User.hasMany(Patient, { foreignKey: 'referedby', as:'referedbyUser',onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Patient.belongsTo(User, { foreignKey: 'referedby', as:'referedbyUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+// Associations
+User.hasMany(Patient, { foreignKey: 'referedby', as: 'referedbyUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Patient.belongsTo(User, { foreignKey: 'referedby', as: 'referedbyUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-User.hasMany(Patient, { foreignKey: 'referedto', as:'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Patient.belongsTo(User, { foreignKey: 'referedto', as:'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+User.hasMany(Patient, { foreignKey: 'referedto', as: 'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Patient.belongsTo(User, { foreignKey: 'referedto', as: 'referedtoUser', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 Address.hasMany(Patient, { foreignKey: "address", onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Patient.belongsTo(Address, { foreignKey: "address", onDelete: 'CASCADE', onUpdate: 'CASCADE' });

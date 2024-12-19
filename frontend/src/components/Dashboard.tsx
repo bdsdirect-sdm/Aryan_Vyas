@@ -234,7 +234,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" onClick={() => navigate('/complete-appointment-list')}>
           <div className='card-heading' style={{ color: "black" }}>Total Refers Completed</div>
           <div className="card-body2">
             <div className='icon d-flex'>
@@ -389,5 +389,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-
-

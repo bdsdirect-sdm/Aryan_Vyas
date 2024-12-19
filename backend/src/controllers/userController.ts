@@ -1054,6 +1054,12 @@ export const completeAppointmentList = async (req: any, res: any): Promise<void>
             referalstatus: patient.referalstatus,
             referedbyUser: patient.referedbyUser,
             referedtoUser: patient.referedtoUser,
+            dob: patient.dob,         
+            gender: patient.gender,  
+            email: patient.email,     
+            disease: patient.disease,
+            phoneNumber: patient.phoneNumber,
+
           })),
         });
       } else {
@@ -1067,3 +1073,7 @@ export const completeAppointmentList = async (req: any, res: any): Promise<void>
     res.status(500).json({ message: 'Error Finding Completed Appointments', error });
   }
 };
+
+
+
+
