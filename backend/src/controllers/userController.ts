@@ -253,7 +253,7 @@ export const getPatientList = async (req: any, res: Response) => {
         include: [
           {
             model: Appointments,
-            attributes: ["date", "type"], // Include the attributes you need from the Appointments model
+            attributes: ["date", "type"],
           },
         ],
       });
@@ -1031,6 +1031,9 @@ export const completeAppointmentList = async (req: any, res: any): Promise<void>
           ],
           referalstatus: 'Completed',
         },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
         include: [
           {
             model: User,
@@ -1042,25 +1045,36 @@ export const completeAppointmentList = async (req: any, res: any): Promise<void>
             as: 'referedtoUser',
             attributes: ['firstname', 'lastname', 'email'],
           },
+          {
+            model: Appointments,
+            attributes: ["date", "type", "createdAt"],
+          },
         ],
       });
+
       if (patients.length > 0) {
+        const patientListWithAppointments = patients.map((patient) => ({
+          uuid: patient.uuid,
+          firstname: patient.firstname,
+          lastname: patient.lastname,
+          referalstatus: patient.referalstatus,
+          referedbyUser: patient.referedbyUser,
+          referedtoUser: patient.referedtoUser,
+          dob: patient.dob,
+          gender: patient.gender,
+          email: patient.email,
+          disease: patient.disease,
+          phoneNumber: patient.phoneNumber,
+          appointments: patient.Appointments.map((appointment: any) => ({
+            date: appointment.date,          
+            type: appointment.type,         
+            createdAt: appointment.createdAt,
+          })),
+        }));
+
         res.status(200).json({
           message: 'Completed patients list fetched successfully',
-          data: patients.map((patient) => ({
-            uuid: patient.uuid,
-            firstname: patient.firstname,
-            lastname: patient.lastname,
-            referalstatus: patient.referalstatus,
-            referedbyUser: patient.referedbyUser,
-            referedtoUser: patient.referedtoUser,
-            dob: patient.dob,         
-            gender: patient.gender,  
-            email: patient.email,     
-            disease: patient.disease,
-            phoneNumber: patient.phoneNumber,
-
-          })),
+          data: patientListWithAppointments,
         });
       } else {
         res.status(404).json({ message: 'No completed patients found for this doctor' });
@@ -1073,7 +1087,4 @@ export const completeAppointmentList = async (req: any, res: any): Promise<void>
     res.status(500).json({ message: 'Error Finding Completed Appointments', error });
   }
 };
-
-
-
 
