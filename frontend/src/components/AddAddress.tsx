@@ -84,46 +84,46 @@ const AddAddress = ({ close } : { close: () => void }) => {
               <Form>
               <div className="form-group1"> 
                   <label>Title<span className='star'>*</span></label>
-                  <Field type="title" name="title" className="form-control1" placeholder="Enter Address Title"/>
+                  <Field type="title" name="title" className="form-control1" placeholder="Enter Address Title" autoComplete='off' />
                   <ErrorMessage name="title" component="div" className="text-danger1"/>
                 </div>
 
                 <div className="form-group1"> 
                   <label>Street<span className='star'>*</span></label>
-                  <Field type="text" name="street" className="form-control1" placeholder="Enter Your Street"/>
+                  <Field type="text" name="street" className="form-control1" placeholder="Enter Your Street" autoComplete='off' />
                   <ErrorMessage name="street" component="div" className="text-danger1"/>
                 </div>
 
                 <div className="form-group1">
                   <label>City<span className='star'>*</span></label>
-                  <Field type="text" name="city" className="form-control1" placeholder="Enter Your City"/>
+                  <Field type="text" name="city" className="form-control1" placeholder="Enter Your City" autoComplete='off' />
                   <ErrorMessage name="city" component="div" className="text-danger1"/>
                 </div>
             
 
                 <div className="form-group1">
                   <label>District<span className='star'>*</span></label>
-                  <Field type="text" name="district" className="form-control1" placeholder="Enter Your District"/>
+                  <Field type="text" name="district" className="form-control1" placeholder="Enter Your District" autoComplete='off' />
                   <ErrorMessage name="district" component="div" className="text-danger1"/>
                 </div>
              
                 
                 <div className="form-group1">
                   <label>State<span className='star'>*</span></label>
-                  <Field type="text" name="state" className="form-control1" placeholder="Enter Your State"/>
+                  <Field type="text" name="state" className="form-control1" placeholder="Enter Your State" autoComplete='off' />
                   <ErrorMessage name="state" component="div" className="text-danger1"/>
                 </div>
                                   
                 <div className="form-group1">
                   <label>Phone Number<span className='star'>*</span></label>
-                  <Field type="text" name="phone" maxLength={10} className="form-control1" placeholder="Enter Your Phone Number"/>
+                  <Field type="text" name="phone" maxLength={10} className="form-control1" placeholder="Enter Your Phone Number" autoComplete='off' />
                   <ErrorMessage name="phone" component="div" className="text-danger1"/>
                 </div>
            
                 
                 <div className="form-group1">
                   <label>Pincode<span className='star'>*</span></label>
-                  <Field type="text" name="pincode" maxLength={6} className="form-control1" placeholder="Enter Your Pincode"/>
+                  <Field type="text" name="pincode" maxLength={6} className="form-control1" placeholder="Enter Your Pincode" autoComplete='off' />
                   <ErrorMessage name="pincode" component="div" className="text-danger1"/>
                 </div>
                 

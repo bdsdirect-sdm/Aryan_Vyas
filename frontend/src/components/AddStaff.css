@@ -174,3 +174,10 @@
   background-color: #17a2b8;
 }
 
+.add-staff-back{
+  display: flex;
+  gap:20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

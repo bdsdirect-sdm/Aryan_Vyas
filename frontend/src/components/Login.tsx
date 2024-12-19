@@ -96,6 +96,7 @@ const Login: React.FC = () => {
                     id="email" 
                     placeholder="Enter your Email" 
                     className="form-control" 
+                    autocomplete="off"
                   />
                   <ErrorMessage name="email" component="div" className="text-danger" />
                 </div>
@@ -107,7 +108,8 @@ const Login: React.FC = () => {
                     type="password" 
                     id="password" 
                     placeholder="Enter your Password" 
-                    className="form-control" 
+                    className="form-control"
+                    autocomplete="off"
                   />
                   <ErrorMessage name="password" component="div" className="text-danger" />
                 </div>

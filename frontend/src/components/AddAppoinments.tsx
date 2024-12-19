@@ -155,7 +155,7 @@ const AddAppointment: React.FC = () => {
                 </div>
                 <div className="form-field1 col">
                   <label htmlFor="date" className='add-appointment-lable'>Appointment Date<span className='star'>*</span></label>
-                  <Field type="date" name="date" className="form-select1" />
+                  <Field type="date" name="date" className="form-select1" onFocus={(e: any) => e.target.showPicker()}  />
                   <ErrorMessage name="date" component="div" className="text-danger" />
                 </div>
                 <div className="form-field1 col">

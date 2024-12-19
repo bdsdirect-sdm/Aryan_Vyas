@@ -72,4 +72,10 @@
     text-align: center;
     color: red;
   }
-  
+  .appointment-list-back {
+    display: flex;
+    gap:20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px; 
+  }  

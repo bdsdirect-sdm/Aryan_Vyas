@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "./AppointmentList.css";
 import { FaRegEye } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
+import { IoIosArrowBack } from "react-icons/io";
 
 const AppointmentsList: React.FC = () => {
   const navigate = useNavigate();
@@ -121,7 +122,9 @@ console.log("status",response);
   return (
     <div className="appointments-list-container">
       <div className="appointments-list-header">
-        <h5 className="appointments-list-title">Appointments List</h5>
+      <p className="appointment-list-back" onClick={() => navigate("/dashboard")}>
+          <span className='arrow-appointment-list-back'><IoIosArrowBack /></span>Appointment List
+          </p>
         <div className="add-appointment-button">
           <button
             onClick={() => navigate("/add-appointment")}

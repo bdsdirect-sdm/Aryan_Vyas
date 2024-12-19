@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './DoctorList.css'; // Custom styles can be added for spacing or adjustments
+import { IoIosArrowBack } from 'react-icons/io';
 
 const DoctorList: React.FC = () => {
   const navigate = useNavigate();
@@ -99,7 +100,9 @@ const handleSearch = () => {
 
   return (
     <div className="doctor-list-container">
-      <h5 className="referral-title">Doctor List</h5>
+      <p className="doctor-list-back" onClick={() => navigate("/dashboard")}>
+          <span className='doctor-appointment-list-back'><IoIosArrowBack /></span>Doctor List
+          </p>
 
       {/* Search Input and Button */}
       <form className="d-flex mb-4 hii1" style={{marginTop: 10}} role="search">

@@ -9,6 +9,7 @@ import moment from 'moment';
 import { FaRegEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { FaPen } from "react-icons/fa6";
+import { IoIosArrowBack } from 'react-icons/io';
 
 const PatientList: React.FC = () => {
   const navigate = useNavigate();
@@ -156,7 +157,9 @@ const PatientList: React.FC = () => {
   return (
     <div className="patient-list-container">
       <div className='referal-patient'>
-        <h6 style={{ marginTop: 15 }}>Referral Patient</h6>
+      <p className="patient-list-back" onClick={() => navigate("/dashboard")}>
+          <span className='patient-appointment-list-back'><IoIosArrowBack /></span>Referral Patient
+          </p>
       </div>
 
       {/* Patient List Heading and Search */}
@@ -183,6 +186,7 @@ const PatientList: React.FC = () => {
               <tr>
                 <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Patient Name</th>
                 <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>DOB</th>
+                <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Phone Number</th>
                 <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Consult</th>
                 <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Appointment Date</th>
                 <th scope="col" style={{padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)"}}>Created At</th>
@@ -203,6 +207,7 @@ const PatientList: React.FC = () => {
                   <tr key={index}>
                     <td>{patient.firstname} {patient.lastname}</td>
                     <td>{moment(patient.dob).format('DD-MM-YYYY')}</td>
+                    <td>{patient.phoneNumber}</td>
                     <td>{patient.disease}</td>
                     <td>{patient.appointmentDate || '-'}</td>
                     <td>{moment(patient.createdAt).format('DD-MM-YYYY')}</td>

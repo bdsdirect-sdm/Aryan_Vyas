@@ -7,7 +7,13 @@
     overflow-y: auto; 
     margin-top: 0px;
 }
-
+.doctor-list-back {
+    display: flex;
+    gap:20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px; 
+  }  
 /* 
 .table {
     width: 100%;

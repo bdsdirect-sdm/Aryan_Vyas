@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import './AddStaff.css';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const AddStaff: React.FC = () => {
   const navigate = useNavigate();
@@ -141,7 +142,9 @@ const AddStaff: React.FC = () => {
     <>
       <div className="add-staff-container">
         <div className="add-staff">
-          <h5 className="appointments-list-title">Staff List</h5>
+        <p className="add-staff-back" onClick={() => navigate("/dashboard")}>
+          <span className='arrow-add-staff-back'><IoIosArrowBack /></span>Staff List
+          </p>
           <button className="btn-add-staff" onClick={openModal}>+ Add Staff</button>
         </div>
 
@@ -161,6 +164,7 @@ const AddStaff: React.FC = () => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder='Enter Staff Name'
+                    autoComplete='off'
                   />
                   {formik.touched.staffName && formik.errors.staffName && (
                     <div className="text-danger1">{formik.errors.staffName}</div>
@@ -177,6 +181,7 @@ const AddStaff: React.FC = () => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder='Enter Staff Email'
+                    autoComplete='off'
                   />
                   {formik.touched.email && formik.errors.email && (
                     <div className="text-danger1">{formik.errors.email}</div>
@@ -194,6 +199,7 @@ const AddStaff: React.FC = () => {
                     onBlur={formik.handleBlur}
                     maxLength={10}
                     placeholder='Enter Staff Phone number'
+                    autoComplete='off'
                   />
                   {formik.touched.phone && formik.errors.phone && (
                     <div className="text-danger1">{formik.errors.phone}</div>
@@ -253,10 +259,10 @@ const AddStaff: React.FC = () => {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Staff Name</th>
-                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Email</th>
-                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Phone</th>
-                <th scope="col" style={{ padding: "14px 10px", textAlign: "center" }}>Gender</th>
+                <th scope="col table-heading" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Staff Name</th>
+                <th scope="col table-heading" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Email</th>
+                <th scope="col table-heading" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Phone</th>
+                <th scope="col table-heading" style={{ padding: "14px 10px", textAlign: "center", fontFamily: "Roboto, Helvetica, Arial, sans-serif", fontWeight: 600, fontSize: "0.875rem", lineHeight: "1.5rem", letterSpacing: "0.01071em", color: "rgba(0, 0, 0, 0.87)" }}>Gender</th>
               </tr>
             </thead>
             <tbody>

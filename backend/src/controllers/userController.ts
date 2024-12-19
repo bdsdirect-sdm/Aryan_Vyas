@@ -288,6 +288,7 @@ export const getPatientList = async (req: any, res: Response) => {
             address: address,
             dob: patient.dob,
             notes: patient.notes,
+            phoneNumber:patient.phoneNumber,
             appointmentDate: appointmentData ? appointmentData.date : null, // If an appointment exists, include the date
             appointmentType: appointmentData ? appointmentData.type : null, // Include the type if available
           };

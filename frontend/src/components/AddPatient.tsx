@@ -12,8 +12,8 @@ import "./AddPatient.css";
 import { IoIosArrowBack } from "react-icons/io";
 
 
-import { io } from "socket.io-client";
-import { jwtDecode } from "jwt-decode";
+// import { io } from "socket.io-client";
+// import { jwtDecode } from "jwt-decode";
 // const socket = io(`${Local.BASE_URL}`);
 // const token: any = localStorage.getItem("token");
 // const decoded: any = jwtDecode(token);
@@ -35,7 +35,6 @@ const AddPatient: React.FC = () => {
       console.log(response)
       // emitNotification(response.data.patient.referedto);
       // console.log(response.data.patient.referedto);
-      toast.success("Patient referred successfully");
       toast.success("Patient referred successfully");
       navigate('/patient');
     } catch (err: any) {
@@ -77,7 +76,7 @@ const AddPatient: React.FC = () => {
     .required('Last Name is required'),
     gender: Yup.string().required("Gender Is required"),
     email: Yup.string().email('Invalid email').required('Email is required'),
-    dob: Yup.date().required('DOB is required').max(new Date(), 'Date of birth cannot be a future date'),
+    dob: Yup.date().required('Date of birth is required').max(new Date(), 'Date of birth cannot be a future date'),
     disease: Yup.string().required("Disease is required"),
     referedto: Yup.string().required("Select Doctor"),
     address: Yup.string().required("Address is required"),
@@ -136,7 +135,9 @@ const AddPatient: React.FC = () => {
 
   return (
     <div className="add-patient-container">
-      <h5 className="referral-title" onClick={() => navigate("/patient")}><IoIosArrowBack />Add Referral Patient</h5>
+       <p className="add-patient-back" onClick={() => navigate("/patient")}>
+          <span className='arrow-add-patient-back'><IoIosArrowBack /></span>Referral Patient
+          </p>
       <Formik
         initialValues={{
           firstname: '',
@@ -170,7 +171,7 @@ const AddPatient: React.FC = () => {
               <div className='referral-fields1 row'>
                 <div className="form-group col">
                   <label>Date of Birth<span className='star'>*</span></label>
-                  <Field type="date" name="dob" className="form-control" style={{color:"#495057"}}/>
+                  <Field type="date" name="dob" className="form-control" onFocus={(e: any) => e.target.showPicker()} style={{color:"#495057"}}/>
                   <ErrorMessage name="dob" component="div" className="text-danger" />
                 </div>
 
@@ -248,7 +249,7 @@ const AddPatient: React.FC = () => {
 
                 <div className="form-group col">
                   <label className="form-label">Patient to return to your care afterwards</label>
-                  <div>
+                  <div style={{marginTop: 5}}>
                     <Field name="referback">
                       {({ field, form }) => (
                         <FormControlLabel
@@ -263,7 +264,7 @@ const AddPatient: React.FC = () => {
                         />
                       )}
                     </Field>
-                    <ErrorMessage name="referback" component="div" className="text-danger" />
+                    <ErrorMessage name="referback" component="div" className="text-danger-refer"/>
                   </div>
                 </div>
 
@@ -338,14 +339,14 @@ const AddPatient: React.FC = () => {
 
                 <div className="form-group col">
                   <label>Policy Starting Date<span className='star'>*</span></label>
-                  <Field type="date" name="policyStartingDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
+                  <Field type="date" name="policyStartingDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}} onFocus={(e: any) => e.target.showPicker()}  />
                   <ErrorMessage name="policyStartingDate" component="div" className="text-danger" />
                 </div>
 
                 <div className="form-group col">
                   <label>Policy Expire Date<span className='star'>*</span></label>
                   <Field type="date"
-                    name="policyExpireDate" placeholder="Enter Date" className="form-control" style={{color:"#495057"}}/>
+                    name="policyExpireDate" placeholder="Enter Date" className="form-control" onFocus={(e: any) => e.target.showPicker()} style={{color:"#495057"}}/>
                   <ErrorMessage name="policyExpireDate" component="div" className="text-danger" />
                 </div>
               </div>

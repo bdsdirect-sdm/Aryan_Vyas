@@ -55,9 +55,9 @@ section.sign-up-section {
 }
 
 form.auth-form {
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #ECF1F3;
+    border-radius: 3px;
     padding: 0px;
 }
 
@@ -65,7 +65,9 @@ form.auth-form {
 .password-fields label {
     font-size: var(--para-size);
 }
-
+/* input::placeholder{
+    color:#F5F5F5;
+} */
 select#doctorType {
     position: relative;
     width: 100%;
