@@ -308,7 +308,7 @@ const Profile: React.FC = () => {
 
         <div className='address-info'>
 
-          <p>
+          <div>
             <span className="fw-medium">Address Information</span>
             <div className='address-data'>
 
@@ -338,7 +338,7 @@ const Profile: React.FC = () => {
               ))}
             </div>
 
-          </p>
+          </div>
 
           {/* <p>Type: {user.doctype === 2 ? 'OD' : 'MD'}</p> */}
 

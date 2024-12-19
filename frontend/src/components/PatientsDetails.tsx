@@ -64,7 +64,7 @@ const PatientDetails: React.FC = () => {
     return (
         <div className="patient-details-container">
             <div className='details-btn'>
-                <p className='back fw-bold' onClick={() => navigate("/patient")}><IoIosArrowBack /> Back</p>
+                <p className='back fw-bold' onClick={() => navigate(-1)}><IoIosArrowBack /> Back</p>
                 <button className="appointment-btn" onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
             </div>
             <div className='patient-info'>
