@@ -1,0 +1,125 @@
+Milestone 1: Week 1 (Dec 23 – Dec 29, 2024) - Total 45 Hours
+
+    Frontend Setup & Basic Pages (Signup, Login, Authentication):
+        Signup Screen (Figma design integration): 8 hours
+        Login Screen (Figma design integration): 8 hours
+        JWT Authentication Setup (localStorage/cookie management, secure login flow): 6 hours
+        Backend Integration for Signup/Login (API integration): 6 hours
+        Testing and Debugging (Verify signup/login flow and error handling): 5 hours
+        UI & UX Adjustments: 3 hours
+        Project Setup & Configuration (Frontend setup for React, TypeScript, Redux, etc.): 9 hours
+
+Milestone 2: Week 2 (Dec 30, 2024 – Jan 5, 2025) - Total 45 Hours
+
+    Dashboard & User Profile Features:
+        Dashboard Screen (List active waves, display friends): 8 hours
+        View User Profile Popup (Display user details in a modal): 6 hours
+        Friends List (Implement add friends, pending/accepted status): 7 hours
+        Invite Friends Form (Email uniqueness validation, pending/accepted status): 6 hours
+        Waves Management (Create, activate/deactivate waves): 6 hours
+        Profile Screen - Basic & Personal Tabs (Create profile editing form): 7 hours
+        UI & UX Adjustments (Refine designs for user interface): 5 hours
+
+Milestone 3: Week 3 (Jan 6 – Jan 12, 2025) - Total 45 Hours
+
+    Advanced Features & Preferences:
+        Preferences Screen (Create and store user preferences): 6 hours
+        Change Password Screen (Form with password validation): 6 hours
+        Comments Section (Add, edit, and delete comments on waves): 8 hours
+        Backend Integration for Comments (Ensure JWT authentication for comment API): 6 hours
+        Profile Tabs Enhancement (Refine Basic/Personal tabs, save preferences): 6 hours
+        Security & Authentication Features (Secure routes and JWT token management): 6 hours
+        Code Cleanup & Linting: 3 hours
+
+Milestone 4: Week 4 (Jan 13 – Jan 19, 2025) - Total 45 Hours
+
+    Admin Portal & Final Touches:
+        Admin Login & Register Screens (Create admin authentication forms): 6 hours
+        Admin Dashboard (Charts for users, waves, and admin control): 7 hours
+        Manage Users (View, edit, delete users, change status): 7 hours
+        Manage Waves (View, edit, delete waves, change status): 7 hours
+        Export Users & Waves (Implement CSV export functionality for users and waves): 6 hours
+        Admin Comments Management (View and delete user comments): 5 hours
+        HIPAA Compliance Implementation (Audit logs, password expiry, account lockout): 5 hours
+        Final Testing & Debugging (Ensure everything works as intended): 4 hours
+
+Overview of Task Distribution
+Milestone	Tasks	Hours
+Week 1	Signup, Login, JWT Authentication, Backend Integration, Setup	45 hours
+Week 2	Dashboard, User Profile, Friends List, Waves, Profile Tabs	45 hours
+Week 3	Preferences, Change Password, Comments, Backend Integration, Security	45 hours
+Week 4	Admin Portal, Final Testing, HIPAA Compliance	45 hours
+Key Considerations:
+
+    Total Hours: 180 hoMilestone 1: Week 1 (Dec 23 – Dec 29, 2024) - Total 45 Hours
+
+    Frontend Setup & Basic Pages (Signup, Login, Authentication):
+        Signup Screen (Figma design integration): 8 hours
+        Login Screen (Figma design integration): 8 hours
+        JWT Authentication Setup (localStorage/cookie management, secure login flow): 6 hours
+        Backend Integration for Signup/Login (API integration): 6 hours
+        Testing and Debugging (Verify signup/login flow and error handling): 5 hours
+        UI & UX Adjustments: 3 hours
+        Project Setup & Configuration (Frontend setup for React, TypeScript, Redux, etc.): 9 hours
+
+Milestone 2: Week 2 (Dec 30, 2024 – Jan 5, 2025) - Total 45 Hours
+
+    Dashboard & User Profile Features:
+        Dashboard Screen (List active waves, display friends): 8 hours
+        View User Profile Popup (Display user details in a modal): 6 hours
+        Friends List (Implement add friends, pending/accepted status): 7 hours
+        Invite Friends Form (Email uniqueness validation, pending/accepted status): 6 hours
+        Waves Management (Create, activate/deactivate waves): 6 hours
+        Profile Screen - Basic & Personal Tabs (Create profile editing form): 7 hours
+        UI & UX Adjustments (Refine designs for user interface): 5 hours
+
+Milestone 3: Week 3 (Jan 6 – Jan 12, 2025) - Total 45 Hours
+
+    Advanced Features & Preferences:
+        Preferences Screen (Create and store user preferences): 6 hours
+        Change Password Screen (Form with password validation): 6 hours
+        Comments Section (Add, edit, and delete comments on waves): 8 hours
+        Backend Integration for Comments (Ensure JWT authentication for comment API): 6 hours
+        Profile Tabs Enhancement (Refine Basic/Personal tabs, save preferences): 6 hours
+        Security & Authentication Features (Secure routes and JWT token management): 6 hours
+        Code Cleanup & Linting: 3 hours
+
+Milestone 4: Week 4 (Jan 13 – Jan 19, 2025) - Total 45 Hours
+
+    Admin Portal & Final Touches:
+        Admin Login & Register Screens (Create admin authentication forms): 6 hours
+        Admin Dashboard (Charts for users, waves, and admin control): 7 hours
+        Manage Users (View, edit, delete users, change status): 7 hours
+        Manage Waves (View, edit, delete waves, change status): 7 hours
+        Export Users & Waves (Implement CSV export functionality for users and waves): 6 hours
+        Admin Comments Management (View and delete user comments): 5 hours
+        HIPAA Compliance Implementation (Audit logs, password expiry, account lockout): 5 hours
+        Final Testing & Debugging (Ensure everything works as intended): 4 hours
+
+Overview of Task Distribution
+Milestone	Tasks	Hours
+Week 1	Signup, Login, JWT Authentication, Backend Integration, Setup	45 hours
+Week 2	Dashboard, User Profile, Friends List, Waves, Profile Tabs	45 hours
+Week 3	Preferences, Change Password, Comments, Backend Integration, Security	45 hours
+Week 4	Admin Portal, Final Testing, HIPAA Compliance	45 hours
+Key Considerations:
+
+    Total Hours: 180 hours (45 hours/week)
+    Testing & Debugging: Each week, allocate some time for testing and ensuring all functionality works as expected.
+    Security: Ensure proper JWT implementation for all protected routes, especially on the backend and user authentication.
+    Deployment: Deploy the project on staging and do final checks before submission.
+
+Submission
+
+    Deadline: Jan 20, 2025 (Submit on GitHub or another version control platform)
+
+This breakdown ensures that your project is completed on time, while providing a reasonable amount of effort per week to balance both frontend and backend tasks effectively. Let me know if you'd like further details on any specific section!urs (45 hours/week)
+    Testing & Debugging: Each week, allocate some time for testing and ensuring all functionality works as expected.
+    Security: Ensure proper JWT implementation for all protected routes, especially on the backend and user authentication.
+    Deployment: Deploy the project on staging and do final checks before submission.
+
+Submission
+
+    Deadline: Jan 20, 2025 (Submit on GitHub or another version control platform)
+
+This breakdown ensures that your project is completed on time, while providing a reasonable amount of effort per week to balance both frontend and backend tasks effectively. Let me know if you'd like further details on any specific section!
