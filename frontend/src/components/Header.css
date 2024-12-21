@@ -128,9 +128,15 @@
     color: #43d79e;
   }
   
+  .nav-link {
+    border-left: 1px solid transparent;
+  }
+  
   .nav-link:hover {
     background-color: #f4fffb;
     color: #43d79e;
+    border-left: 1px solid #43d79e;
+    transition: background-color 0.4s, border-left 0.4s ease; 
   }
   
   .btn {

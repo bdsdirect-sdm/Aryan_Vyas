@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
 
 
       <div className='head-graph'>
-      <h6 className="dashboard-title fw-bold" style={{ fontSize: 16, color: "black" }}>Dashboard</h6>
+      <h6 className="dashboard-title fw-bold" style={{ fontSize: 18, color: "#232A2E" }}>Dashboard</h6>
         <span className="graph-btn" onClick={handleNavigateToGraph}>Graph<span className='graph-icon'><MdOutlineAutoGraph /></span></span>
 
       </div>
@@ -255,7 +255,7 @@ const Dashboard: React.FC = () => {
       <div className='refer d-flex'>
         {user?.doctype === 2 ? (
           <>
-            <h6 className="refer-title">Refer a Patient</h6>
+            <h6 className="refer-title fw-bold" style={{color:"#232A2E",fontSize:18,fontWeight:500}}>Refer a Patient</h6>
             <button className="appointment-btn" style={{ marginTop: -10 }} onClick={() => navigate("/add-patient")}>+Add Referral Patient</button>
           </>
         ) : (
