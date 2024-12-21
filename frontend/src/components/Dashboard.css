@@ -16,8 +16,7 @@
 
 .head-graph{
     display: flex;
-    justify-content: flex-end;
-    gap:20px;
+    justify-content: space-between;
 }
 .graph-line{
     color: #35c0e4;

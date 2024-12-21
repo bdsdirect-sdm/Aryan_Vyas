@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import api from '../api/axiosInstance';
 import * as Yup from 'yup';
 import "./AddAppointment.css";
+import { IoIosArrowBack } from 'react-icons/io';
 
 const AddAppointment: React.FC = () => {
   const navigate = useNavigate();
@@ -122,8 +123,9 @@ const AddAppointment: React.FC = () => {
   }
 
   return (
-    <div className="add-appointment-container">
-      <p className="add-title fw-medium fs-5">Add Appointment</p>
+    <div className="add-appointment-container" >
+      <p style={{cursor:"pointer", fontWeight:"bold" ,display:"flex" ,gap:15}} onClick={() => navigate(-1)}>
+      <span className="add-title" ><IoIosArrowBack /></span>Add Appointment</p>
       <Formik
         initialValues={{
           patientId: '',

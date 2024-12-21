@@ -213,15 +213,10 @@ const Dashboard: React.FC = () => {
 
 
       <div className='head-graph'>
-        <span className="graph-btn" onClick={handleNavigateToGraph}>Graph<span className='graph-icon'><MdOutlineAutoGraph /></span></span>
-      </div>
-
-
-
-
-
       <h6 className="dashboard-title fw-bold" style={{ fontSize: 16, color: "black" }}>Dashboard</h6>
+        <span className="graph-btn" onClick={handleNavigateToGraph}>Graph<span className='graph-icon'><MdOutlineAutoGraph /></span></span>
 
+      </div>
       <div className="metrics-cards">
         <div className="card" onClick={() => navigate('/patient')}>
           <div className='card-heading' style={{ color: "black" }}>Referrals Received</div>
@@ -230,7 +225,7 @@ const Dashboard: React.FC = () => {
               <img src="referReceived.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersReceived}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 19</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update: jan 20</div>
           </div>
         </div>
 
@@ -241,7 +236,7 @@ const Dashboard: React.FC = () => {
               <img src="referCompleted.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalRefersCompleted}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 19</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update: jan 20</div>
           </div>
         </div>
 
@@ -252,7 +247,7 @@ const Dashboard: React.FC = () => {
               <img src="od_md.png" alt="EyeRefer" className='icon-2' />
               <div className="card-text">{totalDoctors}</div>
             </div>
-            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update:dec 19</div>
+            <div className='d-flex justify-content-end fw-bold' style={{ color: "#737A7D" }}>Last update: jan 20</div>
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ const AppointmentDetails: React.FC = () => {
         </div>
 
         <div className="col" style={{display:"flex"}}>
-          <p className="appointment-heading"style={{fontWeight:"bold"}}>Appointment Date:</p><span style={{color:"#737a7d",fontWeight:"bold"}}>{" "} {moment(appointmentData.appoinment.date).format("DD-MM-YYYY")}</span>
+          <p className="appointment-heading"style={{fontWeight:"bold"}}>Appointment Date: </p><span style={{color:"#737a7d",fontWeight:"bold"}}>{" "} {moment(appointmentData.appoinment.date).format("DD-MM-YYYY")}</span>
           
         </div>
       <div className="col">
