@@ -1,0 +1,712 @@
+import React, { useEffect, useState } from "react";
+import "./Preferences.css";
+import { useNavigate, useParams } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Local } from "../environment/env";
+import * as Yup from "yup"; // Import Yup
+
+const Preferences = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [preferences, setPreferences] = useState<any>({});
+
+  useEffect(() => {
+    getPreferencesDetail();
+  }, []);
+
+  const getPreferencesDetail = async () => {
+    try {
+      const response = await axios.get(
+        `${Local.BASE_URL}${Local.GET_PREFERENCES}/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status) {
+        const data = response.data.data;
+        setPreferences(data); // Update preferences state
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 1500,
+      });
+    }
+  };
+
+  const postPreferences = async (values: any) => {
+    try {
+      const response = await axios.put(
+        `${Local.BASE_URL}${Local.UPDATE_PREFERENCES}/${id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    } catch (error: any) {
+      console.error(error.response.data.message);
+      toast.error(error.response.data.message, {
+        position: "top-right",
+        autoClose: 300,
+      });
+    }
+  };
+
+
+
+
+  const validationSchema = Yup.object().shape({
+    breakfast: Yup.string().required("Breakfast time is required"),
+    lunch: Yup.string().required("Lunch time is required"),
+    dinner: Yup.string().required("Dinner time is required"),
+    wakeTime: Yup.string().required("Wake time is required"),
+    bedTime: Yup.string().required("Bed time is required"),
+    weight: Yup.string().required("weight is required"),
+    height:Yup.string().required("height is required"),
+    bloodGlucose: Yup.string().required("bloodGlucose is required"),
+    cholesterol: Yup.string().required("cholesterol is required"),
+    bloodPressure: Yup.string().required("blood Pressure is required"),
+    distance: Yup.string().required("distance is required"),
+    // memberServiceEmails: Yup.boolean(),
+    // sms: Yup.boolean(),
+    // phoneCall: Yup.boolean(),
+    // post: Yup.boolean(),
+  });
+
+
+  console.log("-----------preferences----------",preferences)
+
+  return (
+    <div className="dashboard-wrapper">
+      <div className="user-wrapper">
+        <div id="preferences-header">
+          <img
+            src="../../public/images/left-arrow.png"
+            alt=""
+            id="left-arrow"
+            onClick={() => navigate(`/user/${id}`)}
+          />
+          <h2>Preferences</h2>
+        </div>
+      </div>
+
+      {preferences && (
+        <Formik
+          enableReinitialize={true} // Allow Formik to reinitialize when preferences update
+          initialValues={{
+            language: preferences.language || "English",
+            breakfast: preferences.breakfast || "",
+            lunch: preferences.lunch || "",
+            dinner: preferences.dinner || "",
+            wakeTime: preferences.wakeTime || "",
+            bedTime: preferences.bedTime || "",
+            weight: preferences.weight || "",
+            height: preferences.height || "",
+            bloodGlucose: preferences.bloodGlucose || "",
+            cholesterol: preferences.cholesterol || "",
+            bloodPressure: preferences.bloodPressure || "",
+            distance: preferences.distance || "",
+            systemEmails: preferences.systemEmails || false,
+            memberServiceEmails: preferences.memberServiceEmails || false,
+            sms: preferences.sms || false,
+            phoneCall: preferences.phoneCall || false,
+            post: preferences.post || false,
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            postPreferences(values);
+          }}
+        >
+          {({ values, setFieldValue, handleChange }) => (
+            <Form>
+              <div id="preferences-container" style={{ marginBottom: "39px" }}>
+                <div id="preference-form">
+                  <div id="preference-details">
+                    <div id="preference-1">
+                      <label htmlFor="language">Language</label>
+                      <br />
+                      <Field
+                        as="select"
+                        name="language"
+                        id="language"
+                        onChange={(e: any) => {
+                          handleChange(e); // Update Formik values
+                          setFieldValue("language", e.target.value); // Optional: Sync with Formik
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            language: e.target.value, // Update local state
+                          }));
+                        }}
+                      >
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                      </Field>
+                      <ErrorMessage
+                        name="language"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div id="preference-2">
+                      <label htmlFor="breakfast">Breakfast</label>
+                      <br />
+                      <Field
+                        type="time"
+                        name="breakfast"
+                        id="breakfast"
+                        value={values.breakfast || "00:00"}
+                        onChange={(e: any) => {
+                          handleChange(e); // Update Formik values
+                          setFieldValue("breakfast", e.target.value); // Sync with Formik
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            breakfast: e.target.value, // Update local state
+                          }));
+                        }}
+                      />
+                     <ErrorMessage name="breakfast" component="div" className="error" />
+                    </div>
+
+                  </div>
+                  <div id="preference-details">
+                    <div id="preference-1">
+                      <label htmlFor="lunch">Lunch</label>
+                      <br />
+                      <Field
+                        type="time"
+                        name="lunch"
+                        className="Lunch"
+                        id="Lunch"
+                        value={values.lunch || "00:00"}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          handleChange(e); // Update Formik state
+                          setFieldValue("lunch", e.target.value); // Sync with Formik explicitly
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            lunch: e.target.value, // Update local preferences state
+                          }));
+                        }}
+                      />
+                      <ErrorMessage name="lunch" component="div" className="error" />
+                    </div>
+                    <div id="preference-2">
+                      <label htmlFor="dinner">Dinner</label>
+                      <br />
+                      <Field
+                        type="time"
+                        name="dinner"
+                        className="Dinner"
+                        id="Dinner"
+                        value={values.dinner || "00:00"}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          handleChange(e); // Update Formik state
+                          setFieldValue("dinner", e.target.value); // Sync with Formik explicitly
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            dinner: e.target.value, // Update local preferences state
+                          }));
+                        }}
+                      />
+                      <ErrorMessage name="dinner" component="div" className="error" />
+                    </div>
+                  </div>
+                  <div id="preference-details">
+                    <div id="preference-1">
+                      <label htmlFor="wakeTime">Wake Time</label>
+                      <br />
+                      <Field
+                        type="time"
+                        name="wakeTime"
+                        className="wakeTime"
+                        id="wakeTime"
+                        value={values.wakeTime || "00:00"}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          handleChange(e); // Update Formik state
+                          setFieldValue("wakeTime", e.target.value); // Sync with Formik explicitly
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            wakeTime: e.target.value, // Update local preferences state
+                          }));
+                        }}
+                      />
+                      <ErrorMessage name="wakeTime" component="div" className="error" />
+                    </div>
+                    <div id="preference-2">
+                      <label htmlFor="bedTime">Bed Time</label>
+                      <br />
+                      <Field
+                        type="time"
+                        name="bedTime"
+                        className="bedTime"
+                        id="bedTime"
+                        value={values.bedTime || "00:00"}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          handleChange(e); // Update Formik state
+                          setFieldValue("bedTime", e.target.value); // Sync with Formik explicitly
+                          setPreferences((prev: any) => ({
+                            ...prev,
+                            bedTime: e.target.value, // Update local preferences state
+                          }));
+                        }}
+                      />
+                      <ErrorMessage name="bedTime" component="div" className="error" />
+                    </div>
+                  </div>
+                  <div id="radio-group">
+                    {/* Weight */}
+                    <div className="radio-column">
+                      <label htmlFor="weight">Weight</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="weight-kg"
+                            name="weight"
+                            value="kg"
+                            checked={values.weight === "kg"} // Ensure the radio button is selected based on current Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("weight", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                weight: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="weight-kg">kg</label><br />
+                       
+                        </div>
+                        <div
+                          className="radio-option"
+                          style={{ marginLeft: "37px" }}
+                        >
+                          <Field
+                            type="radio"
+                            id="weight-lbs"
+                            name="weight"
+                            value="lbs"
+                            checked={values.weight === "lbs"} // Ensure the radio button is selected based on current Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("weight", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                weight: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="weight-lbs">lbs</label>
+                        </div>
+                      </div>
+                          <ErrorMessage name="weight" component="div" className="error" />
+                    </div>
+
+                    {/* Height */}
+                    <div className="radio-column">
+                      <label htmlFor="height">Height</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="height-cm"
+                            name="height"
+                            value="cm"
+                            checked={values.height === "cm"} // Ensure the radio button is selected based on current Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("height", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                height: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="height-cm">cm</label>
+                        </div>
+                        <div
+                          className="radio-option"
+                          style={{ marginLeft: "30px" }}
+                        >
+                          <Field
+                            type="radio"
+                            id="height-ft"
+                            name="height"
+                            value="ft/inches"
+                            checked={values.height === "ft/inches"} // Ensure the radio button is selected based on current Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("height", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                height: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="height-ft">ft/inches</label>
+                        </div>
+                      </div>
+                    <ErrorMessage name="height" component="div" className="error" />
+                    </div>
+                  </div>
+                  <div id="radio-group">
+                    {/* Blood Glucose */}
+                    <div className="radio-column">
+                      <label htmlFor="blood-glucose">Blood Glucose</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="glucose-mmol"
+                            name="bloodGlucose"
+                            value="mmol/l"
+                            checked={values.bloodGlucose === "mmol/l"} // Ensures the radio button is selected based on Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("bloodGlucose", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                bloodGlucose: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="glucose-mmol">mmol/l</label>
+                        </div>
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="glucose-mgdl"
+                            name="bloodGlucose"
+                            value="mg/dl"
+                            checked={values.bloodGlucose === "mg/dl"} // Ensures the radio button is selected based on Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("bloodGlucose", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                bloodGlucose: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="glucose-mgdl">mg/dl</label>
+                        </div>
+                      </div>
+                      <ErrorMessage name="bloodGlucose" component="div" className="error" />
+
+                    </div>
+
+                    {/* Cholesterol */}
+                    <div className="radio-column">
+                      <label htmlFor="cholesterol">Cholesterol</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="cholesterol-mmol"
+                            name="cholesterol"
+                            value="mmol/l"
+                            checked={values.cholesterol === "mmol/l"} // Ensures the radio button is selected based on Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("cholesterol", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                cholesterol: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="cholesterol-mmol">mmol/l</label>
+                        </div>
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="cholesterol-mgdl"
+                            name="cholesterol"
+                            value="mg/dl"
+                            checked={values.cholesterol === "mg/dl"} // Ensures the radio button is selected based on Formik value
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("cholesterol", e.target.value); // Sync with Formik explicitly
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                cholesterol: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="cholesterol-mgdl">mg/dl</label>
+                        </div>
+                      </div>
+                      <ErrorMessage name="cholesterol" component="div" className="error" />
+
+                    </div>
+                    
+                  </div>
+                  <div id="radio-group">
+                    {/* Blood Pressure */}
+                    <div className="radio-column">
+                      <label htmlFor="blood-pressure">Blood Pressure</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="pressure-kpa"
+                            name="bloodPressure"
+                            value="kPa"
+                            checked={values.bloodPressure === "kPa"} // Ensures the correct radio button is checked
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("bloodPressure", e.target.value); // Sync with Formik value
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                bloodPressure: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="pressure-kpa">kPa</label>
+                        </div>
+                        <div
+                          className="radio-option"
+                          style={{ marginLeft: "20px" }}
+                        >
+                          <Field
+                            type="radio"
+                            id="pressure-mmHg"
+                            name="bloodPressure"
+                            value="mmHg"
+                            checked={values.bloodPressure === "mmHg"} // Ensures the correct radio button is checked
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("bloodPressure", e.target.value); // Sync with Formik value
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                bloodPressure: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="pressure-mmHg">mmHg</label>
+                        </div>
+                      </div>
+                      <ErrorMessage name="bloodPressure" component="div" className="error" />
+
+                    </div>
+
+                    {/* Distance */}
+                    <div className="radio-column">
+                      <label htmlFor="distance">Distance</label>
+                      <div className="radio-options">
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="distance-km"
+                            name="distance"
+                            value="km"
+                            checked={values.distance === "km"} // Ensures the correct radio button is checked
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("distance", e.target.value); // Sync with Formik value
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                distance: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="distance-km">km</label>
+                        </div>
+                        <div className="radio-option">
+                          <Field
+                            type="radio"
+                            id="distance-miles"
+                            name="distance"
+                            value="miles"
+                            checked={values.distance === "miles"} // Ensures the correct radio button is checked
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(e); // Update Formik state
+                              setFieldValue("distance", e.target.value); // Sync with Formik value
+                              setPreferences((prev: any) => ({
+                                ...prev,
+                                distance: e.target.value, // Update local preferences state
+                              }));
+                            }}
+                          />
+                          <label htmlFor="distance-miles">miles</label>
+                        </div>
+                      </div>
+                    <ErrorMessage name="distance" component="div" className="error" />
+                    </div>
+
+                  </div>
+                  <div id="communication-type">
+                    <span></span>
+                    <p id="communication" style={{ color: "#3c3d3e" }}>
+                      Communication Type
+                    </p>
+                    <span></span>
+                  </div>
+                  <div id="communication-preferences-container">
+                    <div
+                      id="communication-preferences"
+                      className="preferences-section"
+                    >
+                      {/* System Emails */}
+                      <div id="preference-email" className="preference-item">
+                        <label htmlFor="systemEmails">System Emails</label>
+                        <label className="new-switch">
+                          <Field
+                            type="checkbox"
+                            name="systemEmails"
+                            id="systemEmails"
+                            checked={values.systemEmails === 1}
+                            onChange={() =>
+                              setFieldValue(
+                                "systemEmails",
+                                values.systemEmails === 1 ? 0 : 1
+                              )
+                            }
+                          />
+                          <span className="new-slider round"></span>
+                        </label>
+                      </div>
+
+                      {/* Member Services Emails */}
+                      <div
+                        id="preference-member-services"
+                        className="preference-item"
+                      >
+                        <label htmlFor="memberServiceEmails">
+                          Member Services Emails
+                        </label>
+                        <label className="new-switch">
+                          <Field
+                            type="checkbox"
+                            name="memberServiceEmails"
+                            id="memberServiceEmails"
+                            checked={values.memberServiceEmails === 1}
+                            onChange={() =>
+                              setFieldValue(
+                                "memberServiceEmails",
+                                values.memberServiceEmails === 1 ? 0 : 1
+                              )
+                            }
+                          />
+                          <span className="new-slider round"></span>
+                        </label>
+                      </div>
+
+                      {/* SMS */}
+                      <div id="preference-sms" className="preference-item">
+                        <label htmlFor="sms">SMS</label>
+                        <label className="new-switch" style={{ left: "16.2%" }}>
+                          <Field
+                            type="checkbox"
+                            name="sms"
+                            id="sms"
+                            checked={values.sms === 1}
+                            onChange={() =>
+                              setFieldValue("sms", values.sms === 1 ? 0 : 1)
+                            }
+                          />
+                          <span className="new-slider round"></span>
+                        </label>
+                      </div>
+
+                      {/* Phone Calls */}
+                      <div id="preference-phone" className="preference-item">
+                        <label htmlFor="phoneCall">Phone Calls</label>
+                        <label className="new-switch" style={{ left: "5%" }}>
+                          <Field
+                            type="checkbox"
+                            name="phoneCall"
+                            id="phoneCall"
+                            checked={values.phoneCall === 1}
+                            onChange={() =>
+                              setFieldValue(
+                                "phoneCall",
+                                values.phoneCall === 1 ? 0 : 1
+                              )
+                            }
+                          />
+                          <span className="new-slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="communication-preferences-container">
+                    <div className="preferences-section">
+                      {/* Post Preference */}
+                      <div id="preference-sms" className="preference-item">
+                        <label htmlFor="post">Post</label>
+                        <label className="new-switch" style={{ left: "16%" }}>
+                          <Field
+                            type="checkbox"
+                            name="post"
+                            id="post"
+                            checked={values.post === 1}
+                            onChange={
+                              () =>
+                                setFieldValue("post", values.post === 1 ? 0 : 1) // Toggle between 0 and 1
+                            }
+                          />
+                          <span className="new-slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-row button-row">
+                    <button
+                      type="submit"
+                      id="update-button"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Update
+                    </button>
+                  </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      )}
+    </div>
+  );
+};
+
+export default Preferences;
