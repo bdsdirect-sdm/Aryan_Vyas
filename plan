@@ -1,125 +1,878 @@
-Milestone 1: Week 1 (Dec 23 – Dec 29, 2024) - Total 45 Hours
+profile.tsx
+import React, { useEffect, useRef, useState } from "react";
+import "./Profile.css";
+import BasicDetails from "./BasicDetails";
+import PersonalDetails from "./PersonalDetails";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { Local } from "../environment/env";
+import userIcon from '../../public/images/user.jpeg'
+import { toast } from "react-toastify";
+import { useProfile } from "../context/ProfileContext";
 
-    Frontend Setup & Basic Pages (Signup, Login, Authentication):
-        Signup Screen (Figma design integration): 8 hours
-        Login Screen (Figma design integration): 8 hours
-        JWT Authentication Setup (localStorage/cookie management, secure login flow): 6 hours
-        Backend Integration for Signup/Login (API integration): 6 hours
-        Testing and Debugging (Verify signup/login flow and error handling): 5 hours
-        UI & UX Adjustments: 3 hours
-        Project Setup & Configuration (Frontend setup for React, TypeScript, Redux, etc.): 9 hours
+const Profile = () => {
+  const [activeTab,setActiveTab] = useState("BasicDetails"); 
+  // const [profileIcon , setProfileIcon] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const {id}= useParams();
+  // console.log(id);
+  const navigate = useNavigate()
+  const { setProfileIcon , profileIcon } = useProfile();
 
-Milestone 2: Week 2 (Dec 30, 2024 – Jan 5, 2025) - Total 45 Hours
+  const handleTab = (tab: string)=>{
+    setActiveTab(tab);
+  }
 
-    Dashboard & User Profile Features:
-        Dashboard Screen (List active waves, display friends): 8 hours
-        View User Profile Popup (Display user details in a modal): 6 hours
-        Friends List (Implement add friends, pending/accepted status): 7 hours
-        Invite Friends Form (Email uniqueness validation, pending/accepted status): 6 hours
-        Waves Management (Create, activate/deactivate waves): 6 hours
-        Profile Screen - Basic & Personal Tabs (Create profile editing form): 7 hours
-        UI & UX Adjustments (Refine designs for user interface): 5 hours
+  useEffect(()=>{
+    getProfile();
+  },[]);
+  
 
-Milestone 3: Week 3 (Jan 6 – Jan 12, 2025) - Total 45 Hours
+  const getProfile = async()=>{
+    const token = localStorage.getItem('token');
+    if(!token){
+      return navigate(`/`);
+    }
+    try {
+      const response = await axios.get(`${Local.BASE_URL}${Local.GET_USER_NAME}/${id}`,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
+      const data = response.data.data.profileIcon; 
+      if(data){
+        setProfileIcon(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    Advanced Features & Preferences:
-        Preferences Screen (Create and store user preferences): 6 hours
-        Change Password Screen (Form with password validation): 6 hours
-        Comments Section (Add, edit, and delete comments on waves): 8 hours
-        Backend Integration for Comments (Ensure JWT authentication for comment API): 6 hours
-        Profile Tabs Enhancement (Refine Basic/Personal tabs, save preferences): 6 hours
-        Security & Authentication Features (Secure routes and JWT token management): 6 hours
-        Code Cleanup & Linting: 3 hours
 
-Milestone 4: Week 4 (Jan 13 – Jan 19, 2025) - Total 45 Hours
+  const handleFileInputClick = ()=>{
+    fileInputRef.current?.click();
+  }
 
-    Admin Portal & Final Touches:
-        Admin Login & Register Screens (Create admin authentication forms): 6 hours
-        Admin Dashboard (Charts for users, waves, and admin control): 7 hours
-        Manage Users (View, edit, delete users, change status): 7 hours
-        Manage Waves (View, edit, delete waves, change status): 7 hours
-        Export Users & Waves (Implement CSV export functionality for users and waves): 6 hours
-        Admin Comments Management (View and delete user comments): 5 hours
-        HIPAA Compliance Implementation (Audit logs, password expiry, account lockout): 5 hours
-        Final Testing & Debugging (Ensure everything works as intended): 4 hours
+  const handleChangePicture = async (event: React.ChangeEvent<HTMLInputElement>)=>{
+    const file = event.target.files?.[0];
+    console.log(file);
+    if(!file){
+      return ; 
+    }
 
-Overview of Task Distribution
-Milestone	Tasks	Hours
-Week 1	Signup, Login, JWT Authentication, Backend Integration, Setup	45 hours
-Week 2	Dashboard, User Profile, Friends List, Waves, Profile Tabs	45 hours
-Week 3	Preferences, Change Password, Comments, Backend Integration, Security	45 hours
-Week 4	Admin Portal, Final Testing, HIPAA Compliance	45 hours
-Key Considerations:
+    const token = localStorage.getItem('token');
+    if(!token){
+      return navigate(`/`);
+    }
 
-    Total Hours: 180 hoMilestone 1: Week 1 (Dec 23 – Dec 29, 2024) - Total 45 Hours
+    const formData= new FormData();
+    formData.append('profileIcon',file);
 
-    Frontend Setup & Basic Pages (Signup, Login, Authentication):
-        Signup Screen (Figma design integration): 8 hours
-        Login Screen (Figma design integration): 8 hours
-        JWT Authentication Setup (localStorage/cookie management, secure login flow): 6 hours
-        Backend Integration for Signup/Login (API integration): 6 hours
-        Testing and Debugging (Verify signup/login flow and error handling): 5 hours
-        UI & UX Adjustments: 3 hours
-        Project Setup & Configuration (Frontend setup for React, TypeScript, Redux, etc.): 9 hours
+    try {
+      const response = await axios.put(`${Local.BASE_URL}${Local.UPDATE_PROFILE}/${id}`,formData,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      if(response.data.status){
+        toast.success(response.data.message,{
+          position:'top-center',
+          autoClose:1000,
+        })
+        const updateProfileIcon = response.data.data.profileIcon; 
+        setProfileIcon(updateProfileIcon);
+      }
+    } catch (error:any) {
+      console.error(error.message);
+      toast.error("Profile Cannot We Updated",{
+        position:'top-right',
+        autoClose:1000,
+      })
+    }
+  }
 
-Milestone 2: Week 2 (Dec 30, 2024 – Jan 5, 2025) - Total 45 Hours
 
-    Dashboard & User Profile Features:
-        Dashboard Screen (List active waves, display friends): 8 hours
-        View User Profile Popup (Display user details in a modal): 6 hours
-        Friends List (Implement add friends, pending/accepted status): 7 hours
-        Invite Friends Form (Email uniqueness validation, pending/accepted status): 6 hours
-        Waves Management (Create, activate/deactivate waves): 6 hours
-        Profile Screen - Basic & Personal Tabs (Create profile editing form): 7 hours
-        UI & UX Adjustments (Refine designs for user interface): 5 hours
 
-Milestone 3: Week 3 (Jan 6 – Jan 12, 2025) - Total 45 Hours
+  return (
+    <>
+      <div className="dashboard-wrapper">
+        <div className="user-wrapper">
+          <div id="profile-header">
+            <img src="../../public/images/left-arrow.png" alt="" onClick={()=>navigate(`/user/${id}`)} style={{cursor:'pointer'}}/>
+            <h2>Profile</h2>
+          </div>
+          <div id="img-container">
+            <img
+              id="profile-user-icon"
+              src={profileIcon?profileIcon:userIcon}
+              alt="icon"
+            />
+            <div id="upload-photo" style={{marginTop:45}}>
+              <h3>Upload a New Photo</h3>
+              
+              <input
+                type="file"
+                accept="image/*"
+                id="imageUpload"
+                style={{ display: "none"}}
+                ref={fileInputRef}
+                onChange={handleChangePicture}
+              />
+            </div>
+            <button id="change-pic" onClick={handleFileInputClick} style={{cursor:'pointer'}}>Change Picture</button>
+          </div>
+          <div>
+            <p id="change-info">Change Information</p>
+          </div>
+        </div>
+      
+         <div id="basic-details-container">
+          <div style={{ display: "flex" }}>
+            <div id="form-header" onClick={()=> handleTab("BasicDetails")} style={{cursor:'pointer'}}>
+              <h2 style={{ textAlign: "left", fontSize: "16px" }}>
+                Basic Details
+              </h2>
+        
+              {activeTab === "BasicDetails" ?(<span id="form-header-line"></span>): (<span id="form-header-line1"></span>)}
+            </div>
+            <div id="form-header" onClick={()=> handleTab("PersonalDetails")} style={{cursor:'pointer'}}>
+              <h2
+                style={{
+                  textAlign: "left",
+                  fontSize: "16px",
+                  marginLeft: "70%",
+                  width: "100%",
+                }}
+              >
+                Personal Details
+              </h2>
 
-    Advanced Features & Preferences:
-        Preferences Screen (Create and store user preferences): 6 hours
-        Change Password Screen (Form with password validation): 6 hours
-        Comments Section (Add, edit, and delete comments on waves): 8 hours
-        Backend Integration for Comments (Ensure JWT authentication for comment API): 6 hours
-        Profile Tabs Enhancement (Refine Basic/Personal tabs, save preferences): 6 hours
-        Security & Authentication Features (Secure routes and JWT token management): 6 hours
-        Code Cleanup & Linting: 3 hours
+            </div>
+          </div>
+          {activeTab === 'BasicDetails' && <BasicDetails/> }
+          {activeTab === 'PersonalDetails' && <PersonalDetails id={id}/>}
 
-Milestone 4: Week 4 (Jan 13 – Jan 19, 2025) - Total 45 Hours
 
-    Admin Portal & Final Touches:
-        Admin Login & Register Screens (Create admin authentication forms): 6 hours
-        Admin Dashboard (Charts for users, waves, and admin control): 7 hours
-        Manage Users (View, edit, delete users, change status): 7 hours
-        Manage Waves (View, edit, delete waves, change status): 7 hours
-        Export Users & Waves (Implement CSV export functionality for users and waves): 6 hours
-        Admin Comments Management (View and delete user comments): 5 hours
-        HIPAA Compliance Implementation (Audit logs, password expiry, account lockout): 5 hours
-        Final Testing & Debugging (Ensure everything works as intended): 4 hours
+          {/* <BasicDetails/> */}
+          {/* <PersonalDetails/> */}
+        </div> 
+      </div>
+    </>
+  );
+};
 
-Overview of Task Distribution
-Milestone	Tasks	Hours
-Week 1	Signup, Login, JWT Authentication, Backend Integration, Setup	45 hours
-Week 2	Dashboard, User Profile, Friends List, Waves, Profile Tabs	45 hours
-Week 3	Preferences, Change Password, Comments, Backend Integration, Security	45 hours
-Week 4	Admin Portal, Final Testing, HIPAA Compliance	45 hours
-Key Considerations:
+export default Profile;
 
-    Total Hours: 180 hours (45 hours/week)
-    Testing & Debugging: Each week, allocate some time for testing and ensuring all functionality works as expected.
-    Security: Ensure proper JWT implementation for all protected routes, especially on the backend and user authentication.
-    Deployment: Deploy the project on staging and do final checks before submission.
 
-Submission
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Deadline: Jan 20, 2025 (Submit on GitHub or another version control platform)
+personal details
 
-This breakdown ensures that your project is completed on time, while providing a reasonable amount of effort per week to balance both frontend and backend tasks effectively. Let me know if you'd like further details on any specific section!urs (45 hours/week)
-    Testing & Debugging: Each week, allocate some time for testing and ensuring all functionality works as expected.
-    Security: Ensure proper JWT implementation for all protected routes, especially on the backend and user authentication.
-    Deployment: Deploy the project on staging and do final checks before submission.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import "./Profile.css";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Local } from "../environment/env";
 
-Submission
+interface PersonalDetailsProps {
+  id?: string;
+}
 
-    Deadline: Jan 20, 2025 (Submit on GitHub or another version control platform)
+const PersonalDetails: React.FC<PersonalDetailsProps> = ({
+  id,
+}: PersonalDetailsProps) => {
+  // console.log("new id",id);
+  const [initialValues, setInitialValues] = useState({
+    dob: "",
+    gender: "",
+    marital_status: "Unmarried",
+    ssn: "",
+    social: "",
+    kids: "",
+  });
 
-This breakdown ensures that your project is completed on time, while providing a reasonable amount of effort per week to balance both frontend and backend tasks effectively. Let me know if you'd like further details on any specific section!
+  useEffect(() => {
+    getPersonalDetails();
+  }, []);
+
+  const getPersonalDetails = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4001/getpersonaldetails/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Personal Details",response.data.data);
+      if (response.data.status === 200) {
+      
+        const data = response.data.data;
+        setInitialValues({
+          dob: data.dob || "",
+          gender: data.gender || "",
+          marital_status: data.marital_status || "Unmarried",
+          ssn: data.ssn || "",
+          social: data.social || "",
+          kids: data.kids !== null && data.kids !== undefined ? String(data.kids) : "",
+        });
+
+        
+      }
+    } catch (error: any) {
+      console.error("Error Fetching Basic Details", error);
+      toast.error("Error Fetching Basic Details", {
+        position: "top-right",
+        autoClose: 1000,
+      });
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      dob: Yup.date().required('Date of birth is required').max(new Date(), 'Date of birth cannot be a future date'),
+      gender: Yup.string().required("Gender Is Compulsory"),
+      marital_status: Yup.string().required("Marital Status Is Compulsory"),
+      ssn: Yup.string()
+        .matches(/^\d+$/, "Social Security Number must be numbers only")
+        .min(5, "Social Security Number must be at least 5 digits")
+        .max(9, "Social Security Number cannot exceed 9 digits")
+        .required("Social Security Number Is Compulsory"),
+      social: Yup.string().required("Social Is Compulsory"),
+      kids: Yup.number()
+        .typeError("Kids must be a number")
+        .min(0, "Kids cannot be negative"),
+    }),
+    onSubmit: (values) => { 
+      // console.log("Form Submitted with values:", values);
+      // Add your submit logic here
+      updatePersonalDetails(values);
+    },
+  });
+
+  const updatePersonalDetails = async (values: any) => {
+    // console.log()
+    try {
+      const response = await axios.put(
+        `http://localhost:4001/updatepersonaldetails/${id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.status) {
+        toast.success(response.data.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error("One or more fields are empty", {
+        position: "top-center",
+        autoClose: 1000,
+      });
+    }
+  };
+
+  return (
+    <>
+      <div id="basic-details-container">
+        <form id="details-form" onSubmit={formik.handleSubmit}>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="dob">Date of Birth<span style={{color:"red"}}>*</span></label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.dob}
+                onFocus={(e: any) => e.target.showPicker()} style={{color:"#495057"}}
+              />
+              {formik.touched.dob && formik.errors.dob && (
+                <div className="error">{formik.errors.dob}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="gender">Gender<span style={{color:"red"}}>*</span></label>
+              <select
+                id="gender"
+                name="gender"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.gender}
+              >
+                <option value="" disabled>
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              {formik.touched.gender && formik.errors.gender && (
+                <div className="error">{formik.errors.gender}</div>
+              )}
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="marital_status">Marital Status<span style={{color:"red"}}>*</span></label>
+              <select
+                id="marital_status"
+                name="marital_status"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.marital_status}
+              >
+                <option value="Unmarried">Unmarried</option>
+                <option value="Married">Married</option>
+              </select>
+              {formik.touched.marital_status &&
+                formik.errors.marital_status && (
+                  <div className="error">{formik.errors.marital_status}</div>
+                )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="ssn">Social Security Number<span style={{color:"red"}}>*</span></label>
+              <input
+                type="text"
+                id="ssn"
+                name="ssn"
+                placeholder="SSN (Numbers Only)"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.ssn}
+              />
+              {formik.touched.ssn && formik.errors.ssn && (
+                <div className="error">{formik.errors.ssn}</div>
+              )}
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="social">Social<span style={{color:"red"}}>*</span></label>
+              <input
+                type="text"
+                id="social"
+                name="social"
+                placeholder="Social"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.social}
+              />
+              {formik.touched.social && formik.errors.social && (
+                <div className="error">{formik.errors.social}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="kids">Kids (If Any)</label>
+              <input
+                type="text"
+                id="kids"
+                name="kids"
+                placeholder="Number of Kids"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.kids}
+              />
+              {formik.touched.kids && formik.errors.kids && (
+                <div className="error">{formik.errors.kids}</div>
+              )}
+            </div>
+          </div>
+
+          <div className="form-row button-row">
+            <button type="submit" id="update-button">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default PersonalDetails;
+
+////////////////////////////////////////////////////////////////////////////
+
+
+basic details
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import "./Profile.css";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Local } from "../environment/env";
+import { useProfile } from "../context/ProfileContext";
+
+const BasicDetails = () => {
+  // const [activeTab, setActiveTab] = useState("BasicDetails");
+  // const [userName , setUserName] = useState(null);
+  const {userName , setUserName} = useProfile();
+
+  const [initialValues , setInitialValues] = useState({
+    first_name: "",
+      last_name: "",
+      email: "",
+      ssn: "",
+      phone_number: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
+  })
+  const {id} = useParams();
+  const navigate = useNavigate();
+  // console.log("id",id)
+
+  useEffect(()=>{
+    getBasicDetails();
+  },[]);
+
+
+  const getBasicDetails = async ()=>{
+    try {
+      const response = await axios.get(`${Local.BASE_URL}${Local.GET_BASIC_DETAILS}/${id}`,{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      // console.log(">>>>>>.GET BASIC DETAILS",response.data.data);
+      if(response.data.status ===200){
+        // console.log(">>>>>>.GET BASIC DETAILS",response.data.data);
+        const data = response.data.data;
+        setInitialValues({
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          email: data.email || "",
+          ssn: data.ssn || "",
+          phone_number: data.phone_number || "",
+          address1: data.address1 || "",
+          address2: data.address2 || "",
+          city: data.city || "",
+          state: data.state || "",
+          zip: data.zip || "",
+
+        })
+      }
+    } catch (error:any) {
+      console.error(error);
+      toast.error("Cannot Update Your Details At The moment Please Try Again Later", {
+        position:'top-center',
+        autoClose:1000
+      })
+    }
+  }
+  
+  const updateBasicDetails = async (data:any)=>{
+    try {
+      const response = await axios.put(`${Local.BASE_URL}${Local.UPDATE_BASIC_DETAILS}/${id}`,data , {
+        headers:{
+          Authorization:`bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if(response.data.status){
+        toast.success(response.data.message,{
+          position:'top-right',
+          autoClose:1000,
+        })
+      }
+      // getBasicDetails();
+
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 700);
+      setUserName(response.data.data.first_name);
+      // console.log("response", response.data.data.first_name);
+    } catch (error:any) {
+      console.error(error);
+      toast.error("Cannot Update Your Details At The Momeny Please Try Again Later",{
+        position:'top-right',
+        autoClose:1000
+      })
+    }
+  }
+
+
+  // Formik setup
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues,
+    validationSchema: Yup.object({
+      first_name: Yup.string().required("First Name Is Compulsory"),
+      last_name: Yup.string().required("Last Name Is Compulsory"),
+      email: Yup.string().email("Invalid email format").required("Email Is Compulsory"),
+      ssn: Yup.string()
+      .matches(/^\d+$/, "SSN must be numbers only") 
+      .min(5, "SSN must be at least 5 digits")     
+      .max(9, "SSN cannot be more than 9 digits")        
+      .required("Social Security Number Is Compulsory"),
+    
+        phone_number: Yup.string()
+        .matches(/^\d{10}$/, "Phone number must be in 10 digit")
+        .required("Phone number Is Compulsory"),
+      address1: Yup.string().required("Address One Is Compulsory"),
+      address2: Yup.string().required("Address Two Is Compulsory"),
+      city: Yup.string().required("City Is Compulsory"),
+      state: Yup.string().required("State Is Compulsory"),
+      zip: Yup.string()
+        .matches(/^\d{6}$/, "Zip Code must be 6 digits")
+        .required("Zip Code Is Compulsory"),
+    }),
+    onSubmit: (values) => {
+      // console.log("Form Submitted with values:", values);
+      updateBasicDetails(values);
+    },
+  });
+
+  return (
+    <>
+      <form id="basic-details-form" onSubmit={formik.handleSubmit}>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="first_name">First Name<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="first_name"
+              name="first_name"
+              placeholder="First Name"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.first_name}
+            />
+            {formik.touched.first_name && formik.errors.first_name ? (
+              <div className="error">{formik.errors.first_name}</div>
+            ) : null}
+          </div>
+          <div className="form-group">
+            <label htmlFor="last_name">Last Name<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="last_name"
+              name="last_name"
+              placeholder="Last Name"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.last_name}
+            />
+            {formik.touched.last_name && formik.errors.last_name ? (
+              <div className="error">{formik.errors.last_name}</div>
+            ) : null}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="email">Email<span style={{color:"red"}}>*</span></label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <div className="error">{formik.errors.email}</div>
+            ) : null}
+          </div>
+          <div className="form-group">
+            <label htmlFor="ssn">Social Security Number<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="ssn"
+              name="ssn"
+              placeholder="SSN (Numbers Only)"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.ssn}
+              maxLength={9}
+            />
+            {formik.touched.ssn && formik.errors.ssn ? (
+              <div className="error">{formik.errors.ssn}</div>
+            ) : null}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="phone_number">Phone Number<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="phone_number"
+              name="phone_number"
+              placeholder="Phone Number"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phone_number}
+              maxLength={10}
+            />
+            {formik.touched.phone_number && formik.errors.phone_number ? (
+              <div className="error">{formik.errors.phone_number}</div>
+            ) : null}
+          </div>
+          <div className="form-group">
+            <label htmlFor="address1">Address One<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="address1"
+              name="address1"
+              placeholder="Address One"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address1}
+            />
+            {formik.touched.address1 && formik.errors.address1 ? (
+              <div className="error">{formik.errors.address1}</div>
+            ) : null}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="address2">Address Two<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="address2"
+              name="address2"
+              placeholder="Address Two"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address2}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              placeholder="City"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.city}
+            />
+            {formik.touched.city && formik.errors.city ? (
+              <div className="error">{formik.errors.city}</div>
+            ) : null}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="state">State<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              placeholder="State"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.state}
+            />
+            {formik.touched.state && formik.errors.state ? (
+              <div className="error">{formik.errors.state}</div>
+            ) : null}
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip">Home Zip<span style={{color:"red"}}>*</span></label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              placeholder="Zip Code"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.zip}
+              maxLength={6}
+            />
+            {formik.touched.zip && formik.errors.zip ? (
+              <div className="error">{formik.errors.zip}</div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="form-row button-row">
+          <button type="submit" id="update-button" style={{cursor:'pointer'}}>
+            Update
+          </button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+export default BasicDetails;
+
+
+
+
+apis
+
+
+
+export const updateProfile = async (req: any, res: any) => {
+  let data = null;
+  const file = req.file;
+  console.log(file);
+  try {
+    const result = await User.update(
+      { profileIcon: file.filename || null },
+      {
+        where: { id: req.user.id },
+      }
+    );
+
+    if (result) {
+      data = {
+        profileIcon: `http://localhost:4001/uploads/${file.filename}`,
+      };
+      res.status(statusCodes.success.OK.code).json({
+        status: statusCodes.success.OK.code,
+        message: "Profile Picture Updated Successfully",
+        data,
+      });
+    } else {
+      res.status(statusCodes.error.BAD_REQUEST.code).json({
+        status: statusCodes.error.BAD_REQUEST.code,
+        message: "Something went wrong",
+      });
+    }
+  } catch (error) {
+    res.status(statusCodes.error.SERVER_ERROR.code).json({
+      message: statusCodes.error.SERVER_ERROR.message,
+    });
+  }
+};
+
+export const getBasicDetails = async (req: any, res: any) => {
+  try {
+    const userDetails = await User.findByPk(req.user.id);
+
+    if (userDetails?.dataValues) {
+      let data = {
+        first_name: userDetails.first_name || "",
+        last_name: userDetails.last_name || "",
+        email: userDetails.email || "",
+        phone_number: userDetails.phone_number || "",
+        ssn: userDetails.ssn || null,
+        address1: userDetails.address1 || "",
+        address2: userDetails.address2 || "",
+        city: userDetails.city || "",
+        state: userDetails.state || "",
+        zip: userDetails.zip || null,
+        dob: userDetails.dob || "",
+        gender: userDetails.gender || "",
+        marital_status: userDetails.marital_status || "",
+        social: userDetails.social || "",
+        kids: userDetails.kids || null,
+      };
+
+      res.status(statusCodes.success.OK.code).json({
+        status: statusCodes.success.OK.code,
+        message: statusCodes.success.OK.message,
+        data,
+      });
+    } else {
+      res.status(statusCodes.error.NOT_FOUND.code).json({
+        status: statusCodes.error.NOT_FOUND.code,
+        message: statusCodes.error.NOT_FOUND.code,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(statusCodes.error.SERVER_ERROR.code).json({
+      status: statusCodes.error.SERVER_ERROR.code,
+      message: statusCodes.error.SERVER_ERROR.code,
+    });
+  }
+};
+
+export const updateBasicDetails = async (req: any, res: any) => {
+  try {
+    const { error, value } = updateUserSchema.validate(req.body);
+
+    if (error) {
+      return res.status(statusCodes.error.BAD_REQUEST.code).json({
+        status: statusCodes.error.BAD_REQUEST.code,
+        message: error.details[0].message,
+      });
+    }
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(statusCodes.error.BAD_REQUEST.code).json({
+        status: statusCodes.error.BAD_REQUEST.code,
+        message: statusCodes.error.BAD_REQUEST.message,
+      });
+    }
+
+    await user.update(value);
+
+    console.log("user", user);
+
+    return res.status(statusCodes.success.OK.code).json({
+      status: statusCodes.success.OK.code,
+      message: "User details updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(statusCodes.error.SERVER_ERROR.code).json({
+      status: statusCodes.error.SERVER_ERROR.code,
+      message: statusCodes.error.SERVER_ERROR.message,
+    });
+  }
+};
+
+export const getPersonalDetails = async (req: any, res: any) => {
+  try {
+    const userDetails = await User.findByPk(req.user.id);
+
+    if (userDetails?.dataValues) {
+      let data = {
+        dob: userDetails.dob || "",
+        gender: userDetails.gender || "",
+        marital_status: userDetails.marital_status || "",
+        social: userDetails.social || "",
+        ssn: userDetails.ssn || null,
+        kids:
+          userDetails.kids !== undefined && userDetails.kids !== null
+            ? userDetails.kids
+            : null,
+      };
+
+      res.status(statusCodes.success.OK.code).json({
+        status: statusCodes.success.OK.code,
+        message: statusCodes.success.OK.message,
+        data,
+      });
+    } else {
+      res.status(statusCodes.error.NOT_FOUND.code).json({
+        status: statusCodes.error.NOT_FOUND.code,
+        message: statusCodes.error.NOT_FOUND.code,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(statusCodes.error.SERVER_ERROR.code).json({
+      status: statusCodes.error.SERVER_ERROR.code,
+      message: statusCodes.error.SERVER_ERROR.code,
+    });
+  }
+};
