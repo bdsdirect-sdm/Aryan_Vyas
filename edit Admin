@@ -1,0 +1,40 @@
+export const UpdateWavesUserByid = async (req:any, res:any) => {
+      let status = null;
+      let message = null;
+      let data = null;
+
+      console.log(req.body);
+
+      try {
+          const values = {
+              image: req.file && req.file.filename,
+              message: req.body.message,
+          };
+
+          console.log("values",values);
+
+          let updatedWave = await Wave.update(values, {
+              where: {
+                  id: req.params.waveId,
+              },
+          });
+
+
+
+          if (updatedWave) {
+              status = 200;
+              message = "Wave updated!";
+          } else {
+              status = 400;
+              message = "Something is wrong!";
+          }
+      } catch (err) {
+          message = "Internal server error!";
+          status = 500;
+      }
+      res.status(status).json({
+          status: status === 200 ? true : false,
+          message,
+          data,
+      });
+};
