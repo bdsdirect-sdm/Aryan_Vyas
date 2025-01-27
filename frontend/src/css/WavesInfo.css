@@ -29,7 +29,7 @@
     border-radius: 10px;
     background: #c5b084;
     box-shadow: 7px 6px 14px 0px rgba(0, 0, 0, 0.04);
-    margin-top: -50px;
+    margin-top: -80px;
 }
 
 #cover-color h1 {
@@ -50,12 +50,13 @@
     flex-shrink: 0;
     border-radius: 146.4px;
     border: 1px solid #fff;
+    margin-left: -35px;
 }
 
 #cover-color svg {
     margin-left: auto;
     margin-right: 10px;
-    margin-top: -20px;
+    margin-top: -45px;
     display: flex;
     cursor: pointer;
 }

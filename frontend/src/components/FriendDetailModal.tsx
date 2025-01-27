@@ -16,7 +16,7 @@ const FriendDetailModal: React.FC<FriendDetailModalProps> = ({ friend, onClose }
                     &times;
                 </button>
                 <div className="modal_img_container">
-                    <span className="modal_img_text">DETAILS</span>
+                    <span className="modal_img_text" style={{fontSize:100}}>DETAILS</span>
                     <img className="modal_img" src={friend.icon || userIcon} />
                     <span className="modal_image_friend_name">{friend.name}</span>
                     <span className="" style={{ textTransform: "lowercase",color:"white",marginTop: "63px",zIndex:1,marginLeft:"-105px"}}>@{friend.userDetails?.first_name}</span>

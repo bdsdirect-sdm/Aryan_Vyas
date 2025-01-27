@@ -35,7 +35,6 @@ const ChangePassword = (values?: any) => {
   };
 
   const changePassword = async (data: any) => {
-    // console.log("data", data)
     try {
       const response = await axios.put(
         `${Local.BASE_URL}${Local.CHANGE_PASSWORD}`,
@@ -63,11 +62,9 @@ const ChangePassword = (values?: any) => {
           autoClose: 1000,
         }
       );
-      // console.log("response", error)
     }
   };
 
-  // Submit handler
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
     changePassword(values);
@@ -184,7 +181,7 @@ const ChangePassword = (values?: any) => {
                     className="error-message"
                   />
                 </div>
-                <div id="button-container">
+                <div id="button-container" style={{marginRight:-75}}>
                   <button type="submit" id="update-button">
                     Update
                   </button>

@@ -131,13 +131,13 @@ const AdminDashboard = () => {
           padding: 25,
           backgroundColor: "whitesmoke",
           width: "989px",
-          marginLeft: "23%",
+          marginLeft: "20%",
           marginTop: "30px",
         }}
       >
         <div
           className="user-list-header"
-          style={{ backgroundColor: "whitesmoke" ,marginRight:30}}
+          style={{ backgroundColor: "whitesmoke" ,marginLeft:43}}
         >
           <div className="admin-heading">
             <p

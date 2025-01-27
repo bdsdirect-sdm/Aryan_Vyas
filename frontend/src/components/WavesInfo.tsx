@@ -195,9 +195,11 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
       <div id="model-wrapper">
         <div id="wave-model">
           <div id="cover-color">
-            <h1>Details</h1>
+            <h1 style={{color: "rgba(184, 156, 103, 0.3)",
+  fontSize:125,textAlign:"center",marginBottom:22}}>Details</h1>
             <div id="user-profile">
               <img
+                style={{marginTop:-10}}
                 src={posterIcon ? posterIcon : userIcon}
                 alt="user"
                 id="wave-user-icon"

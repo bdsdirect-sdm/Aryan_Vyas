@@ -42,6 +42,17 @@
   margin-top: 30px;
 }
 
+/* .card {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 0 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+} */
+
 .card {
   flex: 1;
   background: white;
@@ -51,6 +62,12 @@
   margin: 0 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(0px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card h3 {
@@ -74,7 +91,7 @@
   display: flex;
   justify-content: end;
   margin-top: 15px;
-  margin-right: 40px;
+  margin-right: 47px;
 }
 .admin-logout-button-css{
   color: white;
@@ -83,6 +100,7 @@
   padding: 10px;
   border-radius: 15px;
   margin-right: -10px;
+  cursor: pointer;
 }
 .admin-logout-button-css:hover{
   background-color: #3e5677;
