@@ -71,7 +71,7 @@ const InviteFriends = () => {
             <h2>Friends</h2>
           </div>
           <p id="friends-header-paragraph">
-            Invite some friends, show them your Waves and let’s see what they
+            Invite some friends, show them your Waves and let's see what they
             can do!
           </p>
           <div id="friends-container">
