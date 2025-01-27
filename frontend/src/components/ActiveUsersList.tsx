@@ -166,7 +166,7 @@ const ActiveUsersList = () => {
                                       </span>
                                       <span className="admin-user-delete-dustbin">
                                         <MdDelete
-                                          style={{ cursor: "pointer", color: "#1976d2" }}
+                                          style={{ cursor: "pointer", color: "red" }}
                                           onClick={() => deleteUser(user.id)}
                                         />
                                       </span>

@@ -67,7 +67,6 @@ function AdminLogin() {
       actions.setSubmitting(false);
     },
   });
-  // aryan
 
   return (
     <div className="signup-page" id="login-page">

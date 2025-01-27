@@ -165,10 +165,12 @@ const AdminWaveList = () => {
               <span className="admin-user-edit-pencil">
                 <FaRegEdit style={{ cursor: "pointer", color: "#1976d2" }} />
               </span>
+              <span className="admin-user-wave-delete-dustbin">
               <MdDelete
-                style={{ cursor: "pointer", color: "#1976d2" }}
+                style={{ cursor: "pointer", color: "red" }}
                 onClick={() => deleteWave(wave.id)}
               />
+              </span>
             </div>
           </td>
         </tr>
