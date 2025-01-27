@@ -60,12 +60,6 @@ const AdminDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAdminProfile();
-    fetchUserList();
-    getAllWaveList();
-  }, []);
-
   const fetchAdminProfile = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -81,13 +75,23 @@ const AdminDashboard = () => {
           },
         }
       );
+      console.log("Admin Profile",response.data)
       if (response.status === 200) {
         setAdminProfile(response.data.admin);
       }
+
     } catch (error: any) {
       toast.error("Failed to fetch admin profile");
     }
   };
+
+  useEffect(() => {
+    fetchAdminProfile();
+    fetchUserList();
+    getAllWaveList();
+  }, []);
+
+
 
   const handleUserList = () => {
     navigate("/admin-user-list");
