@@ -1,0 +1,112 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 525px;
+    max-width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.modal_image_friend_name{
+  margin-top: 35px;
+  color: white;
+  margin-left: 35px;
+}
+.close-button {
+    position: absolute;
+    top: 17px;
+    right: 20px;
+    border-radius: 50px;
+    border: none;
+    color:#B89C67;
+    background: #DECAA5;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.friend-detail img {
+    max-width: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.modal_img_container{
+    background: #C3A772;
+  display: flex;
+  width: auto;
+  height: 110px;
+  border-radius: 11px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 0;
+}
+.modal_img{
+    border-radius: 40px;
+    border: 1.5px solid #fff;
+    background: transparent;
+    width: 100px;
+    height: 100px;
+    margin-left: 30px;
+    margin-top: 50px;
+    z-index: 1;
+}
+.friends_details_info {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+}
+
+.left_side,
+.right_side {
+    width: 45%;
+}
+
+.left_side div,
+.right_side div {
+    margin-bottom: 10px; 
+    font-size: 14px;
+    line-height: 1.5;
+}
+.basic_info_heading{
+    margin-top: 55px;
+    margin-left: 10px;
+}
+
+.modal_img_text{
+    color: #B89C67;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+    width: 100%;
+    text-align: center;
+    font-weight: bolder;
+    z-index: 0;
+}
+.modal_image_friend_name{
+    z-index: 1;
+    font-weight: 900; 
+}
+.mid_vertical_line {
+    width: 1px;
+    background-color: #ccc;
+    height: auto;
+    margin: 0 0px;
+    display: inline-block;
+}

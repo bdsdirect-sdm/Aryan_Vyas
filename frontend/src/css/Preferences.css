@@ -1,0 +1,243 @@
+#preferences-header {
+    display: flex;
+}
+
+#preferences-header h2 {
+    color: #292929;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+
+#preferences-container {
+    background-color: white;
+    max-width: 93%;
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px;
+    border-radius: 8px; /* Add some rounding to the corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for better aesthetics */
+}
+
+#preference-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between rows of input groups */
+}
+
+#preference-details {
+    display: flex;
+    justify-content: space-between; /* Distribute input groups evenly in two columns */
+    gap: 20px; /* Add space between columns */
+}
+
+#preference-1,
+#preference-2 {
+    flex: 1; /* Ensure equal column width */
+}
+
+label {
+    font-size: 17px;
+    font-weight: 500;
+    color: #292929;
+}
+
+select,
+input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px; /* Space between label and input */
+}
+
+select:focus,
+input[type="time"]:focus {
+    outline: none;
+    border-color: #007bff; /* Highlight border on focus */
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+
+ #preference-details input {
+    border-radius: 5px;
+    border: 1px solid rgba(62, 86, 119, 0.2);
+    background: #fff;
+    width: 400px;
+    height: 40px;
+    flex-shrink: 0;
+    color: #535c61;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    padding-left: 10px;
+}
+
+#preference-details-select {
+    border-radius: 5px;
+    border: 1px solid rgba(62, 86, 119, 0.2);
+    background: #fff;
+    width: 462px;
+    height: 40px;
+    flex-shrink: 0;
+    color: #535c61;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    padding-left: 10px;
+}
+
+
+#radio-group {
+    display: flex;
+    justify-content: space-between; /* Space out the two columns */
+    gap: 20px;
+}
+
+.radio-column {
+    flex: 1; /* Ensure equal width for columns */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between label and options */
+}
+
+.radio-options {
+    display: flex;
+    flex-direction: row; /* Align radio buttons and labels horizontally */
+    align-items: center;
+    gap: 20px; /* Space between options */
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between radio button and label */
+}
+
+.radio-option p {
+    margin: 0;
+    font-size: 20px;
+    color: #292929;
+    cursor: pointer;
+}
+
+
+#communication-type span {
+    height: 1px;
+    background: rgba(169, 169, 169, 0.25);
+    display: block;
+}
+
+/* Updated Switch Wrapper */
+.new-switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+  }
+  
+  /* Hide Default Checkbox */
+  .new-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Slider */
+  .new-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  /* Slider Rounded Style */
+  .new-slider.round {
+    border-radius: 34px;
+  }
+  
+  .new-slider.round:before {
+    border-radius: 50%;
+  }
+  
+  /* Circle Inside Slider */
+  .new-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* Checkbox Checked State */
+  input:checked + .new-slider {
+    background-color: #007bff; /* Change to your desired active color */
+  }
+  
+  input:checked + .new-slider:before {
+    transform: translateX(14px);
+  }
+
+
+
+  #communication-preferences-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+    gap: 20px; /* Space between items */
+    margin-top: 20px;
+  }
+  
+  .preferences-section {
+    display: contents;
+  }
+  
+  .preference-item {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    margin-top: 1%;
+  }
+  
+  label {
+    font-size: 17px;
+    font-weight: 500;
+    color: #292929;
+  }
+  
+  .new-switch {
+    position: relative;
+  }
+  
+  .new-slider {
+    width: 34px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+  }
+  
+  .new-slider.round {
+    border-radius: 20px;
+  }
+  
+  input[type="checkbox"]:checked + .new-slider {
+    background-color: #3e5677;
+  }
+  
+
+  .preference-item label {
+    color: #292929;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  

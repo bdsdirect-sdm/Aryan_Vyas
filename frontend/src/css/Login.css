@@ -1,0 +1,31 @@
+
+#login-signup-button,
+#update-button,
+#create-wave-button {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: #3e5677;
+    text-align: center;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+}
+#login-signup-button {
+    cursor: pointer;
+}
+
+
+#login-page {
+    align-items: center;
+}
+
+.form-errors {
+    margin-top: -7px;
+    color: rgb(253, 0, 0);
+    font-size: 15px;
+    margin-bottom: 5px;
+}

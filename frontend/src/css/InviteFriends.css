@@ -1,0 +1,107 @@
+#friends-header1 {
+    display: flex;
+    margin-left: 20px;
+}
+
+#friends-header1 h2 {
+    color: #292929;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+#friends-header-paragraph {
+    color: #535c61;
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 60px;
+    margin-top: -20px;
+}
+
+#friends-container {
+    margin-left: 40px;
+    width: 940px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 7px 6px 14px 0px rgba(0, 0, 0, 0.04);
+    padding-left: 20px;
+    padding-top: 2px;
+    padding-bottom: 90px;
+}
+
+#friend-count h4 {
+    margin-bottom: -10px;
+    color: #535c61;
+    font-size: 14px;
+}
+
+#invite-friends-form {
+    color: #3c3d3e;
+    font-size: 16px;
+    width: 98%;
+    padding-top: 20px;
+}
+
+#friend-details input,
+#message-container input {
+    border-radius: 5px;
+    border: 1px solid rgba(62, 86, 119, 0.2);
+    background: #fff;
+    width: 100%;
+    height: 40px;
+    flex-shrink: 0;
+    color: #535c61;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    padding-left: 10px;
+}
+
+.friend-details-container {
+    position: relative;
+    width: 100%;
+}
+
+#name-email-wrapper,
+#preference-details {
+    display: flex;
+    width: 100%;
+    gap: 50px;
+}
+
+#name-email-wrapper #friend-details,
+#preference-1,
+#preference-2 {
+    width: 45%;
+}
+
+#message-container {
+    width: 95%;
+}
+
+#friends-button-container {
+    float: right;
+    margin-right: 33px;
+}
+
+#add-more {
+    margin-right: 33px;
+    margin-bottom: -10px;
+    margin-top: -10px;
+    display: flex;
+    justify-content: end;
+}
+
+#add-more p {
+    cursor: pointer;
+    text-decoration: none;
+    color: #3e5677;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+#friend-dashboard {
+    width: 70vw;
+    height: auto;
+    position: relative;
+    left: -28px;    
+}

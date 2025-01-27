@@ -1,0 +1,113 @@
+/* Modal overlay styles */
+.user-details-modal .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.user-details-modal .modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 525px;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.user-details-modal .close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #DECAA5;
+  color: #B89C67;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal_img_container {
+  background: #C3A772;
+  display: flex;
+  width: auto;
+  height: 110px;
+  border-radius: 11px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.modal_img {
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  width: 100px;
+  height: 100px;
+  margin-left: 30px;
+  margin-top: 50px;
+  z-index: 1;
+}
+
+.modal_img_text {
+  color: #B89C67;
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bolder;
+  z-index: 0;
+}
+
+.modal_image_friend_name {
+  color: white;
+  font-weight: 900;
+  margin-left: 35px;
+}
+
+.user-details-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px;
+}
+
+.left-side,
+.right-side {
+  width: 45%;
+}
+
+.left-side p,
+.right-side p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.mid-vertical-line {
+  width: 1px;
+  background-color: #ccc;
+  height: auto;
+  margin: 0 0px;
+  display: inline-block;
+}
+
+.user-details-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.back-button-user-details {
+  padding: 10px 20px;
+  background-color: #B89C67;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,71 @@
+.chart-container {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 925px;
+    margin: 30px auto;
+  }
+  
+  .chart-heading {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .chart-heading h6 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1976d2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .chart-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .chart-options button {
+    background: #f3f4f6;
+    border: none;
+    color: #555555;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .chart-options button.active {
+    background: #1976d2;
+    color: #ffffff;
+  }
+  
+  .chart-options button:hover {
+    background: #1976d2;
+    color: #ffffff;
+  }
+  
+  .chart {
+    position: relative;
+    height: 400px;
+  }
+  
+  @media (max-width: 768px) {
+    .chart-container {
+      padding: 15px;
+    }
+  
+    .chart-options button {
+      font-size: 0.8rem;
+      padding: 8px 12px;
+    }
+  
+    .chart {
+      height: 300px;
+    }
+  }
+  

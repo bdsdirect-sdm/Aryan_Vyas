@@ -1,0 +1,117 @@
+.wave-list-container{
+    background-color: #ffff;
+    margin-left: 40px;
+    width: 96%;
+    height: 295px;
+    padding: auto;
+    padding-bottom: 20px;
+    padding-top: 1px;
+    border-radius: 11px;
+    padding-left: 20px;
+    padding-top: 30px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    margin-right: 30px;
+    position: relative;
+    left: -4%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+
+
+.wave-list-container p {
+    color: #292929;
+    font-size: 19px;
+    font-style: normal;
+}
+
+
+#user-wave-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    max-height: 203px;
+    position: relative;
+    left: -25px;
+}
+
+
+
+#user-img {
+    border-radius: 53.866px;
+    width: 53.866px;
+    height: 52px;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+#user-wave-details {
+    margin-top: 4px;
+}
+
+
+#user-id {
+    color: #bb8e01;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#user-message {
+    color: #535c61;
+    font-size: 16px;
+    font-weight: 600;
+    height: 21px;
+    margin-top: -16px;
+    overflow: hidden;
+}
+
+
+#follow-button {
+    line-height: normal;
+    color: #bb8e01;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: -13px;
+}
+
+
+#line {
+    display: block;
+    width: 2px;
+    height: 70%;
+    background-color: rgba(77, 113, 127, 0.25);
+    margin-right: 11px;
+    margin-left: 215px;
+    margin-bottom: auto;
+    margin-top: auto;
+    cursor: default;
+    display: block;
+    width: 2px;
+    height: 70%;
+    background-color: rgba(77, 113, 127, 0.25);
+    margin-right: 11px;
+    margin-bottom: auto;
+    margin-top: auto;
+    cursor: default;
+    position: relative;
+    left: 0;
+    top: -73px;
+}
+
+
+
+.no-waves-container {
+    display: flex;
+    justify-content: center; /* Centers the message horizontally */
+    align-items: center; /* Centers the message vertically */
+    height: 100%; /* Adjust as per your wave-list-container height */
+  }
+  
+  #no-friends {
+    color: #535c61;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
