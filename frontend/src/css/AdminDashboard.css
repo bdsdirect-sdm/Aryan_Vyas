@@ -9,10 +9,12 @@
   border-bottom: 1px solid #ddd;
 }
 .user-table th{
-  font-size: 12px;
+  font-size: 15px;
+  color:#3C3D3E;
 }
 .user-table td {
-  font-size: 11px;
+  font-size: 14px;
+  padding: 15px;
 }
 .admin-profile {
   margin-bottom: 20px;
