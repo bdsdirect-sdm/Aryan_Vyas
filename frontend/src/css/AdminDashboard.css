@@ -82,7 +82,7 @@
   border-color: transparent;
   padding: 10px;
   border-radius: 15px;
-  margin-right: 10px;
+  margin-right: -10px;
 }
 .admin-logout-button-css:hover{
   background-color: #3e5677;
