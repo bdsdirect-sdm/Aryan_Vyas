@@ -62,7 +62,6 @@ const AdminWaveList = () => {
       "Are you sure you want to delete this user?"
     );
     if (!confirmDelete) return;
-
     try {
       const response = await axios.delete(
         `${Local.BASE_URL}${Local.ADMIN_DELETE_WAVE}/${userId}`,

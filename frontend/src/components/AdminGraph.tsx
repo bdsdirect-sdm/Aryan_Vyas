@@ -81,10 +81,6 @@ const Graph: React.FC<GraphProps> = ({ users, waves }) => {
     },
   };
   
-  {chartType === "bar" && <Bar options={options} data={data} />}
-  
-  {chartType === "line" && <Line options={options} data={data} />}
-  
   const handleChartChange = (type: "pie" | "bar" | "line") => {
     setChartType(type);
   };
@@ -92,7 +88,7 @@ const Graph: React.FC<GraphProps> = ({ users, waves }) => {
   return (
     <div className="chart-container">
       <div className="chart-heading">
-
+        {/* Add heading or content here */}
       </div>
 
       <div className="chart-options">

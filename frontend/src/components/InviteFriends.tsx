@@ -76,7 +76,7 @@ const InviteFriends = () => {
           </p>
           <div id="friends-container">
             <div id="friend-count">
-              <h4>Friend #{1}</h4>
+              <h4>Friend</h4>
             </div>
             <div id="friend">
               <form id="invite-friends-form" onSubmit={formik.handleSubmit}>
