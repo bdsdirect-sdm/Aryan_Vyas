@@ -99,7 +99,7 @@ const Profile = () => {
   return (
     <>
       <div className="dashboard-wrapper">
-        <div className="user-wrapper">
+        <div className="user-wrapper" style={{marginLeft:-10}}>
           <div id="profile-header">
             <img
               src="../../public/images/left-arrow.png"
