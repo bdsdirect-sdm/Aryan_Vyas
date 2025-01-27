@@ -65,6 +65,12 @@
     background-color: #bea16e;
 }
 
+.options:active,
+#dashboard:active {
+    background-color: #8e6d40;
+}
+
+
 #circle {
     margin-left: 10px;
     display: flex;
