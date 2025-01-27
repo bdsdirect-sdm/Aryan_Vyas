@@ -122,13 +122,13 @@ const AdminUserList = () => {
           className="user-list-header"
           style={{ backgroundColor: "whitesmoke" }}
         >
-          <p style={{ fontSize: "17px", color: "#1976d2", fontWeight: "bold"}}>
+          <p style={{ fontSize: "17px", color: "#1976d2", fontWeight: "bold" }}>
             Manage User List
           </p>
           {userList.length === 0 ? (
-            <h3 style={{color:"#3c3d3e"}}>No User List Found</h3>
+            <h3 style={{ color: "#3c3d3e" }}>No User List Found</h3>
           ) : (
-            <table className="user-table" style={{ backgroundColor: "white", color:"#3c3d3e" }}>
+            <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
               <thead>
                 <tr>
                   <th>Name</th>
@@ -138,7 +138,7 @@ const AdminUserList = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody className="center" style={{ textAlign: "center",color:"#3c3d3e"}}>
+              <tbody className="center" style={{ textAlign: "center", color: "#3c3d3e" }}>
                 {userList.map((user, index) => (
                   <tr key={index}>
                     <td>{user.full_name}</td>
@@ -171,11 +171,11 @@ const AdminUserList = () => {
                           />
                         </span>
                         <span className="admin-user-delete-dustbin">
-                                                                <MdDelete
-                                                                  style={{ cursor: "pointer", color: "red" }}
-                                                                  onClick={() => deleteUser(user.id)}
-                                                                />
-                                                              </span>
+                          <MdDelete
+                            style={{ cursor: "pointer", color: "red" }}
+                            onClick={() => deleteUser(user.id)}
+                          />
+                        </span>
                       </div>
                     </td>
                   </tr>

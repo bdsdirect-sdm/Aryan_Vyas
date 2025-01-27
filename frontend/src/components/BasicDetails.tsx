@@ -10,35 +10,35 @@ import { useProfile } from "../context/ProfileContext";
 import "../css/Profile.css";
 
 const BasicDetails = () => {
-  const {setUserName} = useProfile();
+  const { setUserName } = useProfile();
 
-  const [initialValues , setInitialValues] = useState({
+  const [initialValues, setInitialValues] = useState({
     first_name: "",
-      last_name: "",
-      email: "",
-      ssn: "",
-      phone_number: "",
-      address1: "",
-      address2: "",
-      city: "",
-      state: "",
-      zip: "",
+    last_name: "",
+    email: "",
+    ssn: "",
+    phone_number: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
   })
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  useEffect(()=>{
+  useEffect(() => {
     getBasicDetails();
-  },[]);
+  }, []);
 
 
-  const getBasicDetails = async ()=>{
+  const getBasicDetails = async () => {
     try {
-      const response = await axios.get(`${Local.BASE_URL}${Local.GET_BASIC_DETAILS}`,{
-        headers:{
-          Authorization:`Bearer ${localStorage.getItem('token')}`
+      const response = await axios.get(`${Local.BASE_URL}${Local.GET_BASIC_DETAILS}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if(response.data.status ===200){
+      if (response.data.status === 200) {
         const data = response.data.data;
         setInitialValues({
           first_name: data.first_name || "",
@@ -54,35 +54,35 @@ const BasicDetails = () => {
 
         })
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error);
       toast.error("Cannot Update Your Details At The moment Please Try Again Later", {
-        position:'top-center',
-        autoClose:1000
+        position: 'top-center',
+        autoClose: 1000
       })
     }
   }
-  
-  const updateBasicDetails = async (data:any)=>{
+
+  const updateBasicDetails = async (data: any) => {
     try {
-      const response = await axios.put(`${Local.BASE_URL}${Local.UPDATE_BASIC_DETAILS}`,data , {
-        headers:{
-          Authorization:`bearer ${localStorage.getItem('token')}`
+      const response = await axios.put(`${Local.BASE_URL}${Local.UPDATE_BASIC_DETAILS}`, data, {
+        headers: {
+          Authorization: `bearer ${localStorage.getItem('token')}`
         }
       });
 
-      if(response.data.status){
-        toast.success(response.data.message,{
-          position:'top-right',
-          autoClose:1000,
+      if (response.data.status) {
+        toast.success(response.data.message, {
+          position: 'top-right',
+          autoClose: 1000,
         })
       }
       setUserName(response.data.data.first_name);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Cannot Update Your Details At The Momeny Please Try Again Later",{
-        position:'top-right',
-        autoClose:1000
+      toast.error("Cannot Update Your Details At The Momeny Please Try Again Later", {
+        position: 'top-right',
+        autoClose: 1000
       })
     }
   }
@@ -94,12 +94,12 @@ const BasicDetails = () => {
       last_name: Yup.string().required("Last Name Is Compulsory"),
       email: Yup.string().email("Invalid email format").required("Email Is Compulsory"),
       ssn: Yup.string()
-      .matches(/^\d+$/, "SSN must be numbers only") 
-      .min(5, "SSN must be at least 5 digits")     
-      .max(9, "SSN cannot be more than 9 digits")        
-      .required("Social Security Number Is Compulsory"),
-    
-        phone_number: Yup.string()
+        .matches(/^\d+$/, "SSN must be numbers only")
+        .min(5, "SSN must be at least 5 digits")
+        .max(9, "SSN cannot be more than 9 digits")
+        .required("Social Security Number Is Compulsory"),
+
+      phone_number: Yup.string()
         .matches(/^\d{10}$/, "Phone number must be in 10 digit")
         .required("Phone number Is Compulsory"),
       address1: Yup.string().required("Address One Is Compulsory"),
@@ -120,7 +120,7 @@ const BasicDetails = () => {
       <form id="basic-details-form" onSubmit={formik.handleSubmit}>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="first_name">First Name<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="first_name">First Name<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="first_name"
@@ -135,7 +135,7 @@ const BasicDetails = () => {
             ) : null}
           </div>
           <div className="form-group">
-            <label htmlFor="last_name">Last Name<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="last_name">Last Name<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="last_name"
@@ -168,7 +168,7 @@ const BasicDetails = () => {
             ) : null}
           </div>
           <div className="form-group">
-            <label htmlFor="ssn">Social Security Number<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="ssn">Social Security Number<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="ssn"
@@ -186,7 +186,7 @@ const BasicDetails = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="phone_number">Phone Number<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="phone_number">Phone Number<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="phone_number"
@@ -202,7 +202,7 @@ const BasicDetails = () => {
             ) : null}
           </div>
           <div className="form-group">
-            <label htmlFor="address1">Address One<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="address1">Address One<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="address1"
@@ -219,7 +219,7 @@ const BasicDetails = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="address2">Address Two<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="address2">Address Two<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="address2"
@@ -231,7 +231,7 @@ const BasicDetails = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="city">City<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="city">City<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="city"
@@ -248,7 +248,7 @@ const BasicDetails = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="state">State<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="state">State<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="state"
@@ -263,7 +263,7 @@ const BasicDetails = () => {
             ) : null}
           </div>
           <div className="form-group">
-            <label htmlFor="zip">Home Zip<span style={{color:"red"}}>*</span></label>
+            <label htmlFor="zip">Home Zip<span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               id="zip"
@@ -281,7 +281,7 @@ const BasicDetails = () => {
         </div>
 
         <div className="form-row button-row">
-          <button type="submit" id="update-button" style={{cursor:'pointer'}}>
+          <button type="submit" id="update-button" style={{ cursor: 'pointer' }}>
             Update
           </button>
         </div>

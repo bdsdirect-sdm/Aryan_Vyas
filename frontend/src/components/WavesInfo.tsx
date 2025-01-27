@@ -28,7 +28,7 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
   const [showInput, setShowInput] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
-  const [editingComment, setEditingComment] = useState<string>(""); 
+  const [editingComment, setEditingComment] = useState<string>("");
   const { id } = useParams();
 
   const formik = useFormik({
@@ -108,7 +108,7 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
-      );  
+      );
 
       if (response.status === 200) {
         toast.success(response.data.message, {
@@ -195,11 +195,13 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
       <div id="model-wrapper">
         <div id="wave-model">
           <div id="cover-color">
-            <h1 style={{color: "rgba(184, 156, 103, 0.3)",
-  fontSize:125,textAlign:"center",marginBottom:22}}>Details</h1>
+            <h1 style={{
+              color: "rgba(184, 156, 103, 0.3)",
+              fontSize: 125, textAlign: "center", marginBottom: 22
+            }}>Details</h1>
             <div id="user-profile">
               <img
-                style={{marginTop:-10}}
+                style={{ marginTop: -10 }}
                 src={posterIcon ? posterIcon : userIcon}
                 alt="user"
                 id="wave-user-icon"
@@ -250,12 +252,12 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
             </div>
           </div>
           <div id="add-button-container">
-            
-            {!showInput && ( 
+
+            {!showInput && (
               <button
                 id="add-comment"
                 type="button"
-                onClick={() => setShowInput(true)} 
+                onClick={() => setShowInput(true)}
               >
                 Add Comments
               </button>
@@ -273,7 +275,7 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.comment && formik.errors.comment ? (
-                    <div className="error" style={{marginTop:10}}>{formik.errors.comment}</div>
+                    <div className="error" style={{ marginTop: 10 }}>{formik.errors.comment}</div>
                   ) : null}
                 </div>
                 <button
@@ -289,34 +291,34 @@ const WavesInfo: React.FC<WavesInfoProps> = ({
               </form>
             )}
           </div>
-          
+
           {comments.length > 0 ? (
-  comments.map((item) => (
-    <div key={item.id} id="comment-details">
-      <p id="commenter-message">
-        <b id="commenter-name">{item.commenterName} :</b> {item.comment}
-      </p>
-      {item.isSameUser && (
-        <div id="button-container">
-          <p
-            id="edit-button"
-            onClick={() => handleEditClick(item.id, item.comment)}
-          >
-            Edit&nbsp;|&nbsp;
-          </p>
-          <p
-            id="delete-button"
-            onClick={() => handleDeleteComment(item.id)}
-          >
-            Delete
-          </p>
-        </div>
-      )}
-    </div>
-  ))
-) : (
-  <p style={{marginTop:55 , marginLeft:7}}>No comments yet.</p>
-)}
+            comments.map((item) => (
+              <div key={item.id} id="comment-details">
+                <p id="commenter-message">
+                  <b id="commenter-name">{item.commenterName} :</b> {item.comment}
+                </p>
+                {item.isSameUser && (
+                  <div id="button-container">
+                    <p
+                      id="edit-button"
+                      onClick={() => handleEditClick(item.id, item.comment)}
+                    >
+                      Edit&nbsp;|&nbsp;
+                    </p>
+                    <p
+                      id="delete-button"
+                      onClick={() => handleDeleteComment(item.id)}
+                    >
+                      Delete
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p style={{ marginTop: 55, marginLeft: 7 }}>No comments yet.</p>
+          )}
 
         </div>
       </div>

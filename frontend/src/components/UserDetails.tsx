@@ -21,7 +21,7 @@ const UserDetails = ({ user, onClose }: { user: any; onClose: () => void }) => {
             &times;
           </button>
           <div className="modal_img_container">
-            <span className="modal_img_text" style={{fontSize:110}}>DETAILS</span>
+            <span className="modal_img_text" style={{ fontSize: 110 }}>DETAILS</span>
             <img className="modal_img" src={profileImageUrl} alt="User Icon" />
             <span className="modal_image_friend_name">{user.full_name}</span>
             <span

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { useEffect, useState } from "react";
 import userIcon from "../../public/images/user.jpeg";
@@ -22,7 +23,7 @@ const AcceptedFriendList = () => {
                     Authorization: `bearer ${localStorage.getItem("token")}`,
                 },
             });
-console.log(response.data)
+            console.log(response.data)
             const accepted = response.data.data.filter((friend: any) => friend.status === 1);
             setAcceptedFriends(accepted);
             if (accepted.length === 0) {
@@ -71,7 +72,7 @@ console.log(response.data)
             {selectedFriend && (
                 <FriendDetailModal
                     friend={selectedFriend}
-                    onClose={() => setSelectedFriend(null)} 
+                    onClose={() => setSelectedFriend(null)}
                 />
             )}
         </div>

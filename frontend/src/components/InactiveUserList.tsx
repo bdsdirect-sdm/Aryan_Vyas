@@ -118,7 +118,7 @@ const InactiveUserList = () => {
           </p>
           {userList.filter((user) => !user.status).length === 0 ? (
             <>
-              <table className="user-table" style={{ backgroundColor: "white" ,color :"#3c3d3e"}}>
+              <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -130,7 +130,7 @@ const InactiveUserList = () => {
                 </thead>
                 <tbody className="center" style={{ textAlign: "center" }}>
                   <tr>
-                    <td style={{color:"#3c3d3e"}} colSpan={12}>No Inactive Users. All Users Are Active.</td>
+                    <td style={{ color: "#3c3d3e" }} colSpan={12}>No Inactive Users. All Users Are Active.</td>
                   </tr>
                 </tbody>
               </table>
@@ -146,7 +146,7 @@ const InactiveUserList = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody className="center" style={{ textAlign: "center" , color:"#3c3d3e" }}>
+              <tbody className="center" style={{ textAlign: "center", color: "#3c3d3e" }}>
                 {userList
                   .filter((user) => !user.status)
                   .map((user: User, index: number) => (
@@ -169,11 +169,11 @@ const InactiveUserList = () => {
                             />
                           </span>
                           <span className="admin-user-delete-dustbin">
-                                                                  <MdDelete
-                                                                    style={{ cursor: "pointer", color: "red" }}
-                                                                    onClick={() => deleteUser(user.id)}
-                                                                  />
-                                                                </span>
+                            <MdDelete
+                              style={{ cursor: "pointer", color: "red" }}
+                              onClick={() => deleteUser(user.id)}
+                            />
+                          </span>
                         </div>
                       </td>
                     </tr>

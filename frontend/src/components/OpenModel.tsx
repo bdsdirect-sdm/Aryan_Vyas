@@ -4,7 +4,7 @@ import "../css/OpenModel.css"
 
 interface OptionsModelProps {
     closeModel: () => void;
-    id: string;            
+    id: string;
 }
 
 function OptionsModel({ closeModel, id }: OptionsModelProps) {

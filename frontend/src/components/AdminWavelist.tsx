@@ -119,64 +119,64 @@ const AdminWaveList = () => {
         }}
       >
         <div className="user-list-header" style={{ backgroundColor: "whitesmoke" }}>
-          <p style={{ fontSize: "17px", color: "#1976d2", fontWeight: "bold"}}>
+          <p style={{ fontSize: "17px", color: "#1976d2", fontWeight: "bold" }}>
             Manage Wave List
           </p>
           {waveList.length === 0 ? (
-  <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
-    <thead>
-      <tr>
-        <th>Full Name</th>
-        <th>Message</th>
-        <th>Created On</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colSpan={4} style={{ textAlign: "center", color: "#3c3d3e", padding: "10px" }}>
-          No Wave List Found
-        </td>
-      </tr>
-    </tbody>
-  </table>
-) : (
-  <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
-    <thead>
-      <tr>
-        <th>Full Name</th>
-        <th>Message</th>
-        <th>Created On</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody className="center" style={{ textAlign: "center" }}>
-      {waveList.map((wave, index) => (
-        <tr key={index}>
-          <td>{`${wave.first_name} ${wave.last_name}`}</td>
-          <td>{wave.message}</td>
-          <td>{moment(wave.createdAt).format("DD-MM-YYYY")}</td>
-          <td>
-            <div className="status-icon">
-              <span className="admin-user-view-eye" onClick={() => openModal(wave)}>
-                <FaRegEye style={{ cursor: "pointer", color: "#1976d2" }} />
-              </span>
-              <span className="admin-user-edit-pencil">
-                <FaRegEdit style={{ cursor: "pointer", color: "#1976d2" }} />
-              </span>
-              <span className="admin-user-wave-delete-dustbin">
-              <MdDelete
-                style={{ cursor: "pointer", color: "red" }}
-                onClick={() => deleteWave(wave.id)}
-              />
-              </span>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)}
+            <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
+              <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>Message</th>
+                  <th>Created On</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan={4} style={{ textAlign: "center", color: "#3c3d3e", padding: "10px" }}>
+                    No Wave List Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
+              <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>Message</th>
+                  <th>Created On</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody className="center" style={{ textAlign: "center" }}>
+                {waveList.map((wave, index) => (
+                  <tr key={index}>
+                    <td>{`${wave.first_name} ${wave.last_name}`}</td>
+                    <td>{wave.message}</td>
+                    <td>{moment(wave.createdAt).format("DD-MM-YYYY")}</td>
+                    <td>
+                      <div className="status-icon">
+                        <span className="admin-user-view-eye" onClick={() => openModal(wave)}>
+                          <FaRegEye style={{ cursor: "pointer", color: "#1976d2" }} />
+                        </span>
+                        <span className="admin-user-edit-pencil">
+                          <FaRegEdit style={{ cursor: "pointer", color: "#1976d2" }} />
+                        </span>
+                        <span className="admin-user-wave-delete-dustbin">
+                          <MdDelete
+                            style={{ cursor: "pointer", color: "red" }}
+                            onClick={() => deleteWave(wave.id)}
+                          />
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

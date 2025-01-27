@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
-import "../css/WaveDetails.css"; 
-import defaultWaveImage from "../../public/images/user.jpeg"; 
+import "../css/WaveDetails.css";
+import defaultWaveImage from "../../public/images/user.jpeg";
 
 const WaveDetails = ({ wave, onClose }: { wave: any; onClose: () => void }) => {
   if (!wave) return null;
@@ -23,7 +23,7 @@ const WaveDetails = ({ wave, onClose }: { wave: any; onClose: () => void }) => {
           >
             &times;
           </button>
-          
+
           <div className="modal_img_container">
             <span className="modal_img_text">WAVE DETAILS</span>
 

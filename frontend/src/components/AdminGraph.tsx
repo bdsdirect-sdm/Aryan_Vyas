@@ -70,7 +70,7 @@ const Graph: React.FC<GraphProps> = ({ users, waves }) => {
       },
     ],
   };
-  
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -80,7 +80,7 @@ const Graph: React.FC<GraphProps> = ({ users, waves }) => {
       },
     },
   };
-  
+
   const handleChartChange = (type: "pie" | "bar" | "line") => {
     setChartType(type);
   };

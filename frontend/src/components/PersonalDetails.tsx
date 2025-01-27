@@ -1,4 +1,5 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -35,9 +36,9 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
           },
         }
       );
-      console.log("Personal Details",response.data.data);
+      console.log("Personal Details", response.data.data);
       if (response.data.status === 200) {
-      
+
         const data = response.data.data;
         setInitialValues({
           dob: data.dob || "",
@@ -48,7 +49,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
           kids: data.kids !== null && data.kids !== undefined ? String(data.kids) : "",
         });
 
-        
+
       }
     } catch (error: any) {
       console.error("Error Fetching Basic Details", error);
@@ -76,7 +77,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
         .typeError("Kids must be a number")
         .min(0, "Kids cannot be negative"),
     }),
-    onSubmit: (values) => { 
+    onSubmit: (values) => {
       updatePersonalDetails(values);
     },
   });
@@ -113,7 +114,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
         <form id="details-form" onSubmit={formik.handleSubmit}>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dob">Date of Birth<span style={{color:"red"}}>*</span></label>
+              <label htmlFor="dob">Date of Birth<span style={{ color: "red" }}>*</span></label>
               <input
                 type="date"
                 id="dob"
@@ -121,14 +122,14 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.dob}
-                onFocus={(e: any) => e.target.showPicker()} style={{color:"#495057"}}
+                onFocus={(e: any) => e.target.showPicker()} style={{ color: "#495057" }}
               />
               {formik.touched.dob && formik.errors.dob && (
                 <div className="error">{formik.errors.dob}</div>
               )}
             </div>
             <div className="form-group">
-              <label htmlFor="gender">Gender<span style={{color:"red"}}>*</span></label>
+              <label htmlFor="gender">Gender<span style={{ color: "red" }}>*</span></label>
               <select
                 id="gender"
                 name="gender"
@@ -149,7 +150,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="marital_status">Marital Status<span style={{color:"red"}}>*</span></label>
+              <label htmlFor="marital_status">Marital Status<span style={{ color: "red" }}>*</span></label>
               <select
                 id="marital_status"
                 name="marital_status"
@@ -166,7 +167,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                 )}
             </div>
             <div className="form-group">
-              <label htmlFor="ssn">Social Security Number<span style={{color:"red"}}>*</span></label>
+              <label htmlFor="ssn">Social Security Number<span style={{ color: "red" }}>*</span></label>
               <input
                 type="text"
                 id="ssn"
@@ -183,7 +184,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="social">Social<span style={{color:"red"}}>*</span></label>
+              <label htmlFor="social">Social<span style={{ color: "red" }}>*</span></label>
               <input
                 type="text"
                 id="social"

@@ -111,7 +111,7 @@ const InviteFriends = () => {
                         value={formik.values.inviteEmail}
                       />
                       {formik.touched.inviteEmail &&
-                      formik.errors.inviteEmail ? (
+                        formik.errors.inviteEmail ? (
                         <div className="error">{formik.errors.inviteEmail}</div>
                       ) : null}
                     </div>
@@ -131,7 +131,7 @@ const InviteFriends = () => {
                       value={formik.values.inviteMessage}
                     />
                     {formik.touched.inviteMessage &&
-                    formik.errors.inviteMessage ? (
+                      formik.errors.inviteMessage ? (
                       <div className="error">{formik.errors.inviteMessage}</div>
                     ) : null}
                   </div>

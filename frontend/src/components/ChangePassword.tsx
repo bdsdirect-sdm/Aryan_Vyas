@@ -181,7 +181,7 @@ const ChangePassword = (values?: any) => {
                     className="error-message"
                   />
                 </div>
-                <div id="button-container" style={{marginRight:-75}}>
+                <div id="button-container" style={{ marginRight: -75 }}>
                   <button type="submit" id="update-button">
                     Update
                   </button>

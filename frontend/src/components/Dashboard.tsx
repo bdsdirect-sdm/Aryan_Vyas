@@ -7,7 +7,7 @@ import { Local } from "../environment/env";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import userIcon from "../../public/images/user.jpeg";
-import { useProfile } from "../context/ProfileContext"; 
+import { useProfile } from "../context/ProfileContext";
 import "../css/Dashboard.css"
 
 const Dashboard = () => {
@@ -62,11 +62,11 @@ const Dashboard = () => {
           headers: {
             Authorization: `bearer ${token}`,
           },
-          
+
         }
-        
+
       );
-      console.log("name",response.data)
+      console.log("name", response.data)
       setUserName(response.data.data.fullName);
       setProfileIcon(response.data.data.profileIcon);
     } catch (error: any) {
@@ -164,7 +164,7 @@ const Dashboard = () => {
                 navigate(`/`);
               }}
             > */}
-              {/* <div id="option-image">
+            {/* <div id="option-image">
                 <img src="../../public/images/logout1.png" alt="icon"></img>
               </div>
               <p className="options-text">Log Out</p> */}
@@ -195,7 +195,7 @@ const Dashboard = () => {
           <ToastContainer />
         </div>
       </div>
-      
+
     </>
   );
 };

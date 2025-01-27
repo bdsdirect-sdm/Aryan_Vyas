@@ -116,11 +116,9 @@ const FriendInfo: React.FC<FriendInfoProps> = ({ closeModel, friendId }) => {
               <div className="item11">Address: </div>
               <div className="item12">
                 {friendInfo?.address
-                  ? `${friendInfo.address.address1 || ""} ${
-                      friendInfo.address.address2 || ""
-                    }, ${friendInfo.address.city || ""}, ${
-                      friendInfo.address.state || ""
-                    }, ${friendInfo.address.zip || ""}`
+                  ? `${friendInfo.address.address1 || ""} ${friendInfo.address.address2 || ""
+                  }, ${friendInfo.address.city || ""}, ${friendInfo.address.state || ""
+                  }, ${friendInfo.address.zip || ""}`
                   : "N/A"}
               </div>
               <div className="item13">Gender: </div>

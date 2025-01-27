@@ -52,31 +52,31 @@ const SideBarForAdmin = () => {
             <p className="options-text">Active Users</p>
           </div>
           <div
-  className="options"
-  onClick={() => navigate(`/inActive-Users-list`)}
->
-  <div id="option-image">
-    <img src="/images/menu.png" alt="icon" />
-  </div>
-  <p className="options-text">Inactive Users</p>
-</div>
-
-<div
-  className="options"
-  onClick={() => navigate(`/admin-wave-list`)}
->
-  <div id="option-image">
-    <img src="/images/menu.png" alt="icon" />
-  </div>
-  <p className="options-text">All Waves</p>
-</div>          
+            className="options"
+            onClick={() => navigate(`/inActive-Users-list`)}
+          >
+            <div id="option-image">
+              <img src="/images/menu.png" alt="icon" />
+            </div>
+            <p className="options-text">Inactive Users</p>
           </div>
+
           <div
-            // className="options"
-            // onClick={() => navigate(`/admin-wave-list`)}
-          ></div>
+            className="options"
+            onClick={() => navigate(`/admin-wave-list`)}
+          >
+            <div id="option-image">
+              <img src="/images/menu.png" alt="icon" />
+            </div>
+            <p className="options-text">All Waves</p>
+          </div>
         </div>
+        <div
+        // className="options"
+        // onClick={() => navigate(`/admin-wave-list`)}
+        ></div>
       </div>
+    </div>
   );
 };
 

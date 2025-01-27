@@ -31,7 +31,7 @@ const WaveList = () => {
           Authorization: `bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log("all waves",response.data)
+      console.log("all waves", response.data)
       if (response.status === 200) {
         setWaveList(response.data.data);
       } else {
@@ -111,8 +111,8 @@ const WaveList = () => {
         />
       )}
 
-      <div className="friends-list-container" style={{marginLeft:"-13px",width:"998px"}}>
-        <div className="friends-list">  
+      <div className="friends-list-container" style={{ marginLeft: "-13px", width: "998px" }}>
+        <div className="friends-list">
           <AcceptedFriendList />
         </div>
       </div>

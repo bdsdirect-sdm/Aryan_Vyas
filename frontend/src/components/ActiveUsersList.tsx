@@ -20,8 +20,8 @@ interface User {
 
 const ActiveUsersList = () => {
   const [userList, setUserList] = useState<User[]>([]);
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const ActiveUsersList = () => {
       toast.error(error.response?.data?.error || "An error occurred");
     }
   };
-  
+
   const openModal = (user: User) => {
     console.log("Opening modal for user:", user);
     setSelectedUser(user);
@@ -90,10 +90,10 @@ const ActiveUsersList = () => {
       <div className="admin-sidebar-button">
         <SideBarForAdmin />
         <div className="admin-logout-button">
-          <button className="admin-logout-button-css"onClick={() => {
-              localStorage.clear();
-              navigate("/adminLogin");
-            }}>
+          <button className="admin-logout-button-css" onClick={() => {
+            localStorage.clear();
+            navigate("/adminLogin");
+          }}>
             Logout
           </button>
         </div>
@@ -113,70 +113,70 @@ const ActiveUsersList = () => {
             Active User List
           </p>
           {userList.filter((user) => user.status).length === 0 ? (
-  <>
-    <table className="user-table" style={{ backgroundColor: "white" , color:"#3c3d3e" }}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody className="center" style={{ textAlign: "center" }}>
-        <tr>
-          <td colSpan={12}>No Active Users All Users Are Inactive</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-) : (
-  <table className="user-table" style={{ backgroundColor: "white" }}>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody className="center" style={{ textAlign: "center" , color:"#3c3d3e"}}>
-      {userList
-        .filter((user) => user.status)
-        .map((user: User, index: number) => (
-          <tr key={index}>
-            <td>{user.full_name}</td>
-            <td>{user.email}</td>
-            <td>{user.phone_number}</td>
-            <td>{user.status ? "Active" : "Inactive"}</td>
-             <td>
-                                    <div className="status-icon">
-                                      <span className="admin-user-view-eye">
-                                        <FaRegEye
-                                          style={{ cursor: "pointer", color: "#1976d2" }}
-                                          onClick={() => openModal(user)}
-                                        />
-                                      </span>
-                                      <span className="admin-user-edit-pencil">
-                                        <FaRegEdit
-                                          style={{ cursor: "pointer", color: "#1976d2" }}
-                                        />
-                                      </span>
-                                      <span className="admin-user-delete-dustbin">
-                                        <MdDelete
-                                          style={{ cursor: "pointer", color: "red" }}
-                                          onClick={() => deleteUser(user.id)}
-                                        />
-                                      </span>
-                                    </div>
-                                  </td>
-          </tr>
-        ))}
-    </tbody>
-  </table>
-)}
+            <>
+              <table className="user-table" style={{ backgroundColor: "white", color: "#3c3d3e" }}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody className="center" style={{ textAlign: "center" }}>
+                  <tr>
+                    <td colSpan={12}>No Active Users All Users Are Inactive</td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <table className="user-table" style={{ backgroundColor: "white" }}>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody className="center" style={{ textAlign: "center", color: "#3c3d3e" }}>
+                {userList
+                  .filter((user) => user.status)
+                  .map((user: User, index: number) => (
+                    <tr key={index}>
+                      <td>{user.full_name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone_number}</td>
+                      <td>{user.status ? "Active" : "Inactive"}</td>
+                      <td>
+                        <div className="status-icon">
+                          <span className="admin-user-view-eye">
+                            <FaRegEye
+                              style={{ cursor: "pointer", color: "#1976d2" }}
+                              onClick={() => openModal(user)}
+                            />
+                          </span>
+                          <span className="admin-user-edit-pencil">
+                            <FaRegEdit
+                              style={{ cursor: "pointer", color: "#1976d2" }}
+                            />
+                          </span>
+                          <span className="admin-user-delete-dustbin">
+                            <MdDelete
+                              style={{ cursor: "pointer", color: "red" }}
+                              onClick={() => deleteUser(user.id)}
+                            />
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
 
         </div>
       </div>

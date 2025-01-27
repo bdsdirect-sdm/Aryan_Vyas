@@ -2,11 +2,11 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
-import { useFormik} from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import open_eye from "../../public/images/open_eye.png";
 import close_eye from "../../public/images/Hide.png";
 import "react-toastify/dist/ReactToastify.css";
@@ -104,147 +104,147 @@ function Signup() {
 
   return (
     <>
-    <div className="signup-page">
-      <div className="left-part"></div>
-      <div className="right-part">
-        <h1 id="signup-header">Sign Up</h1>
-        <span id="rectangle-line"></span>
-        <form id="signup-form" onSubmit={formik.handleSubmit} autoComplete="off">
-          <div id="name">
-            <div>
-              <label htmlFor="first-name">First Name<span style={{color:"Red"}}>*</span></label>
+      <div className="signup-page">
+        <div className="left-part"></div>
+        <div className="right-part">
+          <h1 id="signup-header">Sign Up</h1>
+          <span id="rectangle-line"></span>
+          <form id="signup-form" onSubmit={formik.handleSubmit} autoComplete="off">
+            <div id="name">
+              <div>
+                <label htmlFor="first-name">First Name<span style={{ color: "Red" }}>*</span></label>
+                <br />
+                <input
+                  id="first-name"
+                  name="first_name"
+                  type="text"
+                  placeholder="First Name"
+                  autoComplete="off"
+                  value={formik.values.first_name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.errors.first_name && formik.touched.first_name ? (
+                  <p className="form-errors">{formik.errors.first_name}</p>
+                ) : null}
+              </div>
+              <div>
+                <label htmlFor="last-name">Last Name<span style={{ color: "Red" }}>*</span></label>
+                <br />
+                <input
+                  id="last-name"
+                  name="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                  autoComplete="off"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.errors.lastName && formik.touched.lastName ? (
+                  <p className="form-errors">{formik.errors.lastName}</p>
+                ) : null}
+              </div>
+            </div>
+            <div id="other-details">
+              <label htmlFor="email">Email<span style={{ color: "Red" }}>*</span></label>
               <br />
               <input
-                id="first-name"
-                name="first_name"
-                type="text"
-                placeholder="First Name"
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
                 autoComplete="off"
-                value={formik.values.first_name}
+                maxLength={50}
+                value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.errors.first_name && formik.touched.first_name ? (
-                <p className="form-errors">{formik.errors.first_name}</p>
+              <br />
+              {formik.errors.email && formik.touched.email ? (
+                <p className="form-errors">{formik.errors.email}</p>
+              ) : null}
+              <label htmlFor="phone">Phone Number<span style={{ color: "Red" }}>*</span></label>
+              <br />
+              <input
+                id="number"
+                name="phoneNumber"
+                type="text"
+                placeholder="Phone Number"
+                autoComplete="off"
+                value={formik.values.phoneNumber}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                maxLength={10}
+              />
+              <br />
+              {formik.errors.phoneNumber && formik.touched.phoneNumber ? (
+                <p className="form-errors">{formik.errors.phoneNumber}</p>
+              ) : null}
+              <label htmlFor="password">Password<span style={{ color: "Red" }}>*</span></label>
+              <br />
+
+              <div className="password-container1">
+                <input
+                  id="password"
+                  className="userPassword"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  autoComplete="off"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <img
+                  src={showPassword ? open_eye : close_eye}
+                  alt="Show Me/Hide Me"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="eye-icon"
+                />
+              </div>
+              {formik.errors.password && formik.touched.password ? (
+                <p className="form-errors">{formik.errors.password}</p>
+              ) : null}
+
+              <label htmlFor="confirm-password">Confirm Password<span style={{ color: "Red" }}>*</span></label>
+              <br />
+              <div className="password-container1">
+                <input
+                  id="confirm-password"
+                  name="confirm_password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  autoComplete="off"
+                  value={formik.values.confirm_password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <img
+                  src={showConfirmPassword ? open_eye : close_eye}
+                  alt="Show Me/Hide Me"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="eye-icon"
+                />
+              </div>
+              {formik.errors.confirm_password &&
+                formik.touched.confirm_password ? (
+                <p className="form-errors">{formik.errors.confirm_password}</p>
               ) : null}
             </div>
             <div>
-              <label htmlFor="last-name">Last Name<span style={{color:"Red"}}>*</span></label>
-              <br />
-              <input
-                id="last-name"
-                name="lastName"
-                type="text"
-                placeholder="Last Name"
-                autoComplete="off"
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.errors.lastName && formik.touched.lastName ? (
-                <p className="form-errors">{formik.errors.lastName}</p>
-              ) : null}
+              <Link to="/" id="login-signup-link">
+                Login
+              </Link>
             </div>
-          </div>
-          <div id="other-details">
-            <label htmlFor="email">Email<span style={{color:"Red"}}>*</span></label>
-            <br />
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Email"
-              autoComplete="off"
-              maxLength={50}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            <br />
-            {formik.errors.email && formik.touched.email ? (
-              <p className="form-errors">{formik.errors.email}</p>
-            ) : null}
-            <label htmlFor="phone">Phone Number<span style={{color:"Red"}}>*</span></label>
-            <br />
-            <input
-              id="number"
-              name="phoneNumber"
-              type="text"
-              placeholder="Phone Number"
-              autoComplete="off"
-              value={formik.values.phoneNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              maxLength={10}
-            />
-            <br />
-            {formik.errors.phoneNumber && formik.touched.phoneNumber ? (
-              <p className="form-errors">{formik.errors.phoneNumber}</p>
-            ) : null}
-            <label htmlFor="password">Password<span style={{color:"Red"}}>*</span></label>
-            <br />
-
-            <div className="password-container1">
-              <input
-                id="password"
-                className="userPassword"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                autoComplete="off"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <img
-                src={showPassword ? open_eye : close_eye}
-                alt="Show Me/Hide Me"
-                onClick={() => setShowPassword(!showPassword)}
-                className="eye-icon"
-              />
-            </div>
-            {formik.errors.password && formik.touched.password ? (
-              <p className="form-errors">{formik.errors.password}</p>
-            ) : null}
-
-            <label htmlFor="confirm-password">Confirm Password<span style={{color:"Red"}}>*</span></label>
-            <br />
-            <div className="password-container1">
-              <input
-                id="confirm-password"
-                name="confirm_password"
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
-                autoComplete="off"
-                value={formik.values.confirm_password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <img
-                src={showConfirmPassword ? open_eye : close_eye}
-                alt="Show Me/Hide Me"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="eye-icon"
-              />
-            </div>
-            {formik.errors.confirm_password &&
-            formik.touched.confirm_password ? (
-              <p className="form-errors">{formik.errors.confirm_password}</p>
-            ) : null}
-          </div>
-          <div>
-            <Link to="/" id="login-signup-link">
-              Login
-            </Link>
-          </div>
-          <button type="submit" id="login-signup-button">
-            SIGN UP
-          </button>
-        </form>
+            <button type="submit" id="login-signup-button">
+              SIGN UP
+            </button>
+          </form>
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
-    {/* <div className="footer">
+      {/* <div className="footer">
       <p>2023 DR. Palig.All rights reserved</p>
     </div> */}
     </>

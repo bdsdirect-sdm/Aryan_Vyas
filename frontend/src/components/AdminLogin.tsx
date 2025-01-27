@@ -37,7 +37,7 @@ function AdminLogin() {
 
       if (response.data && response.data.admin) {
         let id = response.data.admin.id;
-        let token = localStorage.setItem("adminToken", response.data.token); 
+        let token = localStorage.setItem("adminToken", response.data.token);
         toast.success(response.data.message, {
           position: "top-right",
           autoClose: 1000,
@@ -76,7 +76,7 @@ function AdminLogin() {
         <span id="rectangle-line"></span>
         <form id="signup-form" onSubmit={Formik.handleSubmit} autoComplete="off">
           <div id="login-details">
-            <label htmlFor="adminEmail">Email<span style={{color:"Red"}}>*</span></label>
+            <label htmlFor="adminEmail">Email<span style={{ color: "Red" }}>*</span></label>
             <br />
             <input
               id="adminEmail"
@@ -94,7 +94,7 @@ function AdminLogin() {
             {Formik.errors.adminEmail && Formik.touched.adminEmail ? (
               <p className="form-errors">{Formik.errors.adminEmail}</p>
             ) : null}
-            <label htmlFor="adminPassword">Password<span style={{color:"Red"}}>*</span></label>
+            <label htmlFor="adminPassword">Password<span style={{ color: "Red" }}>*</span></label>
             <br />
             <div className="password-container1">
               <input

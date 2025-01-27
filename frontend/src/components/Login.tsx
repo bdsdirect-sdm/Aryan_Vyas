@@ -35,16 +35,16 @@ function Login() {
     try {
       const response = await axios.post(`${Local.BASE_URL}${Local.LOGIN_USER}`, data);
       console.log(response);
-      
+
       if (response.data && response.data.user) {
-        const id = response.data.user.id; 
+        const id = response.data.user.id;
         localStorage.setItem("token", response.data.token);
-        
+
         toast.success(response.data.message, {
           position: "top-right",
           autoClose: 1000,
         });
-          navigate(`/user`);
+        navigate(`/user`);
       } else {
         toast.error("Invalid Credentials Or Your Accout Is Inactive Please Contact To The Admin", {
           position: "top-center",
@@ -63,7 +63,7 @@ function Login() {
     validationSchema: dataSchema,
     onSubmit: (values: FormValues, actions: FormikHelpers<FormValues>) => {
       verifyData(values);
-      actions.setSubmitting(false); 
+      actions.setSubmitting(false);
     },
   });
 
@@ -75,7 +75,7 @@ function Login() {
         <span id="rectangle-line"></span>
         <form id="signup-form" onSubmit={Formik.handleSubmit} autoComplete="off">
           <div id="login-details">
-            <label htmlFor="email">Email<span style={{color:"Red"}}>*</span></label>
+            <label htmlFor="email">Email<span style={{ color: "Red" }}>*</span></label>
             <br />
             <input
               id="email"
@@ -93,7 +93,7 @@ function Login() {
             {Formik.errors.email && Formik.touched.email ? (
               <p className="form-errors">{Formik.errors.email}</p>
             ) : null}
-            <label htmlFor="password">Password<span style={{color:"Red"}}>*</span></label>
+            <label htmlFor="password">Password<span style={{ color: "Red" }}>*</span></label>
             <br />
             <div className="password-container1">
               <input
@@ -124,8 +124,8 @@ function Login() {
             <Link to="signup" id="login-signup-link">
               SignUp
             </Link>
-            <Link to="adminSignup" id="login-signup-link" className="login-type" style={{marginLeft:50}}>
-             Admin Signup
+            <Link to="adminSignup" id="login-signup-link" className="login-type" style={{ marginLeft: 50 }}>
+              Admin Signup
             </Link>
           </div>
           <button type="submit" id="login-signup-button">
