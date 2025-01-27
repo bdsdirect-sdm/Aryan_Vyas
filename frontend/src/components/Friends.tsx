@@ -10,6 +10,7 @@ const Friends = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [inviteList, setInviteList] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Added state for search query
   const [isPolling] = useState(true);
 
   useEffect(() => {
@@ -40,6 +41,12 @@ const Friends = () => {
     }
   };
 
+  const filteredInviteList = inviteList.filter((friend) => {
+    const nameMatch = friend.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const emailMatch = friend.email.toLowerCase().includes(searchQuery.toLowerCase());
+    return nameMatch || emailMatch;
+  });
+
   return (
     <>
       <div className="dashboard-wrapper">
@@ -57,7 +64,13 @@ const Friends = () => {
             <div id="search-friend-container">
               <div id="search-friend">
                 <img src="../../public/images/search.png" alt="Search" />
-                <input type="text" id="input-search" placeholder="Search" />
+                <input
+                  type="text"
+                  id="input-search"
+                  placeholder="Search by name or email"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
               <img
                 src="../../public/images/sort.png"
@@ -72,17 +85,17 @@ const Friends = () => {
                 Invite Friends
               </button>
             </div>
-            {inviteList.length === 0 ? (
+            {filteredInviteList.length === 0 ? (
               <div id="no-invite-message">
                 <p style={{ fontSize: 26 }}>No Invite Friend List</p>
               </div>
             ) : (
-              inviteList.length > 0 &&
-              inviteList.map((friend, index) => {
+              filteredInviteList.length > 0 &&
+              filteredInviteList.map((friend, index) => {
                 if (index % 2 === 0) {
                   return (
                     <div id="parent-user" key={index}>
-                      {inviteList.slice(index, index + 2).map((invitee) => (
+                      {filteredInviteList.slice(index, index + 2).map((invitee) => (
                         <div
                           id="invited-user-container"
                           style={{ cursor: "default" }}
