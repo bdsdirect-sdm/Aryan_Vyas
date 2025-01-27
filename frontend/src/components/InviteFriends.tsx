@@ -9,11 +9,11 @@ import { Local } from "../environment/env";
 import "../css/InviteFriends.css";
 
 const validationSchema = Yup.object({
-  inviteName: Yup.string().required("Full name is required"),
+  inviteName: Yup.string().required("Full Name is Compulsory"),
   inviteEmail: Yup.string()
     .email("Invalid email address")
-    .required("Email is required"),
-  inviteMessage: Yup.string().required("Message is required"),
+    .required("Email Is Compulsory"),
+  inviteMessage: Yup.string().required("Message Is Compulsory"),
 });
 
 const InviteFriends = () => {
