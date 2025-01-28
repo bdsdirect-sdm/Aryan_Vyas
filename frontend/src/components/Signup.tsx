@@ -22,7 +22,6 @@ interface FormValues {
   confirm_password: string;
 }
 
-// Validation schema using Yup
 const dataSchema = Yup.object({
   first_name: Yup.string()
     .min(2, "Minimum 2 characters!")

@@ -44,7 +44,7 @@ function Login() {
           position: "top-right",
           autoClose: 1000,
         });
-        navigate(`/user`);
+        navigate(`/user`, {replace: true});
       } else {
         toast.error("Invalid Credentials Or Your Accout Is Inactive Please Contact To The Admin", {
           position: "top-center",

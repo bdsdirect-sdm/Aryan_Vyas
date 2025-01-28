@@ -38,7 +38,7 @@ function OptionsModel({ closeModel, id }: OptionsModelProps) {
                     id="logout-btn"
                     onClick={() => {
                         localStorage.clear();
-                        navigate("/");
+                        navigate("/", { replace: true });
                     }}
                 >
                     Log Out
