@@ -19,7 +19,7 @@ import WaveList from "./components/WaveList";
 import Friends from "./components/Friends";
 import WavesInfo from "./components/WavesInfo";
 import AdminLogin from "./components/AdminLogin";
-import AdminSignup from "./components/AdminSignup";
+// import AdminSignup from "./components/AdminSignup";
 import InviteFriends from "./components/InviteFriends";
 import UserDetails from "./components/UserDetails";
 import AdminDashboard from "./components/AdminDashboard";
@@ -41,7 +41,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
-          <Route path="/adminSignup" element={<AdminSignup />} />
+          {/* <Route path="/adminSignup" element={<AdminSignup />} /> */}
           <Route path="/signup" element={<Signup />} />
           <Route path="/adminDashBoard" element={<AdminDashboard />} />
           <Route path="/admin-user-list" element={<AdminUserList />} />

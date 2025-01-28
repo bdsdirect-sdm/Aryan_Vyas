@@ -122,9 +122,9 @@ function AdminLogin() {
             ) : null}
           </div>
           <div>
-            <Link to="/AdminSignup" id="login-signup-link">
+            {/* <Link to="/AdminSignup" id="login-signup-link">
               SignUp
-            </Link>
+            </Link> */}
           </div>
           <button type="submit" id="login-signup-button">
             LOGIN
