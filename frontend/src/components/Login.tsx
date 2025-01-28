@@ -124,9 +124,9 @@ function Login() {
             <Link to="signup" id="login-signup-link">
               SignUp
             </Link>
-            <Link to="adminSignup" id="login-signup-link" className="login-type" style={{ marginLeft: 50 }}>
+            {/* <Link to="adminSignup" id="login-signup-link" className="login-type" style={{ marginLeft: 50 }}>
               Admin Signup
-            </Link>
+            </Link> */}
           </div>
           <button type="submit" id="login-signup-button">
             LOGIN

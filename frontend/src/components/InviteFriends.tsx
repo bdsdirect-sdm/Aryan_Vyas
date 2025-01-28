@@ -139,7 +139,7 @@ const InviteFriends = () => {
 
                 <div id="friends-button-container">
                   <button type="submit" id="update-button">
-                    Friends
+                    Invite Friend
                   </button>
                 </div>
               </form>
