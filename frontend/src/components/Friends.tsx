@@ -10,7 +10,7 @@ const Friends = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [inviteList, setInviteList] = useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Added state for search query
+  const [searchQuery, setSearchQuery] = useState("");
   const [isPolling] = useState(true);
 
   useEffect(() => {
