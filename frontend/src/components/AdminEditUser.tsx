@@ -34,7 +34,7 @@ const AdminEditUser: React.FC<EditUserModalProps> = ({ user, onClose, refreshUse
     gender: Yup.string().required("Gender is required"),
     marital_status: Yup.string().required("Marital Status is required"),
     social: Yup.string().required("Social is required"),
-    kids: Yup.number()
+    kids: Yup.string()
             .typeError("Kids must be a number")
             .min(0, "Kids cannot be negative"),
      ssn: Yup.string()

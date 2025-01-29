@@ -167,19 +167,29 @@ const AdminUserList = () => {
                     <td>{user.full_name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone_number}</td>
-                    <td>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={user?.status === 1}
-                            onChange={() =>
-                              handleStatusToggle(user.id, user.status)
-                            }
-                          />
-                        }
-                        label={user.status === 1 ? "Active" : "Inactive"}
-                      />
-                    </td>
+                    <td style={{ width: "150px" }}>
+  <FormControlLabel
+    control={
+      <Switch
+        checked={user?.status === 1}
+        onChange={() => handleStatusToggle(user.id, user.status)}
+        sx={{
+          '& .MuiSwitch-thumb': {
+            backgroundColor: user.status === 1 ? undefined : 'red',
+          },
+          '& .MuiSwitch-track': {
+            backgroundColor: user.status === 1 ? undefined : 'red',
+          },
+          '& .Mui-checked': {
+            backgroundColor: user.status === 1 ? undefined : 'red', 
+          },
+        }}
+      />
+    }
+    label={user.status === 1 ? "Active" : "Inactive"}
+  />
+</td>
+
                     <td>
                       <div className="status-icon">
                         <span className="admin-user-view-eye">
