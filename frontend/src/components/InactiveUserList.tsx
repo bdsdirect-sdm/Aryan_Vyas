@@ -44,7 +44,7 @@ const InactiveUserList = () => {
       if (response.status === 200) {
         const users = response.data.users.map((user: User) => ({
           ...user,
-          status: Boolean(user.status), // Ensure the status is a boolean
+          status: Boolean(user.status),
         }));
         setUserList(users);
       }
@@ -98,6 +98,7 @@ const InactiveUserList = () => {
     setIsAdminEditModalOpen(false);
     setSelectedUser(null);
   };
+
 
   return (
     <>
@@ -204,13 +205,13 @@ const InactiveUserList = () => {
       {isModalOpen && selectedUser && (
         <UserDetails user={selectedUser} onClose={closeModal} />
       )}
-      {isAdminEditModalOpen && selectedUser && (
+     {isAdminEditModalOpen && selectedUser && (
         <AdminEditUser
           user={selectedUser}
           onClose={closeEditModal}
           refreshUsers={fetchUserList}
         />
-      )}
+      )}  
     </>
   );
 };

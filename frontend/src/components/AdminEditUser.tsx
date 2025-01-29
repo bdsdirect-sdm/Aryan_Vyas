@@ -44,58 +44,74 @@ const AdminEditUser: React.FC<EditUserModalProps> = ({ user, onClose, refreshUse
             .required("Social Security Number Is Compulsory"),
   });
 
-  const handleSubmit = async (values: any) => {
-    console.log("Submitting form:", values);
+const handleSubmit = async (values: any) => {
+  console.log("Submitting form:", values);
 
-    try {
-      const response = await axios.put(
-        `${Local.BASE_URL}${Local.EDIT_ADMIN_USER}/${user.id}`,
-        values,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-
-      console.log("Admin Edit Users Response:", response.data);
-      
-      if (response.data.message) {
-        toast.success(response.data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 5000,
-        });
-      } else {
-        toast.error("No message received from server", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 5000,
-        });
+  try {
+    const response = await axios.put(
+      `${Local.BASE_URL}${Local.EDIT_ADMIN_USER}/${user.id}`,
+      values,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
+    );
+
+    console.log("Admin Edit Users Response:", response.data);
+
+    if (response.data.message) {
+      toast.success(response.data.message, {
+        position: "top-right",
+        autoClose: 1000,
+      });
 
       refreshUsers();
-      onClose();
-    } catch (error: any) {
-      console.error("API Error:", error);
-      toast.error(error.response?.data?.error || "Failed to update user", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000,
+      setTimeout(() => {
+        onClose();
+      }, 1000);
+    } else {
+      toast.error("No message received from server", {
+        position: "top-right",
+        autoClose: 1000,
       });
     }
-  };
+  } catch (error: any) {
+    console.error("API Error:", error);
+    toast.error(error.response?.data?.error || "Failed to update user", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+};
 
   return (
     <div className="admin-modal-overlay">
       <div className="admin-modal-content">
-        <h2>Edit User</h2>
+        <div className="edit-user-background">
+          <p style={{fontSize:"85px",textAlign:"center",color:"#B89C67"}}>Edit User</p>
+        </div>
 
         <div className="section-toggle">
           <h3
             className={`section-title ${activeSection === 'basic' ? "active" : ""}`}
             onClick={() => setActiveSection('basic')}
+            style={{
+              borderBottom: activeSection === 'basic' ? '2px solid #3e5677' : 'none',
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "rgb(51, 51, 51)"
+            }}
           >
             Basic Details
           </h3>
           <h3
             className={`section-title ${activeSection === 'personal' ? "active" : ""}`}
             onClick={() => setActiveSection('personal')}
+            style={{
+              borderBottom: activeSection === 'personal' ? '2px solid #3e5677' : 'none', 
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "rgb(51, 51, 51)"
+            }}
           >
             Personal Details
           </h3>
@@ -218,6 +234,10 @@ const AdminEditUser: React.FC<EditUserModalProps> = ({ user, onClose, refreshUse
                     <Field type="text" name="ssn" placeholder="Social Security Number" />
                     <ErrorMessage name="ssn" component="div" className="error-message" />
                   </div>
+                  <div className="form-group"></div>
+                  <div className="form-group"></div>
+                  <div className="form-group"></div>
+                  <div className="form-group" style={{marginTop:27.5}}></div>
                 </>
               )}
 

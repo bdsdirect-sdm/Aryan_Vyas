@@ -491,6 +491,87 @@ export const editAdminUser = async (
   }
 };
 
+// export const editAdminUser = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const { userId } = req.params;
+//     const {
+//       first_name,
+//       last_name,
+//       phone_number,
+//       address1,
+//       address2,
+//       city,
+//       state,
+//       zip,
+//       dob,
+//       gender,
+//       marital_status,
+//       social,
+//       kids,
+//     } = req.body;
+    
+//     const file = req.file; // Get uploaded file
+
+//     const user = await User.findOne({
+//       where: { id: userId, deletedAt: null },
+//     });
+
+//     if (!user) {
+//       res.status(404).json({ error: "User not found" });
+//       return;
+//     }
+
+//     // Update user details
+//     user.first_name = first_name || user.first_name;
+//     user.last_name = last_name || user.last_name;
+//     user.phone_number = phone_number || user.phone_number;
+//     user.address1 = address1 || user.address1;
+//     user.address2 = address2 || user.address2;
+//     user.city = city || user.city;
+//     user.state = state || user.state;
+//     user.zip = zip || user.zip;
+//     user.dob = dob || user.dob;
+//     user.gender = gender || user.gender;
+//     user.marital_status = marital_status || user.marital_status;
+//     user.social = social || user.social;
+//     user.kids = kids || user.kids;
+
+
+//     if (file) {
+//       user.profileIcon = file.filename;
+//     }
+
+//     await user.save();
+
+//     res.status(200).json({
+//       message: "User details updated successfully",
+//       user: {
+//         id: user.id,
+//         first_name: user.first_name,
+//         last_name: user.last_name,
+//         email: user.email,
+//         phone_number: user.phone_number,
+//         address1: user.address1,
+//         address2: user.address2,
+//         city: user.city,
+//         state: user.state,
+//         zip: user.zip,
+//         dob: user.dob,
+//         gender: user.gender,
+//         marital_status: user.marital_status,
+//         social: user.social,
+//         kids: user.kids,
+//         profileIcon: file ? `http://localhost:4000/uploads/${file.filename}` : user.profileIcon,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error editing user details:", error);
+//     res.status(500).json({ error: "An error occurred while updating the user's details." });
+//   }
+// };
+
+
+
 // export const getAllWaveListAdmin = async (req: any, res: any) => {
 //   try {
 //     const waveList: any = await Wave.findAll({
@@ -541,6 +622,8 @@ export const editAdminUser = async (
 //     });
 //   }
 // };
+
+
 
 export const getAllWaveListAdmin = async (req: any, res: any) => {
   try {
@@ -631,8 +714,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       password: hashedPassword,
       status: 1,
     });
-
-    // Check for pending friend requests associated with the email
     const pendingFriends = await Friend.findAll({
       where: { inviteEmail: email, status: 0, isAccepted: 0 },
     });
@@ -802,7 +883,6 @@ export const AddInviteFriend = async (req: any, res: any) => {
   try {
     const { inviteEmail, inviteName, inviteMessage } = req.body;
 
-    // Validate input data
     const { error } = inviteFriendSchema.validate({
       inviteEmail,
       inviteName,
@@ -815,7 +895,6 @@ export const AddInviteFriend = async (req: any, res: any) => {
         .json({ message: error.details[0].message });
     }
 
-    // Check if the invitation already exists
     let isInvited = await Friend.findOne({
       where: {
         inviteEmail: req.body.inviteEmail,
@@ -830,7 +909,6 @@ export const AddInviteFriend = async (req: any, res: any) => {
       });
     }
 
-    // Check if the email exists in the User table
     let IsEmailExists = await User.findOne({
       where: { email: req.body.inviteEmail },
     });

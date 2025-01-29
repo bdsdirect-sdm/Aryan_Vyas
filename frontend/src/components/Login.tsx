@@ -46,13 +46,13 @@ function Login() {
         });
         navigate(`/user`, {replace: true});
       } else {
-        toast.error("Invalid Credentials Or Your Accout Is Inactive Please Contact To The Admin", {
+        toast.error("Invalid Credentials", {
           position: "top-center",
           autoClose: 1000,
         });
       }
     } catch (err: any) {
-      toast.error("Invalid Credentials Or Your Accout Is Inactive Please Contact To The Admin", {
+      toast.error("Invalid Credentials", {
         position: "top-center",
         autoClose: 1000,
       });

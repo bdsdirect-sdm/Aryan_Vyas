@@ -46,6 +46,8 @@ router.delete("/delete-admin-user/:userId", deleteUser);
 router.delete("/delete-admin-wave/:waveId", deleteWave);
 router.patch("/toggle-status/:userId", toggleUserStatus);
 router.put("/editAdminUser/:userId",editAdminUser)
+// router.put('/admin/user/:userId', upload.single('profileIcon'), editAdminUser);
+
 router.get("/get-wavelist-admin",getAllWaveListAdmin)
 router.post("/signup", signup);
 router.post("/login", login);
