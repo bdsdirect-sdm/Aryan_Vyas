@@ -161,9 +161,9 @@ const AdminWaveList = () => {
                         <span className="admin-user-view-eye" onClick={() => openModal(wave)}>
                           <FaRegEye style={{ cursor: "pointer", color: "#1976d2" }} />
                         </span>
-                        <span className="admin-user-edit-pencil">
+                        {/* <span className="admin-user-edit-pencil">
                           <FaRegEdit style={{ cursor: "pointer", color: "#1976d2" }} />
-                        </span>
+                        </span> */}
                         <span className="admin-user-wave-delete-dustbin">
                           <MdDelete
                             style={{ cursor: "pointer", color: "red" }}

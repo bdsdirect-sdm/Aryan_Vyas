@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import AdminEditUser from "./AdminEditUser";
 
 interface User {
   id: number;
@@ -22,6 +23,7 @@ const InactiveUserList = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdminEditModalOpen, setIsAdminEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,6 +84,18 @@ const InactiveUserList = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const openEditModal = (user: User) => {
+    console.log("Opening Edit Modal for user:", user);
+    setSelectedUser(user);
+    setIsAdminEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    console.log("Closing Edit Modal");
+    setIsAdminEditModalOpen(false);
     setSelectedUser(null);
   };
 
@@ -166,6 +180,10 @@ const InactiveUserList = () => {
                           <span className="admin-user-edit-pencil">
                             <FaRegEdit
                               style={{ cursor: "pointer", color: "#1976d2" }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEditModal(user);
+                              }}
                             />
                           </span>
                           <span className="admin-user-delete-dustbin">
@@ -185,6 +203,13 @@ const InactiveUserList = () => {
       </div>
       {isModalOpen && selectedUser && (
         <UserDetails user={selectedUser} onClose={closeModal} />
+      )}
+      {isAdminEditModalOpen && selectedUser && (
+        <AdminEditUser
+          user={selectedUser}
+          onClose={closeEditModal}
+          refreshUsers={fetchUserList}
+        />
       )}
     </>
   );

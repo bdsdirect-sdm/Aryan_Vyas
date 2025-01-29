@@ -12,11 +12,22 @@ import UserDetails from "./UserDetails";
 import "../css/AdminDashboard.css";
 import { toggleUserStatusAction } from "../actions/userAction";
 import SideBarForAdmin from "./SideBarForAdmin";
+import AdminEditUser from "./AdminEditUser";
+
+
+interface User {
+  id: number;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  status: boolean;
+}
 
 const AdminUserList = () => {
   const [userList, setUserList] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdminEditModalOpen, setIsAdminEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -88,6 +99,18 @@ const AdminUserList = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const openEditModal = (user: User) => {
+    console.log("Opening Edit Modal for user:", user);
+    setSelectedUser(user);
+    setIsAdminEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    console.log("Closing Edit Modal");
+    setIsAdminEditModalOpen(false);
     setSelectedUser(null);
   };
 
@@ -168,6 +191,10 @@ const AdminUserList = () => {
                         <span className="admin-user-edit-pencil">
                           <FaRegEdit
                             style={{ cursor: "pointer", color: "#1976d2" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditModal(user);
+                            }}
                           />
                         </span>
                         <span className="admin-user-delete-dustbin">
@@ -188,6 +215,13 @@ const AdminUserList = () => {
 
       {isModalOpen && (
         <UserDetails user={selectedUser} onClose={closeModal} />
+      )}
+      {isAdminEditModalOpen && selectedUser && (
+        <AdminEditUser
+          user={selectedUser}
+          onClose={closeEditModal}
+          refreshUsers={fetchUserList}
+        />
       )}
     </>
   );

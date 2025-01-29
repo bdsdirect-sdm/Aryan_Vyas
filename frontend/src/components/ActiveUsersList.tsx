@@ -4,6 +4,7 @@ import SideBarForAdmin from "./SideBarForAdmin";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserDetails from "./UserDetails";
+import AdminEditUser from "./AdminEditUser";
 import { Local } from "../environment/env";
 import { toast } from "react-toastify";
 import { FaRegEye } from "react-icons/fa";
@@ -22,6 +23,7 @@ const ActiveUsersList = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdminEditModalOpen, setIsAdminEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,7 +83,20 @@ const ActiveUsersList = () => {
   };
 
   const closeModal = () => {
+    console.log("Closing User Modal");
     setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const openEditModal = (user: User) => {
+    console.log("Opening Edit Modal for user:", user);
+    setSelectedUser(user);
+    setIsAdminEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    console.log("Closing Edit Modal");
+    setIsAdminEditModalOpen(false);
     setSelectedUser(null);
   };
 
@@ -90,10 +105,13 @@ const ActiveUsersList = () => {
       <div className="admin-sidebar-button">
         <SideBarForAdmin />
         <div className="admin-logout-button">
-          <button className="admin-logout-button-css" onClick={() => {
-            localStorage.clear();
-            navigate("/adminLogin");
-          }}>
+          <button
+            className="admin-logout-button-css"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/adminLogin");
+            }}
+          >
             Logout
           </button>
         </div>
@@ -159,10 +177,14 @@ const ActiveUsersList = () => {
                               onClick={() => openModal(user)}
                             />
                           </span>
-                          <span className="admin-user-edit-pencil">
-                            <FaRegEdit
-                              style={{ cursor: "pointer", color: "#1976d2" }}
-                            />
+                          <span>
+                          <FaRegEdit
+                            style={{ cursor: "pointer", color: "#1976d2" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditModal(user);
+                            }}
+                          />
                           </span>
                           <span className="admin-user-delete-dustbin">
                             <MdDelete
@@ -177,11 +199,19 @@ const ActiveUsersList = () => {
               </tbody>
             </table>
           )}
-
         </div>
       </div>
+
       {isModalOpen && selectedUser && (
         <UserDetails user={selectedUser} onClose={closeModal} />
+      )}
+
+      {isAdminEditModalOpen && selectedUser && (
+        <AdminEditUser
+          user={selectedUser}
+          onClose={closeEditModal}
+          refreshUsers={fetchUserList}
+        />
       )}
     </>
   );

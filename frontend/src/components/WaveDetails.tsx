@@ -18,7 +18,7 @@ const WaveDetails = ({ wave, onClose }: { wave: any; onClose: () => void }) => {
         <div className="modal-content" style={{ width: 560 }}>
           <button
             className="close-button"
-            style={{ marginTop: 3, marginRight: 3 }}
+            style={{ marginTop: 3, marginRight: 3, padding: 1 }}
             onClick={onClose}
           >
             &times;

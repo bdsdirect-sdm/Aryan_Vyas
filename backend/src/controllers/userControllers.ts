@@ -423,7 +423,6 @@ export const editAdminUser = async (
     const {
       first_name,
       last_name,
-      email,
       phone_number,
       address1,
       address2,
@@ -435,16 +434,7 @@ export const editAdminUser = async (
       marital_status,
       social,
       kids,
-      status,
     } = req.body;
-
-    if (!first_name || !last_name || !email || !phone_number) {
-      res.status(400).json({
-        error:
-          "Missing required fields: first name, last name, email, or phone number.",
-      });
-      return;
-    }
 
     const user = await User.findOne({
       where: { id: userId, deletedAt: null },
@@ -457,10 +447,9 @@ export const editAdminUser = async (
       return;
     }
 
-    user.first_name = first_name;
-    user.last_name = last_name;
-    user.email = email;
-    user.phone_number = phone_number;
+    user.first_name = first_name || user.first_name;
+    user.last_name = last_name || user.last_name;
+    user.phone_number = phone_number || user.phone_number;
     user.address1 = address1 || user.address1;
     user.address2 = address2 || user.address2;
     user.city = city || user.city;
@@ -471,7 +460,6 @@ export const editAdminUser = async (
     user.marital_status = marital_status || user.marital_status;
     user.social = social || user.social;
     user.kids = kids || user.kids;
-    user.status = status || user.status;
 
     await user.save();
 
@@ -493,7 +481,6 @@ export const editAdminUser = async (
         marital_status: user.marital_status,
         social: user.social,
         kids: user.kids,
-        status: user.status,
       },
     });
   } catch (error) {
