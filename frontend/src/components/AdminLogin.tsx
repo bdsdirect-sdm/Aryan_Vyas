@@ -43,7 +43,7 @@ function AdminLogin() {
           autoClose: 1000,
         });
         setTimeout(() => {
-          navigate(`/adminDashBoard`);
+          navigate(`/adminDashBoard`, {replace: true});
         }, 1500);
       } else {
         toast.error("Invalid Credentials", {

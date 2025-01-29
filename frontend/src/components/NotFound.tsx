@@ -47,7 +47,7 @@ import "../css/NotFound.css";
 const NotFound: React.FC = () => {
     return (
         <div id="not-found">
-            <h1 className="text-center">Oops! Page Not Found.</h1>
+            <h1 className="text-center">Hold On Smart Person You Hit A Wrong Path</h1>
         </div>
     );
 };
