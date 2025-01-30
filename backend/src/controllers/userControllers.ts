@@ -572,6 +572,8 @@ export const editAdminUser = async (
 
 
 
+
+
 // export const getAllWaveListAdmin = async (req: any, res: any) => {
 //   try {
 //     const waveList: any = await Wave.findAll({
@@ -588,6 +590,7 @@ export const editAdminUser = async (
 //           const userDetails = await User.findByPk(wave.dataValues.userId, {
 //             attributes: ["id", "first_name", "last_name", "profileIcon"],
 //           });
+
 //           return {
 //             id: wave.dataValues.id,
 //             message: wave.dataValues.message,
@@ -624,6 +627,8 @@ export const editAdminUser = async (
 // };
 
 
+////////////////////////////////////////////////////////////////////////////
+
 
 export const getAllWaveListAdmin = async (req: any, res: any) => {
   try {
@@ -633,6 +638,21 @@ export const getAllWaveListAdmin = async (req: any, res: any) => {
         status: 1,
       },
       order: [["id", "DESC"]],
+      include: [
+        {
+          model: Comment,
+          as: "comments",
+          attributes: ["id", "commenterId", "waveId", "comment", "status", "createdAt"],
+          required: false,
+          include: [
+            {
+              model: User,
+              as: "commenter",
+              attributes: ["id", "first_name", "last_name", "profileIcon"],
+            },
+          ],
+        },
+      ],
     });
 
     if (waveList && waveList.length > 0) {
@@ -654,6 +674,24 @@ export const getAllWaveListAdmin = async (req: any, res: any) => {
             profileIcon: userDetails?.dataValues.profileIcon
               ? `http://localhost:4000/uploads/${userDetails.dataValues.profileIcon}`
               : null,
+            comments: wave.dataValues.comments.map((comment: any) => ({
+              id: comment.id,
+              commenterId: comment.commenterId,
+              waveId: comment.waveId,
+              comment: comment.comment,
+              status: comment.status,
+              createdAt: comment.createdAt,
+              commenter: comment.commenter
+                ? {
+                    id: comment.commenter.id,
+                    first_name: comment.commenter.first_name,
+                    last_name: comment.commenter.last_name,
+                    profileIcon: comment.commenter.profileIcon
+                      ? `http://localhost:4000/uploads/${comment.commenter.profileIcon}`
+                      : null,
+                  }
+                : null,
+            })),
           };
         })
       );
@@ -1526,6 +1564,78 @@ export const getAllWaveList = async (req: any, res: any) => {
     });
   }
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////
+
+// export const getAllWaveList = async (req: any, res: any) => {
+//   try {
+//     let waveList: any = await Wave.findAll({
+//       attributes: ["id", "userId", "image", "message"],
+//       where: {
+//         status: 1,
+//       },
+//       order: [["id", "DESC"]],
+//       include: [
+//         {
+//           model: User,
+//           as: "user",
+//           attributes: ["id", "first_name", "last_name", "profileIcon"],
+//         },
+//         {
+//           model: Comment,
+//           as: "comments",
+//           attributes: ["id", "commenterId", "comment"],
+//           required: false,
+//           include: [
+//             {
+//               model: User,
+//               as: "commenter",
+//               attributes: ["id", "first_name", "last_name", "profileIcon"],
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     let data = waveList.map((wave: any) => ({
+//       id: wave.id,
+//       message: wave.message,
+//       image: wave.image ? `http://localhost:4000/uploads/${wave.image}` : null,
+//       first_name: wave.user?.first_name || null,
+//       last_name: wave.user?.last_name || null,
+//       profileIcon: wave.user?.profileIcon
+//         ? `http://localhost:4000/uploads/${wave.user.profileIcon}`
+//         : null,
+//       comments: wave.comments.map((comment: any) => ({
+//         id: comment.id,
+//         comment: comment.comment,
+//         commenterId: comment.commenterId,
+//         first_name: comment.commenter?.first_name || null,
+//         last_name: comment.commenter?.last_name || null,
+//         profileIcon: comment.commenter?.profileIcon
+//           ? `http://localhost:4000/uploads/${comment.commenter.profileIcon}`
+//           : null,
+//       })),
+//     }));
+
+//     return res.status(200).json({
+//       status: 200,
+//       message: "Wave list fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching wave list:", error);
+//     return res.status(500).json({
+//       status: 500,
+//       message: "Internal Server Error",
+//     });
+//   }
+// };
+
+
+
 
 export const addCommentWave = async (req: any, res: any) => {
   try {
