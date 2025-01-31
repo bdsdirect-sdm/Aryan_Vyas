@@ -46,7 +46,3 @@ Cart.belongsTo(Retailer, { foreignKey: 'userId', as: 'retailer' });
 
 export default Cart;
 /////////////////
-Client ID
-AeC0Eq4zGlez1yWtFJ_ZJZy5-_dKijce1xsrzx0EqsCjKqaWpk2A6I-zOV-OlUePxTHH351I0dykKerx
-Secret key 1
-EJvBAshI3bw0SGX9uzw37qrxaEVr0YSo-paLlMtNKW1YXpuCpVb-rOGo-j9MevHz4tFyHU2AsyULek6B
