@@ -1,0 +1,470 @@
+Certainly! Below is the code converted to TypeScript for both the frontend (React) and the backend (Node.js with Express, MySQL2, and Sequelize). This will integrate PayPal into your application and store transactions in a MySQL database using Sequelize.
+Frontend (React with TypeScript):
+1. Setup TypeScript in Your React Project:
+
+If you haven't created your React project with TypeScript, you can do so using:
+bash
+
+npx create-react-app my-app --template typescript
+
+If you're adding TypeScript to an existing project, install the necessary dependencies:
+bash
+
+npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+
+2. Install PayPal SDK Types:
+
+Since PayPal's SDK might not have TypeScript types available, we might need to create custom typings.
+bash
+
+npm install --save @types/paypal__paypal-js
+
+If types are not available, you can create a custom.d.ts file in your src directory:
+typescript
+
+// src/custom.d.ts
+interface Window {
+  paypal: any;
+}
+
+3. Include PayPal SDK in public/index.html:
+html
+
+<!-- public/index.html -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
+
+Replace YOUR_CLIENT_ID with your actual PayPal Client ID from your PayPal developer account.
+4. Create the PayPal Button Component:
+tsx
+
+// src/components/PayPalButton.tsx
+import React, { useEffect } from 'react';
+
+const PayPalButton: React.FC = () => {
+  useEffect(() => {
+    if (window.paypal) {
+      window.paypal
+        .Buttons({
+          createOrder: function (
+            data: any,
+            actions: any
+          ): Promise<string> {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: '10.00', // Replace with the amount to charge
+                  },
+                },
+              ],
+            });
+          },
+          onApprove: function (
+            data: any,
+            actions: any
+          ): Promise<void> {
+            return actions.order
+              .capture()
+              .then(function (details: any) {
+                // Send transaction details to the backend
+                fetch('/api/paypal-transaction-complete', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    orderID: data.orderID,
+                    payerID: data.payerID,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    alert(
+                      'Transaction completed by ' +
+                        details.payer.name.given_name
+                    );
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error);
+                  });
+              });
+          },
+        })
+        .render('#paypal-button-container');
+    }
+  }, []);
+
+  return <div id="paypal-button-container"></div>;
+};
+
+export default PayPalButton;
+
+5. Integrate the PayPal Button into Your Dashboard:
+tsx
+
+// src/components/AdminDashboard.tsx
+import React from 'react';
+import PayPalButton from './PayPalButton';
+
+const AdminDashboard: React.FC = () => {
+  return (
+    <div className="dashboard-container">
+      {/* ...existing content... */}
+      <div className="payment-section">
+        <h2>Make a Payment</h2>
+        <PayPalButton />
+      </div>
+      {/* ...existing content... */}
+    </div>
+  );
+};
+
+export default AdminDashboard;
+
+Backend (Node.js with Express, MySQL2, Sequelize, and TypeScript):
+1. Set Up a TypeScript Node.js Project:
+
+Initialize a new Node.js project and install TypeScript:
+bash
+
+mkdir backend
+cd backend
+npm init -y
+npm install express body-parser mysql2 sequelize dotenv cors
+npm install --save-dev typescript ts-node @types/node @types/express @types/body-parser @types/cors
+
+Initialize TypeScript configuration:
+bash
+
+npx tsc --init
+
+2. Configure tsconfig.json:
+
+Ensure that your tsconfig.json has the following settings:
+json
+
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}
+
+3. Create Directory Structure:
+bash
+
+mkdir src
+mkdir src/models
+
+4. Configure Database Connection:
+typescript
+
+// src/db.ts
+import { Sequelize } from 'sequelize';
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME as string,
+  process.env.DB_USER as string,
+  process.env.DB_PASS as string,
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    logging: false,
+  }
+);
+
+export default sequelize;
+
+5. Define the Transaction Model:
+typescript
+
+// src/models/Transaction.ts
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../db';
+
+interface TransactionAttributes {
+  id?: number;
+  orderID: string;
+  payerID: string;
+  amount: number;
+  status: string;
+}
+
+class Transaction
+  extends Model<TransactionAttributes>
+  implements TransactionAttributes
+{
+  public id!: number;
+  public orderID!: string;
+  public payerID!: string;
+  public amount!: number;
+  public status!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+Transaction.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    orderID: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    payerID: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    amount: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'transactions',
+    sequelize, // passing the `sequelize` instance is required
+  }
+);
+
+export default Transaction;
+
+6. Create the Express Server and API Endpoint:
+typescript
+
+// src/server.ts
+import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import sequelize from './db';
+import Transaction from './models/Transaction';
+
+dotenv.config();
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+// PayPal SDK
+import checkoutNodeJssdk from '@paypal/checkout-server-sdk';
+
+const environment = new checkoutNodeJssdk.core.SandboxEnvironment(
+  process.env.PAYPAL_CLIENT_ID as string,
+  process.env.PAYPAL_CLIENT_SECRET as string
+);
+const paypalClient = new checkoutNodeJssdk.core.PayPalHttpClient(
+  environment
+);
+
+app.post(
+  '/api/paypal-transaction-complete',
+  async (req: Request, res: Response) => {
+    const { orderID } = req.body;
+
+    // Construct a request object and set desired parameters
+    const request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID);
+
+    try {
+      const order = await paypalClient.execute(request);
+
+      // Save transaction details to the database
+      const newTransaction = await Transaction.create({
+        orderID: order.result.id,
+        payerID: order.result.payer.payer_id,
+        amount: parseFloat(
+          order.result.purchase_units[0].amount.value
+        ),
+        status: order.result.status,
+      });
+
+      res
+        .status(200)
+        .json({ message: 'Transaction verified and saved successfully' });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ error: 'Failed to verify and save transaction' });
+    }
+  }
+);
+
+// Sync database and start server
+const PORT = process.env.PORT || 5000;
+
+sequelize
+  .sync()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error: Error) => {
+    console.error('Failed to sync database:', error);
+  });
+
+Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' in your .env file, which we'll set up next.
+7. Environment Variables:
+
+Create a .env file in your backend directory:
+text
+
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+DB_HOST=localhost
+
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+
+8. Install PayPal SDK:
+bash
+
+npm install @paypal/checkout-server-sdk
+
+9. Update Package Scripts:
+
+In your package.json, add a script to run the server with ts-node:
+json
+
+"scripts": {
+  "start": "ts-node src/server.ts"
+}
+
+Alternatively, you can compile the TypeScript files to JavaScript and run the compiled code. Add these scripts:
+json
+
+"scripts": {
+  "build": "tsc",
+  "start": "node dist/server.js"
+}
+
+And update your tsconfig.json to output compiled files to a dist directory.
+10. Install Type Definitions for PayPal SDK (If Necessary):
+
+Since there might not be TypeScript definitions available for PayPal SDK, you might need to declare modules or use any types where necessary.
+Adjustments on the Frontend to Send Amount Dynamically:
+
+If the amount is not fixed, you can pass it as a prop to the PayPalButton component.
+tsx
+
+// src/components/PayPalButton.tsx
+import React, { useEffect } from 'react';
+
+interface PayPalButtonProps {
+  amount: string;
+}
+
+const PayPalButton: React.FC<PayPalButtonProps> = ({ amount }) => {
+  useEffect(() => {
+    if (window.paypal) {
+      window.paypal
+        .Buttons({
+          createOrder: function (
+            data: any,
+            actions: any
+          ): Promise<string> {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: amount,
+                  },
+                },
+              ],
+            });
+          },
+          onApprove: function (
+            data: any,
+            actions: any
+          ): Promise<void> {
+            return actions.order
+              .capture()
+              .then(function (details: any) {
+                // Send transaction details to the backend
+                fetch('/api/paypal-transaction-complete', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    orderID: data.orderID,
+                    payerID: data.payerID,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    alert(
+                      'Transaction completed by ' +
+                        details.payer.name.given_name
+                    );
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error);
+                  });
+              });
+          },
+        })
+        .render('#paypal-button-container');
+    }
+  }, [amount]);
+
+  return <div id="paypal-button-container"></div>;
+};
+
+export default PayPalButton;
+
+Use the component with the amount:
+tsx
+
+// src/components/AdminDashboard.tsx
+import React from 'react';
+import PayPalButton from './PayPalButton';
+
+const AdminDashboard: React.FC = () => {
+  const amountToCharge = '10.00'; // This can be dynamic
+
+  return (
+    <div className="dashboard-container">
+      {/* ...existing content... */}
+      <div className="payment-section">
+        <h2>Make a Payment</h2>
+        <PayPalButton amount={amountToCharge} />
+      </div>
+      {/* ...existing content... */}
+    </div>
+  );
+};
+
+export default AdminDashboard;
+
+Testing the Integration:
+1. Start the Backend Server:
+bash
+
+npm run start
+
+If you used the build scripts:
+bash
+
+npm run build
+npm run start
+
+2. Start the Frontend Application:
+
+Make sure to start your React application:
+bash
+
+npm start
