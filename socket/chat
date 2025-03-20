@@ -71,3 +71,36 @@ const Graph: React.FC = () => {
 
 export default Graph;
 
+const socket = io();
+
+
+const urlParams = new URLSearchParams(window.location.search);
+const meetingId = urlParams.get('id');
+
+
+const videos = document.getElementById('videos');
+const chat = document.getElementById('chat');
+const chatInput = document.getElementById('chatInput');
+const removeControls = document.getElementById('removeControls');
+const meetingIdInput = document.getElementById('meetingId');
+const localVideoContainer = document.getElementById('localVideoContainer');
+const localVideo = document.getElementById('localVideo');
+const meetingInnerBlock = document.getElementById('meetingInnerBlock');
+const videoMeetingBlock = document.getElementById('videoMeetingBlock');
+const topControls = document.querySelector('.meeting_header');
+const meetingUrlDisplay = document.getElementById('meetingUrlDisplay');
+const startMeetingButton = document.getElementById('startMeeting');
+const toggleAudioButton = document.getElementById('toggleAudio');
+
+let localStream;
+let screenStream;
+let peers = {};
+let myId;
+let currentMeetingId;
+let isSocketConnected = false;
+let meetingActive = false;
+let isAudioMuted = false;
+
+document.getElementById("toggleAudio").addEventListener("click",function(){
+    alert(1)
+   }) 
